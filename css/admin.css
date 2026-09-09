@@ -1,0 +1,319 @@
+/* ==========================================================================
+   KK PHARMACY ONLINE PHARMACY - ADMIN PORTAL DESIGN SYSTEM & STYLES (css/admin.css)
+   ========================================================================== */
+
+/* --- Admin Layout Wrapper --- */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #F8FAFC;
+}
+
+/* --- Admin Sidebar --- */
+.admin-sidebar {
+  width: 260px;
+  background-color: var(--dark-navy, #003B66);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  z-index: 1040;
+}
+
+.admin-sidebar-header {
+  padding: 1.5rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-sidebar-header .brand-icon {
+  width: 38px;
+  height: 38px;
+  background-color: var(--primary-blue, #0066B3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: #FFF;
+}
+
+.admin-sidebar-nav {
+  padding: 1rem 0;
+  flex-grow: 1;
+  list-style: none;
+  margin: 0;
+}
+
+.admin-nav-item {
+  margin-bottom: 0.25rem;
+}
+
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 1.25rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  font-size: 0.925rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.admin-nav-link i {
+  font-size: 1.15rem;
+}
+
+.admin-nav-link:hover {
+  color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.admin-nav-link.active {
+  color: #FFFFFF;
+  background-color: rgba(0, 102, 179, 0.35);
+  border-left-color: var(--secondary-blue, #2D9CDB);
+  font-weight: 600;
+}
+
+.admin-sidebar-footer {
+  padding: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Admin Main Content Area --- */
+.admin-main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* --- Admin Topbar --- */
+.admin-topbar {
+  height: 70px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.admin-topbar-search {
+  max-width: 320px;
+  position: relative;
+}
+
+.admin-topbar-search input {
+  padding-left: 2.25rem;
+  border-radius: 8px;
+  border: 1px solid #CBD5E1;
+  font-size: 0.875rem;
+}
+
+.admin-topbar-search i {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94A3B8;
+}
+
+.admin-topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #E8F4FC;
+  color: #0066B3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* --- Admin Page Body --- */
+.admin-body {
+  padding: 1.75rem;
+  flex-grow: 1;
+}
+
+/* --- Stat KPI Cards --- */
+.admin-stat-card {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 59, 102, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 59, 102, 0.08);
+}
+
+.admin-stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.stat-icon-blue { background-color: #E8F4FC; color: #0066B3; }
+.stat-icon-green { background-color: #DCFCE7; color: #16A34A; }
+.stat-icon-amber { background-color: #FEF3C7; color: #D97706; }
+.stat-icon-purple { background-color: #F3E8FF; color: #9333EA; }
+.stat-icon-red { background-color: #FEE2E2; color: #DC2626; }
+
+.admin-stat-value {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #003B66;
+  line-height: 1.2;
+  margin: 0.2rem 0;
+}
+
+.admin-stat-label {
+  font-size: 0.85rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.admin-stat-change {
+  font-size: 0.775rem;
+  font-weight: 600;
+}
+
+/* --- Admin Data Tables --- */
+.admin-card {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 2px 8px rgba(0, 59, 102, 0.04);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.admin-card-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FFFFFF;
+}
+
+.admin-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #003B66;
+  margin: 0;
+}
+
+.admin-table {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.admin-table th {
+  background-color: #F8FAFC;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid #E2E8F0;
+  border-top: none;
+}
+
+.admin-table td {
+  padding: 1rem 1.25rem;
+  vertical-align: middle;
+  color: #1E293B;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+/* Status Badges */
+.badge-status {
+  padding: 0.35rem 0.65rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-pending { background-color: #FEF3C7; color: #92400E; }
+.badge-processing { background-color: #E0F2FE; color: #0369A1; }
+.badge-dispatched { background-color: #EDE9FE; color: #6D28D9; }
+.badge-delivered { background-color: #DCFCE7; color: #15803D; }
+.badge-cancelled { background-color: #FEE2E2; color: #B91C1C; }
+.badge-instock { background-color: #DCFCE7; color: #15803D; }
+.badge-lowstock { background-color: #FEF3C7; color: #B45309; }
+.badge-outofstock { background-color: #FEE2E2; color: #B91C1C; }
+
+/* Action Buttons */
+.btn-action-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+  background-color: #FFFFFF;
+  color: #64748B;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.btn-action-icon:hover {
+  background-color: #F1F5F9;
+  color: #0066B3;
+  border-color: #CBD5E1;
+}
+
+.btn-action-icon.text-danger:hover {
+  background-color: #FEE2E2;
+  color: #DC2626;
+  border-color: #FCA5A5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .admin-sidebar {
+    position: fixed;
+    left: -260px;
+    height: 100vh;
+  }
+  .admin-sidebar.show {
+    left: 0;
+  }
+}

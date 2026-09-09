@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory & Batch Expiry Tracking — KK PHARMACY Admin Portal</title>
+  <meta name="description" content="Pharmaceutical stock management, batch number tracking, and expiry date monitoring.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System & Admin Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body id="admin-inventory-main">
+
+  <div class="admin-layout">
+    
+    <!-- Admin Sidebar -->
+    <div id="admin-sidebar-container"></div>
+
+    <!-- Admin Main -->
+    <div class="admin-main">
+      
+      <!-- Topbar -->
+      <header class="admin-topbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary d-lg-none" id="toggleSidebarBtn">
+            <i class="bi bi-list fs-5"></i>
+          </button>
+          <h4 class="fw-bold text-navy mb-0 fs-5">Pharmacy Inventory & Batch Control</h4>
+        </div>
+
+        <div class="admin-topbar-user">
+          <button class="btn btn-primary-pharmacy btn-sm" data-bs-toggle="modal" data-bs-target="#addBatchModal">
+            <i class="bi bi-box-seam me-1"></i> Receive Inward Batch
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Body -->
+      <main class="admin-body">
+        
+        <!-- Inventory KPIs -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-4">
+            <div class="admin-stat-card">
+              <div>
+                <span class="admin-stat-label">Total SKUs Tracked</span>
+                <div class="admin-stat-value">8 Active SKUs</div>
+                <span class="admin-stat-change text-success">Warehouse Section A & B</span>
+              </div>
+              <div class="admin-stat-icon stat-icon-blue"><i class="bi bi-boxes"></i></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="admin-stat-card">
+              <div>
+                <span class="admin-stat-label">Low Stock Reorders</span>
+                <div class="admin-stat-value text-danger">3 Items</div>
+                <span class="admin-stat-change text-danger">Below minimum safety buffer</span>
+              </div>
+              <div class="admin-stat-icon stat-icon-red"><i class="bi bi-exclamation-octagon"></i></div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="admin-stat-card">
+              <div>
+                <span class="admin-stat-label">Near-Expiry Batches (< 60 Days)</span>
+                <div class="admin-stat-value text-warning">1 Batch</div>
+                <span class="admin-stat-change text-muted">Paracetamol PCM23A04</span>
+              </div>
+              <div class="admin-stat-icon stat-icon-amber"><i class="bi bi-calendar-event"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventory Data Table -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h5 class="admin-card-title"><i class="bi bi-clipboard2-check me-2 text-primary"></i>Stock & Batch Registry</h5>
+            <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+              <i class="bi bi-printer me-1"></i> Print Inventory Audit
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="table admin-table">
+              <thead>
+                <tr>
+                  <th>Product / SKU</th>
+                  <th>Category</th>
+                  <th>Current Stock</th>
+                  <th>Reorder Level</th>
+                  <th>Batch Number</th>
+                  <th>Expiry Date</th>
+                  <th>Stock Health</th>
+                </tr>
+              </thead>
+              <tbody id="adminInventoryTableBody">
+                <!-- Rendered dynamically by admin-inventory.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Inward Batch Modal -->
+  <div class="modal fade" id="addBatchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold text-navy"><i class="bi bi-box-seam me-2 text-primary"></i>Receive Inward Medicine Batch</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="inwardBatchForm">
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Select Healthcare Product</label>
+              <select class="form-select" id="batchProdSelect" required>
+                <option value="1">Amoxicillin 500mg (RX-AMX-500)</option>
+                <option value="2">Digital BP Monitor (EQ-OMR-BP01)</option>
+                <option value="3">Daily Multivitamins (VT-7S-60)</option>
+                <option value="4">Pulse Oximeter (EQ-OXI-02)</option>
+                <option value="6">Paracetamol 500mg (OTC-PCM-100)</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Manufacturer Batch Number</label>
+              <input type="text" class="form-control" id="batchNumberInput" placeholder="e.g. AMX26K09" required>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label small fw-semibold">Quantity Received</label>
+                <input type="number" class="form-control" id="batchQtyInput" placeholder="50" required min="1">
+              </div>
+              <div class="col-6">
+                <label class="form-label small fw-semibold">Expiry Date</label>
+                <input type="date" class="form-control" id="batchExpiryInput" required value="2027-12-31">
+              </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-4 pt-2 border-top">
+              <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary-pharmacy btn-sm px-3">
+                <i class="bi bi-check2-circle me-1"></i> Update Stock Registry
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/admin-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/services/admin-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <script src="../js/components/admin-sidebar.js"></script>
+  <script src="../js/pages/admin-inventory.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

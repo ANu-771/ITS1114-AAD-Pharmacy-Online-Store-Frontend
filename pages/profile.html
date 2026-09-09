@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Healthcare Profile — KK PHARMACY Digital Pharmacy</title>
+  <meta name="description" content="Manage your patient profile, default delivery address, and account settings.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body id="profile-page-main">
+
+  <!-- Universal Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <i class="bi bi-shield-check me-2"></i> Patient Information Protected under Medical Privacy Guidelines
+      </div>
+      <div class="d-none d-md-flex align-items-center gap-4">
+        <span><i class="bi bi-headset me-1"></i> Helpdesk: <strong>+94 11 234 5678</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Universal Navbar -->
+  <header id="main-navbar-container"></header>
+
+  <!-- Main Profile View -->
+  <main class="py-5">
+    <div class="container">
+      <div class="row g-4">
+        
+        <!-- Left: Profile Navigation & Avatar -->
+        <div class="col-12 col-lg-4">
+          <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white mb-4">
+            <div class="mx-auto rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center fw-bold fs-2 mb-3" style="width: 80px; height: 80px;" id="profileAvatar">
+              SP
+            </div>
+            <h4 class="fw-bold text-navy mb-1" id="profileNameDisplay">Sarah Perera</h4>
+            <p class="text-muted small mb-3" id="profileEmailDisplay">user@example.com</p>
+            <span class="badge bg-success-subtle text-success border border-success-subtle mx-auto px-3 py-2" id="profileRoleBadge">
+              <i class="bi bi-patch-check-fill me-1"></i> Verified Patient Account
+            </span>
+          </div>
+
+          <div class="list-group rounded-4 shadow-sm border-0 overflow-hidden">
+            <a href="profile.html" class="list-group-item list-group-item-action active py-3 border-0">
+              <i class="bi bi-person-circle me-2"></i> Personal Information
+            </a>
+            <a href="orders.html" class="list-group-item list-group-item-action py-3 border-0">
+              <i class="bi bi-bag-check me-2"></i> My Order History
+            </a>
+            <a href="wishlist.html" class="list-group-item list-group-item-action py-3 border-0">
+              <i class="bi bi-heart me-2"></i> Saved Wishlist
+            </a>
+            <button class="list-group-item list-group-item-action py-3 border-0 text-danger" id="profileLogoutBtn">
+              <i class="bi bi-box-arrow-right me-2"></i> Sign Out
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Editable Profile Details -->
+        <div class="col-12 col-lg-8">
+          <div class="card border-0 shadow-sm rounded-4 p-4 p-sm-5 bg-white">
+            <h5 class="fw-bold text-navy mb-4 pb-2 border-bottom"><i class="bi bi-sliders me-2 text-primary"></i>Personal & Delivery Details</h5>
+
+            <form id="profileUpdateForm">
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Full Name</label>
+                  <input type="text" class="form-control" id="profFullName" value="Sarah Perera" required>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Email Address</label>
+                  <input type="email" class="form-control" id="profEmail" value="user@example.com" readonly>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Contact Phone Number</label>
+                  <input type="tel" class="form-control" id="profPhone" value="+94 77 123 4567" required>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">City / District</label>
+                  <select class="form-select" id="profCity">
+                    <option value="Colombo" selected>Colombo</option>
+                    <option value="Gampaha">Gampaha</option>
+                    <option value="Kandy">Kandy</option>
+                    <option value="Galle">Galle</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label small fw-semibold">Default Delivery Street Address</label>
+                  <textarea class="form-control" id="profAddress" rows="2">No. 45, Galle Road, Colombo 03, Sri Lanka</textarea>
+                </div>
+
+                <div class="col-12 mt-4">
+                  <button type="submit" class="btn btn-primary-pharmacy px-4 py-2">
+                    <i class="bi bi-check2-circle me-1"></i> Save Changes
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <hr class="my-5">
+
+            <!-- Security & Password -->
+            <h5 class="fw-bold text-navy mb-3"><i class="bi bi-shield-lock me-2 text-primary"></i>Security Credentials</h5>
+            <form id="passwordChangeForm" class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold">New Password</label>
+                <input type="password" class="form-control" id="profNewPass" placeholder="••••••••" required>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold">Confirm New Password</label>
+                <input type="password" class="form-control" id="profConfirmPass" placeholder="••••••••" required>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-outline-secondary btn-sm px-3 py-2">
+                  Update Password
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Universal Footer -->
+  <footer id="main-footer-container"></footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/user-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <!-- MediMate AI Chatbot (Google Generative AI) -->
+  <script src="../js/chat/MediMate_training_data.js"></script>
+  <script src="../js/pages/chat-bot.js"></script>
+  <script src="../js/components/category-card.js"></script>
+  <script src="../js/components/product-card.js"></script>
+  <script src="../js/components/navbar.js"></script>
+  <script src="../js/components/footer.js"></script>
+  <script src="../js/pages/profile.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Products Catalog — KK PHARMACY Admin Portal</title>
+  <meta name="description" content="Pharmaceutical product catalog management, add new medications, pricing, and prescription requirements.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System & Admin Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body id="admin-products-main">
+
+  <div class="admin-layout">
+    
+    <!-- Admin Sidebar -->
+    <div id="admin-sidebar-container"></div>
+
+    <!-- Admin Main Body -->
+    <div class="admin-main">
+      
+      <!-- Topbar -->
+      <header class="admin-topbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary d-lg-none" id="toggleSidebarBtn">
+            <i class="bi bi-list fs-5"></i>
+          </button>
+          <h4 class="fw-bold text-navy mb-0 fs-5">Healthcare Products Management</h4>
+        </div>
+
+        <div class="admin-topbar-user">
+          <button class="btn btn-primary-pharmacy btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            <i class="bi bi-plus-lg me-1"></i> Add New Product
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Body -->
+      <main class="admin-body">
+        
+        <!-- Filter & Search Bar -->
+        <div class="admin-card p-3 mb-4">
+          <div class="row g-3 align-items-center">
+            <div class="col-12 col-md-5">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="adminProductSearch" class="form-control" placeholder="Search by medicine name, brand, or SKU...">
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <select class="form-select form-select-sm" id="adminCategorySelect">
+                <option value="all" selected>All Categories</option>
+                <option value="medicines">Medicines</option>
+                <option value="equipment">Medical Equipment</option>
+                <option value="vitamins">Vitamins & Supplements</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-3 text-md-end">
+              <span class="small text-muted" id="adminProductCount">Showing 8 Products</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Table Card -->
+        <div class="admin-card">
+          <div class="table-responsive">
+            <table class="table admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 35%;">Product & Brand</th>
+                  <th>Category</th>
+                  <th>Unit Price</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminProductsTableBody">
+                <!-- Rendered dynamically by admin-products.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Add / Edit Product Modal -->
+  <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold text-navy"><i class="bi bi-capsule me-2 text-primary"></i>Add New Healthcare Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="productCrudForm">
+            <div class="row g-3">
+              <div class="col-12 col-md-8">
+                <label class="form-label small fw-semibold">Product Name *</label>
+                <input type="text" class="form-control" id="mProdName" placeholder="e.g. Paracetamol Extra 500mg" required>
+              </div>
+              <div class="col-12 col-md-4">
+                <label class="form-label small fw-semibold">Brand / Manufacturer *</label>
+                <input type="text" class="form-control" id="mProdBrand" placeholder="e.g. GSK, Omron" required>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold">Category *</label>
+                <select class="form-select" id="mProdCategory" required>
+                  <option value="medicines" selected>Medicines</option>
+                  <option value="equipment">Medical Equipment</option>
+                  <option value="vitamins">Vitamins & Supplements</option>
+                  <option value="personal-care">Personal Care</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold">Retail Price (LKR) *</label>
+                <input type="number" class="form-control" id="mProdPrice" placeholder="650.00" step="10" required>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold">Active Ingredient / Sensor Tech</label>
+                <input type="text" class="form-control" id="mProdIngredient" placeholder="e.g. Amoxicillin Trihydrate 500mg">
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold">Dosage / Unit Packaging</label>
+                <input type="text" class="form-control" id="mProdForm" placeholder="e.g. 10x10 Blister Pack">
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-semibold">Clinical Description</label>
+                <textarea class="form-control" id="mProdDesc" rows="2" placeholder="Indications, symptoms treated, or device usage..."></textarea>
+              </div>
+              <div class="col-12">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="mProdRx">
+                  <label class="form-check-label small fw-semibold" for="mProdRx">Requires Doctor's Prescription (Rx Only)</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+              <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary-pharmacy btn-sm px-4">
+                <i class="bi bi-check2-circle me-1"></i> Save to Catalog
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/admin-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/services/admin-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <script src="../js/components/admin-sidebar.js"></script>
+  <script src="../js/pages/admin-products.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

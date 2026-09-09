@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <!-- Background Glow Gradient -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#E8F4FC" stop-opacity="0.9"/>
+      <stop offset="70%" stop-color="#2D9CDB" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0066B3" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Primary Pill Blue Gradient -->
+    <linearGradient id="pillBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0088FF"/>
+      <stop offset="45%" stop-color="#0066B3"/>
+      <stop offset="100%" stop-color="#003B66"/>
+    </linearGradient>
+
+    <!-- Pill White/Cyan Gradient -->
+    <linearGradient id="pillWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F0F8FF"/>
+      <stop offset="100%" stop-color="#CBE5F7"/>
+    </linearGradient>
+
+    <!-- Floating Mini Pill Cyan Gradient -->
+    <linearGradient id="miniPillGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2D9CDB"/>
+      <stop offset="100%" stop-color="#0066B3"/>
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="pillShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="2" dy="8" stdDeviation="6" flood-color="#003B66" flood-opacity="0.3"/>
+    </filter>
+
+    <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes floatPill {
+      0%, 100% { transform: translateY(0px) rotate(-35deg); }
+      50% { transform: translateY(-5px) rotate(-30deg); }
+    }
+    @keyframes floatMini {
+      0%, 100% { transform: translateY(0px) rotate(45deg); opacity: 0.85; }
+      50% { transform: translateY(4px) rotate(55deg); opacity: 1; }
+    }
+    @keyframes pulseAura {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.12); opacity: 0.9; }
+    }
+    @keyframes sparkle {
+      0%, 100% { transform: scale(0.6); opacity: 0.3; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+    .main-capsule {
+      transform-origin: 60px 60px;
+      animation: floatPill 3.5s ease-in-out infinite;
+    }
+    .mini-capsule {
+      transform-origin: 90px 32px;
+      animation: floatMini 4s ease-in-out infinite;
+    }
+    .aura-glow {
+      transform-origin: 60px 60px;
+      animation: pulseAura 3s ease-in-out infinite;
+    }
+    .sparkle-1 {
+      transform-origin: 24px 30px;
+      animation: sparkle 2.5s ease-in-out infinite;
+    }
+    .sparkle-2 {
+      transform-origin: 96px 88px;
+      animation: sparkle 2.8s ease-in-out infinite 1.2s;
+    }
+  </style>
+
+  <!-- Ambient Pulsing Glow Circle -->
+  <circle class="aura-glow" cx="60" cy="60" r="48" fill="url(#bgGlow)"/>
+
+  <!-- Sparkle Stars -->
+  <g class="sparkle-1">
+    <path d="M 24 22 Q 24 30 16 30 Q 24 30 24 38 Q 24 30 32 30 Q 24 30 24 22 Z" fill="#2D9CDB" opacity="0.85"/>
+  </g>
+  <g class="sparkle-2">
+    <path d="M 96 82 Q 96 88 90 88 Q 96 88 96 94 Q 96 88 102 88 Q 96 88 96 82 Z" fill="#0066B3" opacity="0.75"/>
+  </g>
+
+  <!-- Mini Floating Tablet in Background -->
+  <g class="mini-capsule" filter="url(#pillShadow)">
+    <rect x="76" y="24" width="28" height="14" rx="7" fill="url(#miniPillGrad)"/>
+    <circle cx="83" cy="31" r="3.5" fill="#FFFFFF" opacity="0.6"/>
+  </g>
+
+  <!-- Main 3D Floating Capsule Pill -->
+  <g class="main-capsule" filter="url(#pillShadow)">
+    <!-- Capsule Outer Container Group (Rotated 45deg approx centered at 60,60) -->
+    <g transform="translate(60, 60)">
+      <g transform="translate(-24, -44)">
+        <!-- Capsule Shadow/Base -->
+        <rect x="0" y="0" width="48" height="88" rx="24" fill="none"/>
+        
+        <!-- Top Half (Blue Half) -->
+        <path d="M 0 24 A 24 24 0 0 1 48 24 L 48 44 L 0 44 Z" fill="url(#pillBlue)"/>
+        
+        <!-- Bottom Half (White/Cyan Half) -->
+        <path d="M 0 44 L 48 44 L 48 64 A 24 24 0 0 1 0 64 Z" fill="url(#pillWhite)"/>
+
+        <!-- Middle Seam Ring -->
+        <rect x="0" y="42.5" width="48" height="3" fill="#003B66" opacity="0.25"/>
+
+        <!-- Medical Cross on Blue Half -->
+        <g transform="translate(24, 24)">
+          <path d="M -3 -10 L 3 -10 L 3 -3 L 10 -3 L 10 3 L 3 3 L 3 10 L -3 10 L -3 3 L -10 3 L -10 -3 L -3 -3 Z" fill="#FFFFFF" opacity="0.95" filter="url(#glowFilter)"/>
+        </g>
+
+        <!-- Gloss / Glass Light Reflection on Side -->
+        <path d="M 8 18 Q 6 44 8 70 Q 12 70 12 44 Q 10 20 8 18 Z" fill="#FFFFFF" opacity="0.45" rx="4"/>
+        <ellipse cx="24" cy="12" rx="14" ry="4" fill="#FFFFFF" opacity="0.35"/>
+      </g>
+    </g>
+  </g>
+</svg>

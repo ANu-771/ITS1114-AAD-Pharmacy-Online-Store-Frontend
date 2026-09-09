@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KK PHARMACY — Professional Online Pharmacy & Medical Equipment</title>
+  <meta name="description" content="Shop authentic medicines, medical equipment, vitamins, and healthcare products online with fast delivery and pharmacist support across Sri Lanka.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System & Component Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body id="homepage-main">
+
+  <!-- ==========================================
+       SECTION 1 — ANNOUNCEMENT BAR
+       ========================================== -->
+  <div class="announcement-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <i class="bi bi-truck me-2"></i> Free delivery on orders above <strong>Rs. 5,000</strong> across Sri Lanka
+      </div>
+      <div class="d-none d-md-flex align-items-center gap-4">
+        <span><i class="bi bi-shield-check me-1"></i> 100% Authentic Products</span>
+        <span><i class="bi bi-headset me-1"></i> Pharmacist Support: <strong>+94 11 234 5678</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       SECTION 2 — DYNAMIC HEADER NAVBAR
+       ========================================== -->
+  <header id="main-navbar-container"></header>
+
+  <!-- MAIN HOMEPAGE CONTENT -->
+  <main class="py-4">
+    <div class="container">
+
+      <!-- ==========================================
+           SECTION 3 — HERO SECTION
+           ========================================== -->
+      <section class="mb-5">
+        <div class="hero-wrapper">
+          <div class="row align-items-center g-4">
+            <!-- Left Hero Content -->
+            <div class="col-12 col-lg-6">
+              <span class="badge badge-pharmacy badge-light-blue mb-3">
+                <i class="bi bi-patch-check-fill me-1"></i> Certified Digital Pharmacy
+              </span>
+              <h1 class="hero-headline">
+                “Your Health,<br>Delivered to Your Door”
+              </h1>
+              <p class="hero-subtext">
+                Shop trusted medicines, medical equipment, vitamins, and everyday healthcare essentials from one convenient online pharmacy.
+              </p>
+
+              <!-- Hero Search Widget -->
+              <div class="hero-search-box">
+                <i class="bi bi-search text-muted me-2"></i>
+                <input type="text" id="heroSearchInput" placeholder="Search medicines, medical equipment, vitamins..." aria-label="Search medicines and products">
+                <button class="btn-search" id="heroSearchBtn" title="Search">
+                  <i class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+
+              <!-- Action CTAs -->
+              <div class="hero-ctas d-flex flex-wrap gap-3">
+                <a href="pages/products.html?category=medicines" class="btn btn-primary-pharmacy">
+                  <i class="bi bi-capsule"></i> Shop Medicines
+                </a>
+                <a href="pages/products.html?category=equipment" class="btn btn-outline-pharmacy">
+                  <i class="bi bi-heart-pulse"></i> Explore Medical Equipment
+                </a>
+              </div>
+            </div>
+
+            <!-- Right Hero Visual Grid -->
+            <div class="col-12 col-lg-6">
+              <div class="hero-image-grid">
+                <div class="hero-image-card">
+                  <img src="assets/images/hero_collage.png" alt="Healthcare Products Collage" class="img-fluid">
+                  <div class="mt-2 text-center">
+                    <span class="fw-bold small text-navy">Authentic Care</span>
+                  </div>
+                </div>
+                <div class="hero-image-card">
+                  <img src="assets/images/bp_monitor.png" alt="Digital BP Monitor" class="img-fluid">
+                  <div class="mt-2 text-center">
+                    <span class="fw-bold small text-navy">Medical Equipment</span>
+                  </div>
+                </div>
+                <div class="hero-image-card">
+                  <img src="assets/images/medicine_1.png" alt="Prescription Medicines" class="img-fluid">
+                  <div class="mt-2 text-center">
+                    <span class="fw-bold small text-navy">Prescription Rx</span>
+                  </div>
+                </div>
+                <div class="hero-image-card">
+                  <img src="assets/images/vitamins_1.png" alt="Vitamins & Supplements" class="img-fluid">
+                  <div class="mt-2 text-center">
+                    <span class="fw-bold small text-navy">Daily Wellness</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECTION 4 — QUICK CATEGORIES
+           ========================================== -->
+      <section class="mb-5">
+        <div class="section-header text-center">
+          <div class="section-subtitle">Browse Categories</div>
+          <h2 class="section-title">Essential Healthcare Categories</h2>
+        </div>
+        <div class="row g-3" id="categories-grid">
+          <!-- Dynamic Category Cards Inserted by home.js -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECTION 5 — FEATURED PRODUCTS
+           ========================================== -->
+      <section class="mb-5" id="featured-section">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+          <div>
+            <div class="section-subtitle">Curated Selection</div>
+            <h2 class="section-title mb-0">Featured Healthcare Products</h2>
+          </div>
+          <!-- Category Filter Tabs -->
+          <div class="d-flex gap-2 mt-3 mt-md-0 flex-wrap">
+            <button class="btn btn-primary-pharmacy btn-sm product-filter-btn" data-category="all">All Products</button>
+            <button class="btn btn-outline-pharmacy btn-sm product-filter-btn" data-category="medicines">Medicines</button>
+            <button class="btn btn-outline-pharmacy btn-sm product-filter-btn" data-category="equipment">Medical Equipment</button>
+            <button class="btn btn-outline-pharmacy btn-sm product-filter-btn" data-category="vitamins">Wellness</button>
+          </div>
+        </div>
+
+        <div class="row g-4" id="featured-products-grid">
+          <!-- Dynamic Product Cards Inserted by home.js -->
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECTION 6 — MEDICAL EQUIPMENT PROMOTION
+           ========================================== -->
+      <section class="mb-5">
+        <div class="medical-equipment-banner">
+          <div class="row align-items-center g-4">
+            <div class="col-12 col-lg-6">
+              <span class="badge badge-pharmacy badge-light-blue mb-3">Diagnostic & Monitoring</span>
+              <h2 class="hero-headline fs-2">“Healthcare Equipment You Can Trust”</h2>
+              <p class="text-muted mb-4">
+                Monitor your vital health metrics at home with certified hospital-grade blood pressure monitors, glucose meters, pulse oximeters, and nebulizers.
+              </p>
+              <div class="d-flex flex-wrap gap-2 mb-4">
+                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Blood Pressure Monitors</span>
+                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Glucose Meters</span>
+                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Thermometers</span>
+                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Nebulizers</span>
+                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Pulse Oximeters</span>
+              </div>
+              <a href="pages/products.html?category=equipment" class="btn btn-primary-pharmacy">
+                Explore Medical Equipment <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+            <div class="col-12 col-lg-6 text-center">
+              <img src="assets/images/bp_monitor.png" alt="Medical Equipment" class="img-fluid rounded-4 shadow-sm" style="max-height: 280px; object-fit: contain;">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECTION 7 — WHY CHOOSE US (HEALTHCARE TRUST)
+           ========================================== -->
+      <section class="mb-5">
+        <div class="section-header text-center">
+          <div class="section-subtitle">Healthcare Trust</div>
+          <h2 class="section-title">Why Patients Choose KK PHARMACY</h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="trust-card">
+              <div class="trust-icon"><i class="bi bi-patch-check"></i></div>
+              <h5 class="trust-title">Genuine Products</h5>
+              <p class="trust-text">Directly sourced 100% authentic medicines and medical supplies from certified manufacturers.</p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="trust-card">
+              <div class="trust-icon"><i class="bi bi-credit-card-2-front"></i></div>
+              <h5 class="trust-title">Secure Payments</h5>
+              <p class="trust-text">256-bit SSL encrypted checkout supporting credit cards, debit cards, and cash on delivery.</p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="trust-card">
+              <div class="trust-icon"><i class="bi bi-lightning-charge"></i></div>
+              <h5 class="trust-title">Fast Delivery</h5>
+              <p class="trust-text">Temperature-controlled fast delivery right to your door with real-time order tracking.</p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="trust-card">
+              <div class="trust-icon"><i class="bi bi-person-heart"></i></div>
+              <h5 class="trust-title">Pharmacist Support</h5>
+              <p class="trust-text">Qualified pharmacists available for dosage assistance and prescription consultation.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECTION 8 — HOW IT WORKS
+           ========================================== -->
+      <section class="mb-5 py-4">
+        <div class="section-header text-center">
+          <div class="section-subtitle">Simple Process</div>
+          <h2 class="section-title">How It Works</h2>
+        </div>
+        <div class="how-it-works-timeline">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h5 class="step-title">1. Search</h5>
+            <p class="step-desc">Find the healthcare product or medicine you need using our smart search.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h5 class="step-title">2. Add to Cart</h5>
+            <p class="step-desc">Select your desired products, dosage strength, and quantities.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h5 class="step-title">3. Place Order</h5>
+            <p class="step-desc">Upload prescription if required and confirm your delivery details.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <h5 class="step-title">4. Get Delivered</h5>
+            <p class="step-desc">Receive your order at your preferred address safely and quickly.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECTION 9 — HEALTHCARE PROMOTION BANNER
+           ========================================== -->
+      <section class="mb-5">
+        <div class="promo-banner">
+          <div class="row align-items-center">
+            <div class="col-12 col-md-8">
+              <h2 class="fs-2 fw-bold mb-2">“Take Better Care of Your Health”</h2>
+              <p class="lead mb-4 text-white-50 fs-6">
+                Everything you need for everyday healthcare, chronic care, and family wellness in one place.
+              </p>
+              <a href="pages/products.html" class="btn btn-light text-primary fw-bold px-4 py-2">
+                Shop Now <i class="bi bi-arrow-right ms-1"></i>
+              </a>
+            </div>
+            <div class="col-12 col-md-4 text-center mt-4 mt-md-0">
+              <i class="bi bi-capsule-pill display-1 text-white opacity-50"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECTION 10 — CUSTOMER REVIEWS
+           ========================================== -->
+      <section class="mb-5">
+        <div class="section-header text-center">
+          <div class="section-subtitle">Verified Feedback</div>
+          <h2 class="section-title">What Our Customers Say</h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-12 col-md-4">
+            <div class="review-card">
+              <div class="review-stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p class="text-muted small fst-italic mb-3">
+                “Ordering prescription medicines was fast and effortless. The delivery arrived the very next day with genuine sealed packaging. Excellent digital pharmacy service!”
+              </p>
+              <div class="reviewer-profile">
+                <div class="reviewer-avatar">DP</div>
+                <div>
+                  <div class="fw-bold text-navy small">Dilshan Perera</div>
+                  <small class="text-muted">Verified Customer — Colombo</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="review-card">
+              <div class="review-stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p class="text-muted small fst-italic mb-3">
+                “Bought the Omron Blood Pressure monitor. It works accurately and the price was lower than local physical pharmacies. Certified quality!”
+              </p>
+              <div class="reviewer-profile">
+                <div class="reviewer-avatar">KF</div>
+                <div>
+                  <div class="fw-bold text-navy small">Kavindi Fernando</div>
+                  <small class="text-muted">Verified Customer — Kandy</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="review-card">
+              <div class="review-stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <p class="text-muted small fst-italic mb-3">
+                “The customer service and pharmacist guidance are top-notch. I had a question about dosage strength and received immediate assistance.”
+              </p>
+              <div class="reviewer-profile">
+                <div class="reviewer-avatar">RS</div>
+                <div>
+                  <div class="fw-bold text-navy small">Dr. Ruwan Silva</div>
+                  <small class="text-muted">Healthcare Professional — Galle</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SECTION 11 — NEWSLETTER SUBSCRIPTION
+           ========================================== -->
+      <section class="mb-5">
+        <div class="newsletter-card text-center">
+          <div class="max-w-600 mx-auto" style="max-width: 600px;">
+            <div class="text-primary fs-3 mb-2"><i class="bi bi-envelope-paper-heart"></i></div>
+            <h3 class="fw-bold text-navy mb-2">Stay Updated on Healthcare</h3>
+            <p class="text-muted small mb-4">
+              Receive product updates, seasonal health tips, medicine reminders, and exclusive healthcare promotions directly to your inbox.
+            </p>
+            <form id="newsletterForm" class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+              <input type="email" class="form-control form-control-lg fs-6 border-light-subtle" placeholder="Enter your email address..." required style="border-radius: 8px;">
+              <button type="submit" class="btn btn-primary-pharmacy px-4 py-2 text-nowrap">
+                Subscribe <i class="bi bi-send ms-1"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==========================================
+       SECTION 12 — FOOTER
+       ========================================== -->
+  <footer id="main-footer-container"></footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Layers -->
+  <script src="js/config.js"></script>
+  <script src="js/services/storage-service.js"></script>
+  <script src="js/api/api-client.js"></script>
+  <script src="js/api/auth-api.js"></script>
+  <script src="js/api/product-api.js"></script>
+  <script src="js/api/category-api.js"></script>
+  <script src="js/api/cart-api.js"></script>
+  <script src="js/api/order-api.js"></script>
+  <script src="js/api/user-api.js"></script>
+  <script src="js/services/auth-service.js"></script>
+  <script src="js/services/cart-service.js"></script>
+  <script src="js/services/product-service.js"></script>
+  <script src="js/services/order-service.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/modal.js"></script>
+  <script src="js/components/loading.js"></script>
+  <!-- MediMate AI Chatbot (Google Generative AI) -->
+  <script src="js/chat/MediMate_training_data.js"></script>
+  <script src="js/pages/chat-bot.js"></script>
+  <script src="js/components/category-card.js"></script>
+  <script src="js/components/product-card.js"></script>
+  <script src="js/components/navbar.js"></script>
+  <script src="js/components/footer.js"></script>
+  <script src="js/pages/home.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — KK PHARMACY Online Pharmacy Portal</title>
+  <meta name="description" content="Administrative management dashboard for sales KPIs, pharmacy inventory, and prescription fulfillment.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System & Admin Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body id="admin-dashboard-main">
+
+  <div class="admin-layout">
+    
+    <!-- Reusable Admin Sidebar Container -->
+    <div id="admin-sidebar-container"></div>
+
+    <!-- Admin Main Body -->
+    <div class="admin-main">
+      
+      <!-- Topbar -->
+      <header class="admin-topbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary d-lg-none" id="toggleSidebarBtn">
+            <i class="bi bi-list fs-5"></i>
+          </button>
+          <div class="admin-topbar-search d-none d-md-block">
+            <i class="bi bi-search"></i>
+            <input type="text" class="form-control" placeholder="Search orders, SKU, patients...">
+          </div>
+        </div>
+
+        <div class="admin-topbar-user">
+          <div class="d-flex align-items-center gap-2">
+            <div class="admin-avatar">AD</div>
+            <div>
+              <div class="fw-bold small text-navy">System Admin</div>
+              <small class="text-success"><i class="bi bi-circle-fill" style="font-size: 0.5rem;"></i> System Live</small>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <main class="admin-body">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4">
+          <div>
+            <h1 class="h4 fw-bold text-navy mb-1">Pharmaceutical Control Dashboard</h1>
+            <p class="text-muted small mb-0">Live revenue metrics, fulfillment queues, and automated inventory alerts.</p>
+          </div>
+          <div class="d-flex gap-2 mt-3 mt-sm-0">
+            <a href="reports.html" class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-file-earmark-pdf me-1"></i> Sales Report
+            </a>
+            <a href="products.html" class="btn btn-primary-pharmacy btn-sm">
+              <i class="bi bi-plus-lg me-1"></i> Add New Medicine
+            </a>
+          </div>
+        </div>
+
+        <!-- KPI Metrics Row -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="admin-stat-card">
+              <div>
+                <span class="admin-stat-label">Total Pharmacy Revenue</span>
+                <div class="admin-stat-value" id="kpiRevenue">Rs. 284,500</div>
+                <span class="admin-stat-change text-success"><i class="bi bi-arrow-up-right"></i> +14.8% this month</span>
+              </div>
+              <div class="admin-stat-icon stat-icon-green">
+                <i class="bi bi-currency-dollar"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="admin-stat-card">
+              <div>
+                <span class="admin-stat-label">Total Prescription Orders</span>
+                <div class="admin-stat-value" id="kpiOrders">64</div>
+                <span class="admin-stat-change text-success"><i class="bi bi-arrow-up-right"></i> +8.2% from last week</span>
+              </div>
+              <div class="admin-stat-icon stat-icon-blue">
+                <i class="bi bi-bag-check"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="admin-stat-card">
+              <div>
+                <span class="admin-stat-label">Active Medical Products</span>
+                <div class="admin-stat-value" id="kpiProducts">48</div>
+                <span class="admin-stat-change text-muted">6 Categories active</span>
+              </div>
+              <div class="admin-stat-icon stat-icon-purple">
+                <i class="bi bi-capsule"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="admin-stat-card">
+              <div>
+                <span class="admin-stat-label">Low Stock Warnings</span>
+                <div class="admin-stat-value text-danger" id="kpiLowStock">3</div>
+                <span class="admin-stat-change text-danger"><i class="bi bi-exclamation-circle"></i> Requires immediate reorder</span>
+              </div>
+              <div class="admin-stat-icon stat-icon-red">
+                <i class="bi bi-exclamation-triangle"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sales Analytics Chart & Category Split -->
+        <div class="row g-4 mb-4">
+          <!-- Monthly Revenue Chart -->
+          <div class="col-12 col-lg-8">
+            <div class="admin-card h-100">
+              <div class="admin-card-header">
+                <h5 class="admin-card-title"><i class="bi bi-graph-up-arrow me-2 text-primary"></i>Revenue & Order Trend (2026)</h5>
+                <span class="badge bg-light text-navy border small">Monthly Aggregation</span>
+              </div>
+              <div class="p-4 text-center">
+                <!-- HTML5 Canvas Visual Chart -->
+                <canvas id="salesAnalyticsCanvas" width="700" height="260" style="max-width: 100%; height: auto;"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Split -->
+          <div class="col-12 col-lg-4">
+            <div class="admin-card h-100">
+              <div class="admin-card-header">
+                <h5 class="admin-card-title"><i class="bi bi-pie-chart me-2 text-primary"></i>Sales by Department</h5>
+              </div>
+              <div class="p-4">
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-navy fw-semibold">Prescription Medicines (Rx)</span>
+                    <span class="text-primary fw-bold">42%</span>
+                  </div>
+                  <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-primary" style="width: 42%;"></div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-navy fw-semibold">Medical Equipment & Devices</span>
+                    <span class="text-primary fw-bold">34%</span>
+                  </div>
+                  <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-info" style="width: 34%;"></div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-navy fw-semibold">Vitamins & Supplements</span>
+                    <span class="text-primary fw-bold">16%</span>
+                  </div>
+                  <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-success" style="width: 16%;"></div>
+                  </div>
+                </div>
+
+                <div class="mb-0">
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-navy fw-semibold">Personal & Baby Care</span>
+                    <span class="text-primary fw-bold">8%</span>
+                  </div>
+                  <div class="progress" style="height: 6px;">
+                    <div class="progress-bar bg-warning" style="width: 8%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders & Low Stock Table Row -->
+        <div class="row g-4">
+          <!-- Recent Orders -->
+          <div class="col-12 col-lg-7">
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h5 class="admin-card-title"><i class="bi bi-clock-history me-2 text-primary"></i>Recent Patient Orders</h5>
+                <a href="orders.html" class="small text-primary text-decoration-none">View All Orders</a>
+              </div>
+              <div class="table-responsive">
+                <table class="table admin-table">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Patient</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentOrdersTableBody">
+                    <!-- Rendered by admin-dashboard.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Low Stock Alert Box -->
+          <div class="col-12 col-lg-5">
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h5 class="admin-card-title text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Critical Low Stock</h5>
+                <a href="inventory.html" class="small text-primary text-decoration-none">Manage Inventory</a>
+              </div>
+              <div class="table-responsive">
+                <table class="table admin-table">
+                  <thead>
+                    <tr>
+                      <th>Medicine / Instrument</th>
+                      <th>Stock</th>
+                      <th>Threshold</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lowStockTableBody">
+                    <!-- Rendered by admin-dashboard.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/admin-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/services/admin-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <script src="../js/components/admin-sidebar.js"></script>
+  <script src="../js/pages/admin-dashboard.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

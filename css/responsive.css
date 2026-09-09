@@ -1,0 +1,106 @@
+/* ==========================================================================
+   KK PHARMACY ONLINE PHARMACY - RESPONSIVE STYLESHEET
+   ========================================================================== */
+
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1360px;
+  }
+  .hero-headline {
+    font-size: 3rem;
+  }
+}
+
+/* Standard Desktop & Tablet Landscape (992px to 1199px) */
+@media (max-width: 1199px) {
+  .hero-wrapper {
+    padding: 2.5rem 2rem;
+  }
+  .hero-headline {
+    font-size: 2.2rem;
+  }
+}
+
+/* Tablet (768px to 991px) */
+@media (max-width: 991px) {
+  .hero-wrapper {
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  .hero-subtext {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-search-box {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-image-grid {
+    margin-top: 2rem;
+  }
+  
+  .medical-equipment-banner {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .how-it-works-timeline {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* Mobile Devices (Up to 767px) */
+@media (max-width: 767px) {
+  .announcement-bar {
+    font-size: 0.75rem;
+    text-align: center;
+  }
+  
+  .hero-wrapper {
+    padding: 1.5rem 1rem;
+    border-radius: var(--radius-md);
+  }
+  
+  .hero-headline {
+    font-size: 1.75rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .newsletter-card {
+    padding: 1.5rem;
+  }
+  
+  .promo-banner {
+    padding: 2rem 1.25rem;
+    text-align: center;
+  }
+  
+  .pharmacy-footer {
+    padding: 2.5rem 0 1.5rem 0;
+  }
+}
+
+/* Extra Small Devices (Up to 480px) */
+@media (max-width: 480px) {
+  .hero-headline {
+    font-size: 1.5rem;
+  }
+  
+  .btn-primary-pharmacy, 
+  .btn-outline-pharmacy {
+    width: 100%;
+    padding: 0.6rem 1rem;
+  }
+  
+  .hero-ctas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+}

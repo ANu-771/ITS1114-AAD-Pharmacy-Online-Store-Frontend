@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequently Asked Questions (FAQ) — KK PHARMACY Digital Pharmacy</title>
+  <meta name="description" content="Answers to common questions regarding prescription orders, cold-chain delivery, payment methods, and return policies.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Universal Navbar -->
+  <header id="main-navbar-container"></header>
+
+  <!-- Breadcrumbs -->
+  <div class="bg-light py-3 border-bottom">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 small">
+          <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">FAQ</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main FAQ Content -->
+  <main class="py-5">
+    <div class="container">
+      <div class="section-header text-center mb-5">
+        <div class="section-subtitle">Help & Information</div>
+        <h1 class="h2 fw-bold text-navy">Frequently Asked Questions</h1>
+        <p class="text-muted small mx-auto" style="max-width: 600px;">
+          Find quick answers regarding medication dispensing regulations, prescription uploads, delivery areas, and returns.
+        </p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+          <div class="accordion accordion-flush rounded-4 overflow-hidden shadow-sm border bg-white" id="pharmacyFaqAccordion">
+            
+            <!-- Item 1 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button fw-bold text-navy collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                  How do I order prescription-only (Rx) medicines online?
+                </button>
+              </h2>
+              <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#pharmacyFaqAccordion">
+                <div class="accordion-body text-muted small">
+                  Simply search for your required medication, add it to your shopping cart, and proceed to checkout. During checkout, you will be prompted to upload a clear photo or scan of your valid doctor's prescription. Our licensed pharmacist team will review the dosage and authenticity before packaging and dispatching.
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button fw-bold text-navy collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                  How fast is the island-wide delivery?
+                </button>
+              </h2>
+              <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#pharmacyFaqAccordion">
+                <div class="accordion-body text-muted small">
+                  Within the Greater Colombo area, standard orders are delivered within 4 to 24 hours. For outstation regions across Sri Lanka, delivery takes 1 to 2 business days. All temperature-sensitive medications are transported in specialized insulated thermal boxes.
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button fw-bold text-navy collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                  How do I qualify for FREE delivery?
+                </button>
+              </h2>
+              <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#pharmacyFaqAccordion">
+                <div class="accordion-body text-muted small">
+                  All orders with a subtotal of <strong>Rs. 5,000 or more</strong> qualify automatically for FREE standard delivery across Sri Lanka.
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button fw-bold text-navy collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                  Are your medical devices genuine and warrantied?
+                </button>
+              </h2>
+              <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#pharmacyFaqAccordion">
+                <div class="accordion-body text-muted small">
+                  Yes, all diagnostic devices (such as Omron blood pressure monitors, Roche Accu-Chek glucose meters, and Beurer pulse oximeters) are 100% genuine and imported directly with official manufacturer warranties (1 to 3 years depending on the brand).
+                </div>
+              </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button fw-bold text-navy collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                  Can I return medicines after receiving them?
+                </button>
+              </h2>
+              <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#pharmacyFaqAccordion">
+                <div class="accordion-body text-muted small">
+                  Under Sri Lankan NMRA regulations, prescription medicines cannot be returned once dispensed, to prevent tampering and ensure safety. However, defective medical equipment or incorrectly dispatched items can be returned within 7 days in unopened original packaging.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Universal Footer -->
+  <footer id="main-footer-container"></footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/user-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <!-- MediMate AI Chatbot (Google Generative AI) -->
+  <script src="../js/chat/MediMate_training_data.js"></script>
+  <script src="../js/pages/chat-bot.js"></script>
+  <script src="../js/components/category-card.js"></script>
+  <script src="../js/components/product-card.js"></script>
+  <script src="../js/components/navbar.js"></script>
+  <script src="../js/components/footer.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

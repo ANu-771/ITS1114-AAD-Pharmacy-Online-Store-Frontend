@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart — KK PHARMACY Digital Pharmacy</title>
+  <meta name="description" content="Review your selected medicines, medical devices, and health products in your KK PHARMACY shopping cart.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body id="cart-page-main">
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <i class="bi bi-truck me-2"></i> Free delivery on orders above <strong>Rs. 5,000</strong> across Sri Lanka
+      </div>
+      <div class="d-none d-md-flex align-items-center gap-4">
+        <span><i class="bi bi-shield-check me-1"></i> 100% Authentic Medications</span>
+        <span><i class="bi bi-headset me-1"></i> Pharmacist Line: <strong>+94 11 234 5678</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Universal Navbar -->
+  <header id="main-navbar-container"></header>
+
+  <!-- Breadcrumbs -->
+  <div class="bg-light py-3 border-bottom">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 small">
+          <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="products.html">Products</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Cart Content -->
+  <main class="py-5">
+    <div class="container">
+      <h1 class="h3 fw-bold text-navy mb-4"><i class="bi bi-bag-check me-2 text-primary"></i>Your Healthcare Cart</h1>
+
+      <!-- Free Shipping Threshold Progress Meter -->
+      <div class="free-shipping-bar" id="freeShippingBanner">
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="small fw-semibold text-navy" id="shippingProgressText">Add Rs. 5,000 more to get FREE Island-wide Delivery!</span>
+          <span class="badge bg-primary rounded-pill small" id="shippingStatusBadge">Free at Rs. 5,000</span>
+        </div>
+        <div class="progress">
+          <div class="progress-bar" id="shippingProgressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <div class="row g-4" id="cartContentWrapper">
+        
+        <!-- Cart Items Table -->
+        <div class="col-12 col-lg-8">
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="table-responsive">
+              <table class="table align-middle mb-0">
+                <thead class="bg-light text-muted small text-uppercase">
+                  <tr>
+                    <th class="ps-4 py-3" style="width: 45%;">Healthcare Product</th>
+                    <th class="py-3 text-center">Unit Price</th>
+                    <th class="py-3 text-center">Quantity</th>
+                    <th class="py-3 text-center">Subtotal</th>
+                    <th class="pe-4 py-3 text-end">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="cartItemsTbody">
+                  <!-- Rendered dynamically by cart.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty Cart Fallback -->
+            <div class="p-5 text-center d-none" id="emptyCartView">
+              <i class="bi bi-cart-x display-1 text-muted opacity-50 mb-3"></i>
+              <h4 class="fw-bold text-navy">Your Cart is Currently Empty</h4>
+              <p class="text-muted small mb-4">You haven't added any medicines or medical devices to your cart yet.</p>
+              <a href="products.html" class="btn btn-primary-pharmacy px-4 py-2">
+                <i class="bi bi-shop me-1"></i> Start Shopping
+              </a>
+            </div>
+
+            <!-- Cart Table Footer -->
+            <div class="p-3 bg-light d-flex justify-content-between align-items-center border-top" id="cartActionsRow">
+              <a href="products.html" class="btn btn-outline-pharmacy btn-sm">
+                <i class="bi bi-arrow-left me-1"></i> Continue Shopping
+              </a>
+              <button class="btn btn-link text-danger btn-sm text-decoration-none" id="clearCartBtn">
+                <i class="bi bi-trash me-1"></i> Clear Cart
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary Card -->
+        <div class="col-12 col-lg-4" id="orderSummaryCol">
+          <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 90px;">
+            <h5 class="fw-bold text-navy mb-3 pb-2 border-bottom">Order Summary</h5>
+
+            <div class="d-flex justify-content-between mb-2 small">
+              <span class="text-muted">Subtotal</span>
+              <span class="fw-semibold text-navy" id="summarySubtotal">Rs. 0.00</span>
+            </div>
+
+            <div class="d-flex justify-content-between mb-2 small">
+              <span class="text-muted">Estimated Delivery</span>
+              <span class="fw-semibold text-success" id="summaryDelivery">FREE</span>
+            </div>
+
+            <div class="d-flex justify-content-between mb-3 small" id="discountRow" style="display: none !important;">
+              <span class="text-muted">Promo Discount</span>
+              <span class="fw-semibold text-danger" id="summaryDiscount">- Rs. 0.00</span>
+            </div>
+
+            <!-- Coupon Form -->
+            <div class="mb-4 pt-2 border-top">
+              <label class="form-label small fw-semibold text-muted">Promo or Pharmacy Voucher</label>
+              <div class="input-group">
+                <input type="text" id="couponCodeInput" class="form-control form-control-sm text-uppercase" placeholder="MEDORA10">
+                <button class="btn btn-outline-primary btn-sm" id="applyCouponBtn">Apply</button>
+              </div>
+              <small class="text-muted" style="font-size: 0.75rem;">Use code <strong>MEDORA10</strong> for 10% off demo</small>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center pt-3 border-top mb-4">
+              <span class="fw-bold text-navy fs-5">Final Total</span>
+              <span class="fw-bold text-primary fs-4" id="summaryTotal">Rs. 0.00</span>
+            </div>
+
+            <a href="checkout.html" class="btn btn-primary-pharmacy w-100 py-2 fs-6 mb-3" id="proceedCheckoutBtn">
+              Proceed to Checkout <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+
+            <div class="p-3 bg-light rounded-3 small text-muted text-center">
+              <i class="bi bi-shield-check text-success me-1"></i> Safe & Encrypted Checkout
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Universal Footer -->
+  <footer id="main-footer-container"></footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/user-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <!-- MediMate AI Chatbot (Google Generative AI) -->
+  <script src="../js/chat/MediMate_training_data.js"></script>
+  <script src="../js/pages/chat-bot.js"></script>
+  <script src="../js/components/category-card.js"></script>
+  <script src="../js/components/product-card.js"></script>
+  <script src="../js/components/navbar.js"></script>
+  <script src="../js/components/footer.js"></script>
+  <script src="../js/pages/cart.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

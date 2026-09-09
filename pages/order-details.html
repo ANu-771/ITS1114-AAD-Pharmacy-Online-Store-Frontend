@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Invoice & Tracking — KK PHARMACY Digital Pharmacy</title>
+  <meta name="description" content="View your order receipt, delivery tracking timeline, and itemized invoice details.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body id="order-details-main">
+
+  <!-- Universal Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <i class="bi bi-truck me-2"></i> Real-Time Healthcare Delivery Tracking
+      </div>
+      <div class="d-none d-md-flex align-items-center gap-4">
+        <span><i class="bi bi-headset me-1"></i> Pharmacist Helpdesk: <strong>+94 11 234 5678</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Universal Navbar -->
+  <header id="main-navbar-container"></header>
+
+  <!-- Breadcrumbs -->
+  <div class="bg-light py-3 border-bottom">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 small">
+          <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="orders.html">My Orders</a></li>
+          <li class="breadcrumb-item active" id="orderBreadcrumbId" aria-current="page">Invoice</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Invoice & Tracking Content -->
+  <main class="py-5">
+    <div class="container">
+      
+      <!-- Top Action Bar -->
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+        <div>
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle mb-1" id="orderStatusBadge">DELIVERED</span>
+          <h1 class="h3 fw-bold text-navy mb-0" id="orderHeaderTitle">Order #MED-2026-89421</h1>
+          <small class="text-muted" id="orderHeaderDate">Placed on Aug 25, 2026</small>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i> Print Invoice
+          </button>
+          <a href="products.html" class="btn btn-primary-pharmacy btn-sm">
+            <i class="bi bi-shop me-1"></i> Order More Products
+          </a>
+        </div>
+      </div>
+
+      <!-- Tracking Stepper Card -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+        <h5 class="fw-bold text-navy fs-6 mb-3"><i class="bi bi-geo-alt me-2 text-primary"></i>Delivery Tracking Stepper</h5>
+        
+        <div class="order-timeline-stepper">
+          <div class="timeline-step completed" id="step1">
+            <div class="step-bubble"><i class="bi bi-check-lg"></i></div>
+            <div class="step-label">Order Confirmed</div>
+          </div>
+          <div class="timeline-step completed" id="step2">
+            <div class="step-bubble"><i class="bi bi-check-lg"></i></div>
+            <div class="step-label">Pharmacist Verified</div>
+          </div>
+          <div class="timeline-step completed" id="step3">
+            <div class="step-bubble"><i class="bi bi-check-lg"></i></div>
+            <div class="step-label">Dispatched</div>
+          </div>
+          <div class="timeline-step completed" id="step4">
+            <div class="step-bubble"><i class="bi bi-check-lg"></i></div>
+            <div class="step-label">Delivered</div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-light rounded-3 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center small">
+          <div>
+            <span class="text-muted">Tracking Reference ID:</span>
+            <strong class="text-navy ms-1" id="orderTrackingId">MED-TRK-78912</strong>
+          </div>
+          <div class="mt-2 mt-sm-0">
+            <span class="text-muted">Estimated Delivery Date:</span>
+            <strong class="text-primary ms-1" id="orderEstDelivery">2026-08-27</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Itemized Invoice Breakdown Table -->
+      <div class="row g-4">
+        <div class="col-12 col-lg-8">
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+            <div class="card-header bg-white py-3 border-bottom">
+              <h5 class="fw-bold text-navy fs-6 mb-0"><i class="bi bi-receipt me-2 text-primary"></i>Itemized Pharmacy Invoice</h5>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-middle mb-0">
+                <thead class="bg-light text-muted small text-uppercase">
+                  <tr>
+                    <th class="ps-4 py-3">Prescription & Healthcare Item</th>
+                    <th class="py-3 text-center">Unit Price</th>
+                    <th class="py-3 text-center">Qty</th>
+                    <th class="pe-4 py-3 text-end">Line Total</th>
+                  </tr>
+                </thead>
+                <tbody id="invoiceItemsTbody">
+                  <!-- Rendered dynamically by order-details.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address & Payment Details -->
+        <div class="col-12 col-lg-4">
+          <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+            <h5 class="fw-bold text-navy fs-6 mb-3 pb-2 border-bottom">Delivery & Payment Information</h5>
+
+            <div class="mb-3">
+              <span class="text-muted small d-block">Recipient Name:</span>
+              <strong class="text-navy small" id="invoiceCustName">Sarah Perera</strong>
+            </div>
+
+            <div class="mb-3">
+              <span class="text-muted small d-block">Shipping Address:</span>
+              <span class="text-navy small" id="invoiceAddress">No. 45, Galle Road, Colombo 03, Sri Lanka</span>
+            </div>
+
+            <div class="mb-3">
+              <span class="text-muted small d-block">Payment Method:</span>
+              <span class="badge bg-light text-navy border small" id="invoicePayment">Credit Card (Visa)</span>
+            </div>
+
+            <hr class="my-3">
+
+            <!-- Total summary -->
+            <div class="d-flex justify-content-between small text-muted mb-2">
+              <span>Subtotal:</span>
+              <span class="fw-semibold text-navy" id="invoiceSubtotal">Rs. 0.00</span>
+            </div>
+            <div class="d-flex justify-content-between small text-muted mb-2">
+              <span>Delivery Fee:</span>
+              <span class="fw-semibold text-success" id="invoiceDelivery">FREE</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+              <span class="fw-bold text-navy fs-6">Grand Total Paid:</span>
+              <span class="fw-bold text-primary fs-5" id="invoiceGrandTotal">Rs. 0.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Universal Footer -->
+  <footer id="main-footer-container"></footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/user-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <!-- MediMate AI Chatbot (Google Generative AI) -->
+  <script src="../js/chat/MediMate_training_data.js"></script>
+  <script src="../js/pages/chat-bot.js"></script>
+  <script src="../js/components/category-card.js"></script>
+  <script src="../js/components/product-card.js"></script>
+  <script src="../js/components/navbar.js"></script>
+  <script src="../js/components/footer.js"></script>
+  <script src="../js/pages/order-details.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

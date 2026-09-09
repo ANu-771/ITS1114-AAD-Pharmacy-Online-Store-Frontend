@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Healthcare Account — KK PHARMACY Digital Pharmacy</title>
+  <meta name="description" content="Register an account with KK PHARMACY for fast prescription refills and island-wide delivery.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body id="register-page-main" class="bg-light">
+
+  <!-- Universal Navbar -->
+  <header id="main-navbar-container"></header>
+
+  <main class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-7">
+          <div class="card border-0 shadow-lg rounded-4 p-4 p-sm-5 bg-white">
+            
+            <div class="text-center mb-4">
+              <div class="navbar-brand-icon mx-auto mb-2" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                <i class="bi bi-person-plus"></i>
+              </div>
+              <h2 class="h4 fw-bold text-navy mb-1">Create Your Patient Account</h2>
+              <p class="text-muted small">Join KK PHARMACY to manage prescription refills and expedited delivery</p>
+            </div>
+
+            <form id="registerForm" class="needs-validation" novalidate>
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Full Name *</label>
+                  <input type="text" class="form-control" id="regFullName" placeholder="e.g. Ruwan Silva" required>
+                  <div class="invalid-feedback">Please enter your full name.</div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Email Address *</label>
+                  <input type="email" class="form-control" id="regEmail" placeholder="ruwan@example.com" required>
+                  <div class="invalid-feedback">Please enter a valid email address.</div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Contact Phone Number *</label>
+                  <input type="tel" class="form-control" id="regPhone" placeholder="+94 77 123 4567" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">City / District *</label>
+                  <select class="form-select" id="regCity" required>
+                    <option value="Colombo" selected>Colombo</option>
+                    <option value="Gampaha">Gampaha</option>
+                    <option value="Kandy">Kandy</option>
+                    <option value="Galle">Galle</option>
+                    <option value="Kurunegala">Kurunegala</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small fw-semibold">Delivery Street Address *</label>
+                  <input type="text" class="form-control" id="regAddress" placeholder="No. 12, Temple Road, Colombo" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Password *</label>
+                  <input type="password" class="form-control" id="regPassword" placeholder="Minimum 6 characters" minlength="6" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Confirm Password *</label>
+                  <input type="password" class="form-control" id="regConfirmPassword" placeholder="Re-enter password" required>
+                </div>
+
+                <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="regTerms" required checked>
+                    <label class="form-check-label small text-muted" for="regTerms">
+                      I agree to KK PHARMACY's <a href="faq.html" class="text-primary">Pharmacy Terms</a> and <a href="faq.html" class="text-primary">Privacy Policy</a>.
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                  <button type="submit" class="btn btn-primary-pharmacy w-100 py-2 fs-6">
+                    <i class="bi bi-shield-check me-1"></i> Register & Create Account
+                  </button>
+                </div>
+              </div>
+
+              <div class="text-center small text-muted mt-4">
+                Already registered? <a href="login.html" class="fw-bold text-primary text-decoration-none">Sign In Here</a>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Universal Footer -->
+  <footer id="main-footer-container"></footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/user-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <!-- MediMate AI Chatbot (Google Generative AI) -->
+  <script src="../js/chat/MediMate_training_data.js"></script>
+  <script src="../js/pages/chat-bot.js"></script>
+  <script src="../js/components/category-card.js"></script>
+  <script src="../js/components/product-card.js"></script>
+  <script src="../js/components/navbar.js"></script>
+  <script src="../js/components/footer.js"></script>
+  <script src="../js/pages/register.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

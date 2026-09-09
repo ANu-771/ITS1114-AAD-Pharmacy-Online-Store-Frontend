@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details — KK PHARMACY Digital Pharmacy</title>
+  <meta name="description" content="Detailed clinical information, dosage, manufacturer, and pricing for certified medical and pharmacy products.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body id="product-details-main">
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <i class="bi bi-truck me-2"></i> Free delivery on orders above <strong>Rs. 5,000</strong> across Sri Lanka
+      </div>
+      <div class="d-none d-md-flex align-items-center gap-4">
+        <span><i class="bi bi-shield-check me-1"></i> 100% Authentic Medications</span>
+        <span><i class="bi bi-headset me-1"></i> Pharmacist Line: <strong>+94 11 234 5678</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Universal Navbar -->
+  <header id="main-navbar-container"></header>
+
+  <!-- Breadcrumbs -->
+  <div class="bg-light py-3 border-bottom">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 small">
+          <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="products.html">Products</a></li>
+          <li class="breadcrumb-item active" id="detailBreadcrumbTitle" aria-current="page">Loading...</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Product Detail View -->
+  <main class="py-5">
+    <div class="container" id="productDetailContainer">
+      <div class="row g-5">
+        
+        <!-- Left: Product Image Gallery -->
+        <div class="col-12 col-md-6 col-lg-5">
+          <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white">
+            <div class="position-relative mb-3">
+              <span id="detailBadge" class="badge badge-pharmacy badge-light-blue position-absolute top-0 start-0">Popular</span>
+              <img id="detailMainImg" src="../assets/images/medicine_1.png" alt="Product Image" class="img-fluid rounded-3" style="max-height: 380px; object-fit: contain;">
+            </div>
+            <!-- Thumbnails -->
+            <div class="d-flex justify-content-center gap-2 mt-3">
+              <div class="border rounded-2 p-1 border-primary" style="width: 60px; height: 60px; cursor: pointer;">
+                <img id="detailThumb1" src="../assets/images/medicine_1.png" class="img-fluid h-100 object-fit-contain" alt="Thumb 1">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Clinical & Commercial Info -->
+        <div class="col-12 col-md-6 col-lg-7">
+          <div class="ps-lg-3">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <span class="text-primary fw-semibold small text-uppercase" id="detailBrand">Brand Name</span>
+              <span class="text-muted">•</span>
+              <span class="text-muted small" id="detailCategory">Category</span>
+            </div>
+
+            <h1 class="h2 fw-bold text-navy mb-3" id="detailTitle">Product Title Loading...</h1>
+
+            <!-- Ratings & Reviews -->
+            <div class="d-flex align-items-center gap-2 mb-4">
+              <div class="text-warning small" id="detailStars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+              </div>
+              <span class="fw-bold small text-navy" id="detailRatingVal">4.8</span>
+              <span class="text-muted small" id="detailReviewsCount">(42 verified reviews)</span>
+            </div>
+
+            <!-- Price & Stock -->
+            <div class="p-3 bg-light rounded-3 mb-4 d-flex align-items-baseline gap-3">
+              <span class="fs-2 fw-bold text-primary" id="detailPrice">Rs. 0.00</span>
+              <span class="text-muted text-decoration-line-through fs-5" id="detailOldPrice"></span>
+              <span class="badge bg-success-subtle text-success border border-success-subtle ms-auto" id="detailStockBadge">In Stock</span>
+            </div>
+
+            <!-- Rx Prescription Alert Banner -->
+            <div class="alert alert-warning d-none align-items-center gap-3 rounded-3" id="rxWarningAlert" role="alert">
+              <i class="bi bi-exclamation-triangle-fill fs-3 text-warning"></i>
+              <div class="small">
+                <strong>Prescription Required (Rx):</strong> Valid doctor's prescription must be uploaded during checkout for verification by a licensed pharmacist.
+              </div>
+            </div>
+
+            <!-- Description -->
+            <p class="text-muted mb-4" id="detailDescription">
+              Detailed product description...
+            </p>
+
+            <!-- Quantity & Actions -->
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-4 pb-4 border-bottom">
+              <div class="input-group" style="width: 130px;">
+                <button class="btn btn-outline-secondary btn-sm" type="button" id="qtyMinusBtn">-</button>
+                <input type="number" id="detailQtyInput" class="form-control form-control-sm text-center fw-bold" value="1" min="1" max="50">
+                <button class="btn btn-outline-secondary btn-sm" type="button" id="qtyPlusBtn">+</button>
+              </div>
+
+              <button class="btn btn-primary-pharmacy px-4 py-2" id="detailAddToCartBtn">
+                <i class="bi bi-bag-plus"></i> Add to Cart
+              </button>
+
+              <button class="btn btn-outline-secondary p-2 rounded-3" id="detailWishlistBtn" title="Add to Wishlist">
+                <i class="bi bi-heart fs-5"></i>
+              </button>
+            </div>
+
+            <!-- Clinical Specifications Table -->
+            <div class="card border-0 bg-light rounded-3 p-3 mb-4">
+              <h5 class="fw-bold text-navy fs-6 mb-3"><i class="bi bi-clipboard2-pulse me-2 text-primary"></i>Pharmaceutical / Clinical Specifications</h5>
+              <div class="table-responsive">
+                <table class="table table-sm table-borderless mb-0 small">
+                  <tbody>
+                    <tr>
+                      <td class="text-muted fw-semibold" style="width: 35%;">Active Ingredient:</td>
+                      <td class="text-navy fw-medium" id="specIngredient">-</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted fw-semibold">Strength / Dosage:</td>
+                      <td class="text-navy fw-medium" id="specStrength">-</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted fw-semibold">Dosage Form:</td>
+                      <td class="text-navy fw-medium" id="specForm">-</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted fw-semibold">Manufacturer:</td>
+                      <td class="text-navy fw-medium" id="specManufacturer">-</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted fw-semibold">Storage Instructions:</td>
+                      <td class="text-navy fw-medium" id="specStorage">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Medical Disclaimer -->
+            <div class="p-3 border rounded-3 bg-white small text-muted">
+              <i class="bi bi-info-circle text-primary me-1"></i>
+              <strong>Medical Disclaimer:</strong> Consult a qualified healthcare professional before using prescription medicines. Always read the packaging label and follow dosage recommendations.
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Related Healthcare Products -->
+      <section class="mt-5 pt-5 border-top">
+        <div class="section-header">
+          <div class="section-subtitle">Complementary Items</div>
+          <h3 class="section-title">Related Healthcare Essentials</h3>
+        </div>
+        <div class="row g-4" id="relatedProductsGrid">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Universal Footer -->
+  <footer id="main-footer-container"></footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/user-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <!-- MediMate AI Chatbot (Google Generative AI) -->
+  <script src="../js/chat/MediMate_training_data.js"></script>
+  <script src="../js/pages/chat-bot.js"></script>
+  <script src="../js/components/category-card.js"></script>
+  <script src="../js/components/product-card.js"></script>
+  <script src="../js/components/navbar.js"></script>
+  <script src="../js/components/footer.js"></script>
+  <script src="../js/pages/product-details.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

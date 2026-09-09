@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Healthcare Checkout — KK PHARMACY Digital Pharmacy</title>
+  <meta name="description" content="Complete your medical order with encrypted checkout and prescription verification.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Custom Design System -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body id="checkout-page-main">
+
+  <!-- Universal Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div>
+        <i class="bi bi-shield-lock-fill me-2 text-primary"></i> 256-Bit SSL Encrypted Healthcare Checkout
+      </div>
+      <div class="d-none d-md-flex align-items-center gap-4">
+        <span><i class="bi bi-headset me-1"></i> Pharmacist Helpdesk: <strong>+94 11 234 5678</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Universal Navbar -->
+  <header id="main-navbar-container"></header>
+
+  <!-- Main Checkout Container -->
+  <main class="py-5">
+    <div class="container">
+      <h1 class="h3 fw-bold text-navy mb-4"><i class="bi bi-credit-card-2-front me-2 text-primary"></i>Secure Checkout</h1>
+
+      <form id="checkoutForm" class="needs-validation" novalidate>
+        <div class="row g-4">
+          
+          <!-- Left: Checkout Forms -->
+          <div class="col-12 col-lg-8">
+            
+            <!-- Section 1: Customer Information -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+              <h5 class="fw-bold text-navy mb-3 pb-2 border-bottom"><i class="bi bi-person me-2 text-primary"></i>1. Customer & Delivery Contact</h5>
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Full Name *</label>
+                  <input type="text" class="form-control" id="custFullName" placeholder="e.g. Sarah Perera" required value="Sarah Perera">
+                  <div class="invalid-feedback">Please enter your full name.</div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Email Address *</label>
+                  <input type="email" class="form-control" id="custEmail" placeholder="user@example.com" required value="user@example.com">
+                  <div class="invalid-feedback">Please enter a valid email address.</div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">Phone Number *</label>
+                  <input type="tel" class="form-control" id="custPhone" placeholder="+94 77 123 4567" required value="+94 77 123 4567">
+                  <div class="invalid-feedback">Please provide a contact number for delivery coordination.</div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label small fw-semibold">City / District *</label>
+                  <select class="form-select" id="custCity" required>
+                    <option value="Colombo" selected>Colombo</option>
+                    <option value="Gampaha">Gampaha</option>
+                    <option value="Kandy">Kandy</option>
+                    <option value="Galle">Galle</option>
+                    <option value="Kalutara">Kalutara</option>
+                    <option value="Kurunegala">Kurunegala</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label small fw-semibold">Delivery Street Address *</label>
+                  <textarea class="form-control" id="custAddress" rows="2" placeholder="No. 45, Galle Road, Colombo 03" required>No. 45, Galle Road, Colombo 03</textarea>
+                  <div class="invalid-feedback">Please provide your complete delivery street address.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 2: Prescription Upload (If applicable) -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white" id="prescriptionSection">
+              <h5 class="fw-bold text-navy mb-2 pb-2 border-bottom"><i class="bi bi-file-earmark-medical me-2 text-primary"></i>2. Doctor's Prescription (Optional / Rx Items)</h5>
+              <p class="text-muted small mb-3">If ordering prescription items, please upload a clear doctor's slip or hospital prescription for pharmacist verification.</p>
+              
+              <div class="prescription-dropzone" id="prescriptionDropzone">
+                <i class="bi bi-cloud-arrow-up display-5 text-primary mb-2"></i>
+                <div class="fw-bold text-navy small mb-1">Click to Upload Doctor's Prescription</div>
+                <div class="text-muted small">Supports JPG, PNG, PDF (Max 5MB)</div>
+                <input type="file" id="prescriptionFileInput" class="d-none" accept="image/*,.pdf">
+              </div>
+
+              <!-- Uploaded preview -->
+              <div class="mt-3 p-3 bg-light rounded-3 d-none align-items-center justify-content-between" id="rxPreviewBox">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-file-earmark-check text-success fs-4"></i>
+                  <div>
+                    <div class="small fw-bold text-navy" id="rxFileName">prescription.jpg</div>
+                    <small class="text-success"><i class="bi bi-check2"></i> Ready for Pharmacist Review</small>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger border-0" id="rxRemoveBtn"><i class="bi bi-trash"></i></button>
+              </div>
+            </div>
+
+            <!-- Section 3: Payment Method Selection -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+              <h5 class="fw-bold text-navy mb-3 pb-2 border-bottom"><i class="bi bi-credit-card me-2 text-primary"></i>3. Payment Method</h5>
+              
+              <div class="d-flex flex-column gap-3">
+                <div class="form-check p-3 border rounded-3 d-flex align-items-center">
+                  <input class="form-check-input ms-0 me-3" type="radio" name="paymentMethod" id="payCard" value="Credit Card" checked>
+                  <label class="form-check-label d-flex justify-content-between align-items-center w-100 cursor-pointer" for="payCard">
+                    <div>
+                      <div class="fw-bold text-navy small">Credit / Debit Card (Visa, MasterCard)</div>
+                      <small class="text-muted">Instant and secure 256-bit payment gateway</small>
+                    </div>
+                    <div class="fs-4 text-primary"><i class="bi bi-credit-card-2-front"></i></div>
+                  </label>
+                </div>
+
+                <div class="form-check p-3 border rounded-3 d-flex align-items-center">
+                  <input class="form-check-input ms-0 me-3" type="radio" name="paymentMethod" id="payCOD" value="Cash on Delivery (COD)">
+                  <label class="form-check-label d-flex justify-content-between align-items-center w-100 cursor-pointer" for="payCOD">
+                    <div>
+                      <div class="fw-bold text-navy small">Cash on Delivery (COD)</div>
+                      <small class="text-muted">Pay in cash when our delivery rider arrives</small>
+                    </div>
+                    <div class="fs-4 text-success"><i class="bi bi-cash-stack"></i></div>
+                  </label>
+                </div>
+
+                <div class="form-check p-3 border rounded-3 d-flex align-items-center">
+                  <input class="form-check-input ms-0 me-3" type="radio" name="paymentMethod" id="payBank" value="Direct Bank Transfer">
+                  <label class="form-check-label d-flex justify-content-between align-items-center w-100 cursor-pointer" for="payBank">
+                    <div>
+                      <div class="fw-bold text-navy small">Direct Bank Transfer</div>
+                      <small class="text-muted">Transfer to KK PHARMACY Commercial Bank Account</small>
+                    </div>
+                    <div class="fs-4 text-navy"><i class="bi bi-bank"></i></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right: Order Review Sidebar -->
+          <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 90px;">
+              <h5 class="fw-bold text-navy mb-3 pb-2 border-bottom">Order Items (<span id="checkoutItemsCount">0</span>)</h5>
+
+              <!-- Mini items list -->
+              <div class="d-flex flex-column gap-3 mb-4 overflow-auto" style="max-height: 240px;" id="checkoutMiniItems">
+                <!-- Rendered dynamically by checkout.js -->
+              </div>
+
+              <!-- Price breakdown -->
+              <div class="border-top pt-3 mb-3">
+                <div class="d-flex justify-content-between small text-muted mb-2">
+                  <span>Subtotal</span>
+                  <span class="fw-semibold text-navy" id="chkSubtotal">Rs. 0.00</span>
+                </div>
+                <div class="d-flex justify-content-between small text-muted mb-2">
+                  <span>Delivery Fee</span>
+                  <span class="fw-semibold text-success" id="chkDelivery">FREE</span>
+                </div>
+                <div class="d-flex justify-content-between small text-muted mb-3" id="chkDiscountRow" style="display: none !important;">
+                  <span>Voucher Discount</span>
+                  <span class="fw-semibold text-danger" id="chkDiscount">- Rs. 0.00</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                  <span class="fw-bold text-navy fs-5">Final Total</span>
+                  <span class="fw-bold text-primary fs-4" id="chkTotal">Rs. 0.00</span>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary-pharmacy w-100 py-3 fs-6 mb-3" id="placeOrderBtn">
+                <i class="bi bi-bag-check me-2"></i> Place & Confirm Order
+              </button>
+
+              <div class="small text-muted text-center">
+                By placing order, you agree to KK PHARMACY's <a href="faq.html" class="text-primary">Terms & Conditions</a>.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Universal Footer -->
+  <footer id="main-footer-container"></footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modular JavaScript Architecture -->
+  <script src="../js/config.js"></script>
+  <script src="../js/services/storage-service.js"></script>
+  <script src="../js/api/api-client.js"></script>
+  <script src="../js/api/auth-api.js"></script>
+  <script src="../js/api/product-api.js"></script>
+  <script src="../js/api/category-api.js"></script>
+  <script src="../js/api/cart-api.js"></script>
+  <script src="../js/api/order-api.js"></script>
+  <script src="../js/api/user-api.js"></script>
+  <script src="../js/services/auth-service.js"></script>
+  <script src="../js/services/cart-service.js"></script>
+  <script src="../js/services/product-service.js"></script>
+  <script src="../js/services/order-service.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/loading.js"></script>
+  <!-- MediMate AI Chatbot (Google Generative AI) -->
+  <script src="../js/chat/MediMate_training_data.js"></script>
+  <script src="../js/pages/chat-bot.js"></script>
+  <script src="../js/components/category-card.js"></script>
+  <script src="../js/components/product-card.js"></script>
+  <script src="../js/components/navbar.js"></script>
+  <script src="../js/components/footer.js"></script>
+  <script src="../js/pages/checkout.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>
