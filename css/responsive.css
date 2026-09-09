@@ -8,7 +8,7 @@
     max-width: 1360px;
   }
   .hero-headline {
-    font-size: 3rem;
+    font-size: 3.1rem;
   }
 }
 
@@ -18,14 +18,20 @@
     padding: 2.5rem 2rem;
   }
   .hero-headline {
-    font-size: 2.2rem;
+    font-size: 2.3rem;
+  }
+  .hero-showcase-main {
+    height: 360px;
+  }
+  .slide-img-wrapper {
+    height: 180px;
   }
 }
 
 /* Tablet (768px to 991px) */
 @media (max-width: 991px) {
   .hero-wrapper {
-    padding: 2rem 1.5rem;
+    padding: 2.25rem 1.75rem;
     text-align: center;
   }
   .hero-subtext {
@@ -36,8 +42,17 @@
     margin-left: auto;
     margin-right: auto;
   }
-  .hero-image-grid {
-    margin-top: 2rem;
+  .hero-trending-tags {
+    justify-content: center;
+  }
+  .hero-ctas {
+    justify-content: center;
+  }
+  .hero-trust-strip {
+    justify-content: center;
+  }
+  .hero-showcase-container {
+    margin-top: 1.5rem;
   }
   
   .medical-equipment-banner {
@@ -59,16 +74,41 @@
   }
   
   .hero-wrapper {
-    padding: 1.5rem 1rem;
-    border-radius: var(--radius-md);
+    padding: 1.75rem 1rem;
+    border-radius: 20px;
   }
   
   .hero-headline {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
+  }
+
+  .hero-showcase-main {
+    height: 330px;
+  }
+
+  .slide-img-wrapper {
+    height: 160px;
+  }
+
+  .slide-heading {
+    font-size: 1.05rem;
+  }
+
+  .hero-thumbnail-strip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
   }
   
   .section-title {
     font-size: 1.5rem;
+  }
+
+  .quick-services-banner {
+    padding: 0.85rem;
+  }
+
+  .stat-number {
+    font-size: 1.35rem;
   }
 
   .newsletter-card {
@@ -88,13 +128,13 @@
 /* Extra Small Devices (Up to 480px) */
 @media (max-width: 480px) {
   .hero-headline {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
   }
   
   .btn-primary-pharmacy, 
   .btn-outline-pharmacy {
     width: 100%;
-    padding: 0.6rem 1rem;
+    padding: 0.65rem 1rem;
   }
   
   .hero-ctas {
@@ -102,5 +142,10 @@
     flex-direction: column;
     gap: 0.75rem;
     width: 100%;
+  }
+
+  .hero-glass-pill {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.68rem;
   }
 }

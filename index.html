@@ -46,21 +46,25 @@
     <div class="container">
 
       <!-- ==========================================
-           SECTION 3 — HERO SECTION
+           SECTION 3 — HERO SECTION WITH MODERN AUTO-SHOWCASE
            ========================================== -->
       <section class="mb-5">
         <div class="hero-wrapper">
           <div class="row align-items-center g-4">
             <!-- Left Hero Content -->
             <div class="col-12 col-lg-6">
-              <span class="badge badge-pharmacy badge-light-blue mb-3">
-                <i class="bi bi-patch-check-fill me-1"></i> Certified Digital Pharmacy
-              </span>
+              <div class="hero-top-badge mb-3">
+                <span class="badge-pulse-dot"></span>
+                <i class="bi bi-patch-check-fill text-primary me-1"></i> Certified Digital Pharmacy • Sri Lanka
+              </div>
+              
               <h1 class="hero-headline">
-                “Your Health,<br>Delivered to Your Door”
+                “Your Health,<br>
+                <span class="hero-highlight-text">Delivered to Your Door</span>”
               </h1>
+              
               <p class="hero-subtext">
-                Shop trusted medicines, medical equipment, vitamins, and everyday healthcare essentials from one convenient online pharmacy.
+                Shop trusted medicines, medical equipment, vitamins, and everyday healthcare essentials from Sri Lanka's premier digital pharmacy network.
               </p>
 
               <!-- Hero Search Widget -->
@@ -72,8 +76,18 @@
                 </button>
               </div>
 
+              <!-- Popular Quick Search Tags -->
+              <div class="hero-trending-tags d-flex align-items-center flex-wrap gap-2 mb-4">
+                <span class="text-muted small fw-semibold"><i class="bi bi-fire text-danger me-1"></i> Popular:</span>
+                <span class="hero-tag-pill" data-query="Paracetamol">Paracetamol</span>
+                <span class="hero-tag-pill" data-query="Blood Pressure">Omron BP</span>
+                <span class="hero-tag-pill" data-query="Vitamin C">Vitamin C</span>
+                <span class="hero-tag-pill" data-query="Amoxicillin">Antibiotics</span>
+                <span class="hero-tag-pill" data-query="Inhaler">Inhaler</span>
+              </div>
+
               <!-- Action CTAs -->
-              <div class="hero-ctas d-flex flex-wrap gap-3">
+              <div class="hero-ctas d-flex flex-wrap gap-3 mb-4">
                 <a href="pages/products.html?category=medicines" class="btn btn-primary-pharmacy">
                   <i class="bi bi-capsule"></i> Shop Medicines
                 </a>
@@ -81,37 +95,212 @@
                   <i class="bi bi-heart-pulse"></i> Explore Medical Equipment
                 </a>
               </div>
-            </div>
 
-            <!-- Right Hero Visual Grid -->
-            <div class="col-12 col-lg-6">
-              <div class="hero-image-grid">
-                <div class="hero-image-card">
-                  <img src="assets/images/hero_collage.png" alt="Healthcare Products Collage" class="img-fluid">
-                  <div class="mt-2 text-center">
-                    <span class="fw-bold small text-navy">Authentic Care</span>
-                  </div>
+              <!-- Hero Micro Trust Pills -->
+              <div class="hero-trust-strip d-flex flex-wrap align-items-center gap-3 pt-2 border-top border-light-subtle">
+                <div class="trust-item">
+                  <i class="bi bi-star-fill text-warning"></i>
+                  <span><strong>4.9/5</strong> (12k+ Reviews)</span>
                 </div>
-                <div class="hero-image-card">
-                  <img src="assets/images/bp_monitor.png" alt="Digital BP Monitor" class="img-fluid">
-                  <div class="mt-2 text-center">
-                    <span class="fw-bold small text-navy">Medical Equipment</span>
-                  </div>
+                <div class="trust-item">
+                  <i class="bi bi-clock-history text-primary"></i>
+                  <span><strong>2-Hr</strong> Express Delivery</span>
                 </div>
-                <div class="hero-image-card">
-                  <img src="assets/images/medicine_1.png" alt="Prescription Medicines" class="img-fluid">
-                  <div class="mt-2 text-center">
-                    <span class="fw-bold small text-navy">Prescription Rx</span>
-                  </div>
-                </div>
-                <div class="hero-image-card">
-                  <img src="assets/images/vitamins_1.png" alt="Vitamins & Supplements" class="img-fluid">
-                  <div class="mt-2 text-center">
-                    <span class="fw-bold small text-navy">Daily Wellness</span>
-                  </div>
+                <div class="trust-item">
+                  <i class="bi bi-shield-fill-check text-success"></i>
+                  <span><strong>10,000+</strong> Genuine Rx</span>
                 </div>
               </div>
             </div>
+
+            <!-- Right Hero Visual Showcase & Auto Slideshow -->
+            <div class="col-12 col-lg-6">
+              <div class="hero-showcase-container" id="heroShowcase" aria-label="Interactive Healthcare Showcase">
+                
+                <!-- Main Active Showcase Card -->
+                <div class="hero-showcase-main">
+                  <!-- Floating Glass Badges -->
+                  <div class="hero-glass-pill pill-top-right">
+                    <i class="bi bi-shield-fill-check text-success"></i>
+                    <span>100% Certified Authentic</span>
+                  </div>
+                  <div class="hero-glass-pill pill-bottom-left">
+                    <i class="bi bi-lightning-charge-fill text-warning"></i>
+                    <span>Express Delivery</span>
+                  </div>
+
+                  <!-- 4 Showcase Slides -->
+                  <!-- Slide 0: Authentic Care -->
+                  <div class="hero-slide-card active" data-index="0" data-url="pages/products.html">
+                    <div class="slide-img-wrapper">
+                      <img src="assets/images/hero_collage.png" alt="Authentic Care Healthcare Range" class="slide-main-img">
+                    </div>
+                    <div class="slide-content-overlay">
+                      <div class="slide-tag"><i class="bi bi-stars"></i> Verified Stock</div>
+                      <h3 class="slide-heading">Authentic Healthcare & Daily Care</h3>
+                      <p class="slide-desc">Top-rated health supplements, first aid, and everyday family medical essentials.</p>
+                      <a href="pages/products.html" class="btn-slide-cta">
+                        Shop Range <i class="bi bi-arrow-up-right"></i>
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Slide 1: Medical Equipment -->
+                  <div class="hero-slide-card" data-index="1" data-url="pages/products.html?category=equipment">
+                    <div class="slide-img-wrapper">
+                      <img src="assets/images/bp_monitor.png" alt="Clinical Grade Medical Equipment" class="slide-main-img">
+                    </div>
+                    <div class="slide-content-overlay">
+                      <div class="slide-tag"><i class="bi bi-heart-pulse-fill"></i> Clinical Precision</div>
+                      <h3 class="slide-heading">Digital Monitors & Diagnostic Gear</h3>
+                      <p class="slide-desc">Hospital-grade digital BP monitors, glucometers, nebulizers, and thermometers.</p>
+                      <a href="pages/products.html?category=equipment" class="btn-slide-cta">
+                        Explore Devices <i class="bi bi-arrow-up-right"></i>
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Slide 2: Prescription Rx -->
+                  <div class="hero-slide-card" data-index="2" data-url="pages/products.html?category=medicines">
+                    <div class="slide-img-wrapper">
+                      <img src="assets/images/medicine_1.png" alt="Prescription Medicines Rx" class="slide-main-img">
+                    </div>
+                    <div class="slide-content-overlay">
+                      <div class="slide-tag"><i class="bi bi-capsule"></i> Licensed Rx</div>
+                      <h3 class="slide-heading">Certified Prescription Rx & Chronic Care</h3>
+                      <p class="slide-desc">Antibiotics, cardiac, diabetic, and chronic medications dispensed by registered pharmacists.</p>
+                      <a href="pages/products.html?category=medicines" class="btn-slide-cta">
+                        Order Medicines <i class="bi bi-arrow-up-right"></i>
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Slide 3: Daily Wellness -->
+                  <div class="hero-slide-card" data-index="3" data-url="pages/products.html?category=vitamins">
+                    <div class="slide-img-wrapper">
+                      <img src="assets/images/vitamins_1.png" alt="Vitamins & Daily Wellness" class="slide-main-img">
+                    </div>
+                    <div class="slide-content-overlay">
+                      <div class="slide-tag"><i class="bi bi-shield-plus"></i> Immune Defense</div>
+                      <h3 class="slide-heading">Vitamins, Supplements & Vitality</h3>
+                      <p class="slide-desc">Certified multivitamins, Omega-3, calcium, and herbal immune support formulations.</p>
+                      <a href="pages/products.html?category=vitamins" class="btn-slide-cta">
+                        Explore Wellness <i class="bi bi-arrow-up-right"></i>
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Prev / Next Navigation Arrows -->
+                  <button class="hero-nav-arrow arrow-prev" id="heroPrevBtn" aria-label="Previous Slide">
+                    <i class="bi bi-chevron-left"></i>
+                  </button>
+                  <button class="hero-nav-arrow arrow-next" id="heroNextBtn" aria-label="Next Slide">
+                    <i class="bi bi-chevron-right"></i>
+                  </button>
+                </div>
+
+                <!-- 4 Interactive Thumbnail Selector Cards with Progress Bars -->
+                <div class="hero-thumbnail-strip" role="tablist">
+                  <div class="hero-thumb-card active" data-index="0" role="tab" tabindex="0" aria-label="Slide 1: Authentic Care">
+                    <div class="thumb-progress"><div class="thumb-progress-fill"></div></div>
+                    <div class="thumb-img-box">
+                      <img src="assets/images/hero_collage.png" alt="Authentic Care thumbnail">
+                    </div>
+                    <div class="thumb-text">
+                      <span class="thumb-title">Authentic Care</span>
+                      <small class="thumb-sub">Essentials</small>
+                    </div>
+                  </div>
+
+                  <div class="hero-thumb-card" data-index="1" role="tab" tabindex="0" aria-label="Slide 2: Medical Equipment">
+                    <div class="thumb-progress"><div class="thumb-progress-fill"></div></div>
+                    <div class="thumb-img-box">
+                      <img src="assets/images/bp_monitor.png" alt="Medical Equipment thumbnail">
+                    </div>
+                    <div class="thumb-text">
+                      <span class="thumb-title">Equipment</span>
+                      <small class="thumb-sub">Diagnostics</small>
+                    </div>
+                  </div>
+
+                  <div class="hero-thumb-card" data-index="2" role="tab" tabindex="0" aria-label="Slide 3: Prescription Rx">
+                    <div class="thumb-progress"><div class="thumb-progress-fill"></div></div>
+                    <div class="thumb-img-box">
+                      <img src="assets/images/medicine_1.png" alt="Prescription Rx thumbnail">
+                    </div>
+                    <div class="thumb-text">
+                      <span class="thumb-title">Prescription Rx</span>
+                      <small class="thumb-sub">Medicines</small>
+                    </div>
+                  </div>
+
+                  <div class="hero-thumb-card" data-index="3" role="tab" tabindex="0" aria-label="Slide 4: Daily Wellness">
+                    <div class="thumb-progress"><div class="thumb-progress-fill"></div></div>
+                    <div class="thumb-img-box">
+                      <img src="assets/images/vitamins_1.png" alt="Daily Wellness thumbnail">
+                    </div>
+                    <div class="thumb-text">
+                      <span class="thumb-title">Daily Wellness</span>
+                      <small class="thumb-sub">Vitamins</small>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           FAST ACTION BAR: PRESCRIPTION & AI CONSULTATION
+           ========================================== -->
+      <section class="mb-5">
+        <div class="quick-services-banner">
+          <div class="row g-3 align-items-center">
+            
+            <!-- Quick Action 1: Upload Prescription -->
+            <div class="col-12 col-md-4">
+              <div class="quick-service-card" id="quickPrescriptionBtn" role="button" tabindex="0">
+                <div class="service-icon-bubble icon-rx">
+                  <i class="bi bi-file-earmark-medical"></i>
+                </div>
+                <div class="service-details">
+                  <h6 class="service-title">Upload Prescription Rx</h6>
+                  <p class="service-sub">Have a doctor’s slip? Get home delivery in 2 hours</p>
+                </div>
+                <span class="service-action-arrow"><i class="bi bi-chevron-right"></i></span>
+              </div>
+            </div>
+
+            <!-- Quick Action 2: Chat with AI Pharmacist -->
+            <div class="col-12 col-md-4">
+              <div class="quick-service-card" id="quickAiConsultBtn" role="button" tabindex="0">
+                <div class="service-icon-bubble icon-ai">
+                  <i class="bi bi-robot"></i>
+                </div>
+                <div class="service-details">
+                  <h6 class="service-title">MediMate AI Pharmacist</h6>
+                  <p class="service-sub">Instant dosage guidance, precautions & medicine search</p>
+                </div>
+                <span class="service-action-arrow"><i class="bi bi-chat-dots-fill"></i></span>
+              </div>
+            </div>
+
+            <!-- Quick Action 3: 24/7 Pharmacist Helpline -->
+            <div class="col-12 col-md-4">
+              <div class="quick-service-card hotline-card">
+                <div class="service-icon-bubble icon-call">
+                  <i class="bi bi-telephone-inbound-fill"></i>
+                </div>
+                <div class="service-details">
+                  <h6 class="service-title">24/7 Pharmacist Helpline</h6>
+                  <p class="service-sub">Direct call: <strong>+94 11 234 5678</strong></p>
+                </div>
+                <a href="tel:+94112345678" class="service-action-arrow" title="Call Now"><i class="bi bi-phone"></i></a>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -158,65 +347,99 @@
       <section class="mb-5">
         <div class="medical-equipment-banner">
           <div class="row align-items-center g-4">
-            <div class="col-12 col-lg-6">
-              <span class="badge badge-pharmacy badge-light-blue mb-3">Diagnostic & Monitoring</span>
-              <h2 class="hero-headline fs-2">“Healthcare Equipment You Can Trust”</h2>
+            <div class="col-12 col-md-7">
+              <span class="badge bg-warning text-dark fw-bold mb-2">Hospital Grade Diagnostics</span>
+              <h2 class="fs-2 fw-bold text-navy mb-3">Monitor Your Vitals at Home with Precision</h2>
               <p class="text-muted mb-4">
-                Monitor your vital health metrics at home with certified hospital-grade blood pressure monitors, glucose meters, pulse oximeters, and nebulizers.
+                Explore digital blood pressure monitors, pulse oximeters, blood glucose meters, nebulizers, and orthopedic support gear certified by international health authorities.
               </p>
-              <div class="d-flex flex-wrap gap-2 mb-4">
-                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Blood Pressure Monitors</span>
-                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Glucose Meters</span>
-                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Thermometers</span>
-                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Nebulizers</span>
-                <span class="badge bg-white text-dark border px-3 py-2"><i class="bi bi-check2-circle text-success me-1"></i> Pulse Oximeters</span>
+              <div class="d-flex gap-3 flex-wrap">
+                <a href="pages/products.html?category=equipment" class="btn btn-primary-pharmacy">
+                  <i class="bi bi-heart-pulse"></i> Shop Diagnostics
+                </a>
+                <a href="pages/about.html" class="btn btn-outline-pharmacy">
+                  Learn About Warranty
+                </a>
               </div>
-              <a href="pages/products.html?category=equipment" class="btn btn-primary-pharmacy">
-                Explore Medical Equipment <i class="bi bi-arrow-right"></i>
-              </a>
             </div>
-            <div class="col-12 col-lg-6 text-center">
-              <img src="assets/images/bp_monitor.png" alt="Medical Equipment" class="img-fluid rounded-4 shadow-sm" style="max-height: 280px; object-fit: contain;">
+            <div class="col-12 col-md-5 text-center">
+              <div class="p-3 bg-white rounded-4 shadow-sm d-inline-block">
+                <img src="assets/images/bp_monitor.png" alt="Omron Blood Pressure Monitor" class="img-fluid" style="max-height: 220px; object-fit: contain;">
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ==========================================
-           SECTION 7 — WHY CHOOSE US (HEALTHCARE TRUST)
+           SECTION 7 — TRUST METRICS & WHY CHOOSE US
            ========================================== -->
       <section class="mb-5">
         <div class="section-header text-center">
-          <div class="section-subtitle">Healthcare Trust</div>
-          <h2 class="section-title">Why Patients Choose KK PHARMACY</h2>
+          <div class="section-subtitle">Why Sri Lanka Trusts Us</div>
+          <h2 class="section-title">The KK PHARMACY Healthcare Standard</h2>
         </div>
+        
+        <!-- Live Healthcare Impact Numbers -->
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3">
+            <div class="stat-card">
+              <div class="stat-icon-wrapper"><i class="bi bi-capsule"></i></div>
+              <div class="stat-number">10,000+</div>
+              <div class="stat-label">Certified Medicines</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stat-card">
+              <div class="stat-icon-wrapper"><i class="bi bi-people-fill"></i></div>
+              <div class="stat-number">50,000+</div>
+              <div class="stat-label">Happy Patients</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stat-card">
+              <div class="stat-icon-wrapper"><i class="bi bi-truck"></i></div>
+              <div class="stat-number">99.8%</div>
+              <div class="stat-label">On-Time Delivery</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stat-card">
+              <div class="stat-icon-wrapper"><i class="bi bi-award-fill"></i></div>
+              <div class="stat-number">100%</div>
+              <div class="stat-label">Genuine Batch Quality</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Key Value Pillars -->
         <div class="row g-4">
           <div class="col-12 col-sm-6 col-lg-3">
-            <div class="trust-card">
-              <div class="trust-icon"><i class="bi bi-patch-check"></i></div>
-              <h5 class="trust-title">Genuine Products</h5>
-              <p class="trust-text">Directly sourced 100% authentic medicines and medical supplies from certified manufacturers.</p>
+            <div class="feature-box">
+              <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+              <h5 class="feature-title">100% Authentic</h5>
+              <p class="feature-desc">All medicines and medical supplies are sourced directly from licensed global manufacturers.</p>
             </div>
           </div>
           <div class="col-12 col-sm-6 col-lg-3">
-            <div class="trust-card">
-              <div class="trust-icon"><i class="bi bi-credit-card-2-front"></i></div>
-              <h5 class="trust-title">Secure Payments</h5>
-              <p class="trust-text">256-bit SSL encrypted checkout supporting credit cards, debit cards, and cash on delivery.</p>
+            <div class="feature-box">
+              <div class="feature-icon"><i class="bi bi-lightning-charge"></i></div>
+              <h5 class="feature-title">Rapid Delivery</h5>
+              <p class="feature-desc">Prompt, temperature-controlled delivery to ensure medicine potency and freshness.</p>
             </div>
           </div>
           <div class="col-12 col-sm-6 col-lg-3">
-            <div class="trust-card">
-              <div class="trust-icon"><i class="bi bi-lightning-charge"></i></div>
-              <h5 class="trust-title">Fast Delivery</h5>
-              <p class="trust-text">Temperature-controlled fast delivery right to your door with real-time order tracking.</p>
+            <div class="feature-box">
+              <div class="feature-icon"><i class="bi bi-person-check"></i></div>
+              <h5 class="feature-title">Pharmacist Verified</h5>
+              <p class="feature-desc">Prescriptions and orders are carefully reviewed by certified pharmacists prior to dispatch.</p>
             </div>
           </div>
           <div class="col-12 col-sm-6 col-lg-3">
-            <div class="trust-card">
-              <div class="trust-icon"><i class="bi bi-person-heart"></i></div>
-              <h5 class="trust-title">Pharmacist Support</h5>
-              <p class="trust-text">Qualified pharmacists available for dosage assistance and prescription consultation.</p>
+            <div class="feature-box">
+              <div class="feature-icon"><i class="bi bi-credit-card"></i></div>
+              <h5 class="feature-title">Secure Payments</h5>
+              <p class="feature-desc">Encrypted digital card payments, bank transfers, and Cash on Delivery (COD) supported.</p>
             </div>
           </div>
         </div>
@@ -225,31 +448,31 @@
       <!-- ==========================================
            SECTION 8 — HOW IT WORKS
            ========================================== -->
-      <section class="mb-5 py-4">
+      <section class="mb-5">
         <div class="section-header text-center">
-          <div class="section-subtitle">Simple Process</div>
-          <h2 class="section-title">How It Works</h2>
+          <div class="section-subtitle">Simple 4-Step Process</div>
+          <h2 class="section-title">How to Order from KK PHARMACY</h2>
         </div>
         <div class="how-it-works-timeline">
           <div class="step-card">
             <div class="step-number">1</div>
-            <h5 class="step-title">1. Search</h5>
-            <p class="step-desc">Find the healthcare product or medicine you need using our smart search.</p>
+            <h5 class="step-title">1. Search & Select</h5>
+            <p class="step-desc">Find your prescribed medicines, wellness products or equipment using our smart search.</p>
           </div>
           <div class="step-card">
             <div class="step-number">2</div>
             <h5 class="step-title">2. Add to Cart</h5>
-            <p class="step-desc">Select your desired products, dosage strength, and quantities.</p>
+            <p class="step-desc">Choose your dosage strengths, pack sizes, and review details easily.</p>
           </div>
           <div class="step-card">
             <div class="step-number">3</div>
-            <h5 class="step-title">3. Place Order</h5>
-            <p class="step-desc">Upload prescription if required and confirm your delivery details.</p>
+            <h5 class="step-title">3. Confirm & Rx</h5>
+            <p class="step-desc">Upload doctor's prescription if needed and confirm your delivery address.</p>
           </div>
           <div class="step-card">
             <div class="step-number">4</div>
-            <h5 class="step-title">4. Get Delivered</h5>
-            <p class="step-desc">Receive your order at your preferred address safely and quickly.</p>
+            <h5 class="step-title">4. Doorstep Delivery</h5>
+            <p class="step-desc">Receive your securely sealed medications safely at your doorstep.</p>
           </div>
         </div>
       </section>
@@ -263,7 +486,7 @@
             <div class="col-12 col-md-8">
               <h2 class="fs-2 fw-bold mb-2">“Take Better Care of Your Health”</h2>
               <p class="lead mb-4 text-white-50 fs-6">
-                Everything you need for everyday healthcare, chronic care, and family wellness in one place.
+                Everything you need for everyday healthcare, chronic care, and family wellness in one trusted place.
               </p>
               <a href="pages/products.html" class="btn btn-light text-primary fw-bold px-4 py-2">
                 Shop Now <i class="bi bi-arrow-right ms-1"></i>
@@ -366,7 +589,62 @@
   </main>
 
   <!-- ==========================================
-       SECTION 12 — FOOTER
+       SECTION 12 — PRESCRIPTION UPLOAD MODAL
+       ========================================== -->
+  <div class="modal fade" id="prescriptionUploadModal" tabindex="-1" aria-labelledby="rxModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+        <div class="modal-header border-0 pb-0">
+          <div class="d-flex align-items-center gap-2">
+            <div class="service-icon-bubble icon-rx" style="width: 40px; height: 40px; font-size: 1.2rem;">
+              <i class="bi bi-file-earmark-medical"></i>
+            </div>
+            <div>
+              <h5 class="modal-title fw-bold text-navy mb-0" id="rxModalTitle">Upload Prescription Slip (Rx)</h5>
+              <small class="text-muted">Our verified pharmacists will process your order</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="prescriptionUploadForm">
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-navy small">Patient Full Name</label>
+              <input type="text" class="form-control" id="rxPatientName" placeholder="e.g. Nimal Perera" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-navy small">Phone / WhatsApp Number</label>
+              <input type="tel" class="form-control" id="rxPhone" placeholder="e.g. +94 77 123 4567" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-navy small">Delivery Address (City / Street)</label>
+              <input type="text" class="form-control" id="rxAddress" placeholder="e.g. No. 45, Galle Road, Colombo 03" required>
+            </div>
+            <div class="mb-4">
+              <label class="form-label fw-semibold text-navy small">Upload Prescription Photo / PDF</label>
+              <div class="rx-dropzone" id="rxDropzone">
+                <i class="bi bi-cloud-arrow-up display-5 text-primary mb-2"></i>
+                <div class="fw-semibold text-navy small">Click to browse or drag & drop prescription image</div>
+                <small class="text-muted">Supports JPG, PNG, PDF (Max: 10MB)</small>
+                <input type="file" id="rxFileInput" accept="image/*,.pdf" class="d-none" required>
+              </div>
+              <div id="rxFilePreview" class="mt-2 d-none">
+                <span class="badge bg-success-subtle text-success p-2 d-inline-flex align-items-center gap-1">
+                  <i class="bi bi-file-check-fill"></i> <span id="rxFileName">file.jpg</span>
+                </span>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary-pharmacy w-100 py-2">
+              <i class="bi bi-send-check"></i> Submit Prescription Refill
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       SECTION 13 — FOOTER
        ========================================== -->
   <footer id="main-footer-container"></footer>
 
