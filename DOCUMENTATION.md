@@ -338,5 +338,16 @@ The four core trust & volume metric tiles under *"The KK PHARMACY Healthcare Sta
 - **Verification Micro-Badges (`.stat-tag`)**: Trust markers attached to each metric (*"Rx & OTC Verified"*, *"Trusted Care"*, *"Islandwide Express"*, *"NMRA Approved"*).
 
 ---
+
+## 14. 4 PILLARS OF MEDICAL TRUST TILE SUITE (ABOUT & HOMEPAGE)
+
+The *"4 Pillars of Medical Trust"* and core healthcare value boxes are upgraded with modern UI styling:
+
+- **Clinical Card Architecture (`.trust-card`, `.feature-box`)**: Glassmorphic backgrounds with subtle themed radial color meshes (NMRA blue, Cold-Chain cryo-cyan, Pharmacist emerald, and Patient-first rose).
+- **Background Medical Watermarks (`.trust-bg-watermark`)**: Oversized, ultra-crisp vector glyphs (`bi-shield-check`, `bi-snow2`, `bi-person-badge-fill`, `bi-heart-pulse-fill`) with subtle transparency (0.06 normal -> 0.16 hover) and smooth 3D rotation expansion.
+- **Interactive Micro-Motions**: Cards lift on hover (`translateY(-8px)`) with expanded ambient shadow and squircle icon rotational pulse (`scale(1.1) rotate(5deg)`).
+- **Trust Badges (`.trust-tag`)**: Departmental certification markers embedded into each card (*"Regulatory Approved"*, *"2°C – 8°C Monitored"*, *"Clinical Oversight"*, *"24/7 Care & Refills"*).
+
+---
 *Document maintained automatically with each build increment.*
 
