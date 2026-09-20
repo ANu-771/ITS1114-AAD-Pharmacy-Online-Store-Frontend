@@ -12,7 +12,7 @@ const AdminSidebarComponent = {
     const container = document.getElementById('admin-sidebar-container');
     if (!container) return;
 
-    const user = AuthService.getCurrentUser() || { fullName: 'Administrator', email: 'admin@medora.com' };
+    const user = AuthService.getCurrentUser() || { fullName: 'Administrator', email: 'admin@kkpharmacy.com' };
 
     container.innerHTML = `
       <aside class="admin-sidebar" id="adminSidebar">

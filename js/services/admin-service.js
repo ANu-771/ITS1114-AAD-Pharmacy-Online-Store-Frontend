@@ -15,7 +15,7 @@ const AdminService = {
   ],
 
   _mockUsers: [
-    { id: 101, fullName: 'System Administrator', email: 'admin@medora.com', phone: '+94 11 234 5678', role: 'ROLE_ADMIN', roles: ['ROLE_ADMIN'], status: 'ACTIVE', enabled: true, joinDate: '2025-01-10' },
+    { id: 101, fullName: 'System Administrator', email: 'admin@kkpharmacy.com', phone: '+94 11 234 5678', role: 'ROLE_ADMIN', roles: ['ROLE_ADMIN'], status: 'ACTIVE', enabled: true, joinDate: '2025-01-10' },
     { id: 102, fullName: 'Sarah Perera', email: 'user@example.com', phone: '+94 77 123 4567', role: 'ROLE_USER', roles: ['ROLE_USER'], status: 'ACTIVE', enabled: true, joinDate: '2026-02-14' },
     { id: 103, fullName: 'Dr. Ruwan Silva', email: 'ruwan.s@hospital.lk', phone: '+94 71 987 6543', role: 'ROLE_USER', roles: ['ROLE_USER'], status: 'ACTIVE', enabled: true, joinDate: '2026-03-01' },
     { id: 104, fullName: 'Kamal Jayawardena', email: 'kamal.j@gmail.com', phone: '+94 76 555 8899', role: 'ROLE_USER', roles: ['ROLE_USER'], status: 'ACTIVE', enabled: true, joinDate: '2026-05-19' },

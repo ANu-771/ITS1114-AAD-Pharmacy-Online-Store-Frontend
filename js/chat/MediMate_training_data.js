@@ -114,7 +114,7 @@ CORE MISSION & BEHAVIORAL PROTOCOLS:
             license: "SL-NMRA Registered Pharmacy Lic. #PH-2026-889",
             hotline: "+94 11 234 5678",
             emergencySupport: "+94 11 999 0000",
-            email: "support@medora.lk",
+            email: "support@kkpharmacy.lk",
             address: "No. 120, Healthcare Avenue, Colombo 03, Sri Lanka",
             operatingHours: "24/7 Online Store | Licensed Pharmacist Support 8:00 AM – 10:00 PM Daily",
             deliveryCoverage: "Islandwide across Sri Lanka (Colombo, Kandy, Galle, Jaffna, Gampaha, and all districts)",

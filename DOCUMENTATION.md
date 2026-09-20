@@ -724,8 +724,8 @@ For instant coursework demonstration and evaluation:
 | Role | Email | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
 | **Customer User** | `user@example.com` | `password123` | Storefront, Cart, Checkout, Orders, Profile |
-| **Administrator** | `admin@medora.com` | `admin123` | All Storefront + Full Admin Portal (`admin/`) |
-| **Pharmacist** | `pharmacist@medora.com` | `pharma123` | Inventory, Prescriptions, Orders |
+| **Administrator** | `admin@kkpharmacy.com` | `admin123` | All Storefront + Full Admin Portal (`admin/`) |
+| **Pharmacist** | `pharmacist@kkpharmacy.com` | `pharma123` | Inventory, Prescriptions, Orders |
 
 ### 10.2 Switching between Mock Mode and Live Spring Boot API
 In `js/config.js`:

@@ -31,7 +31,7 @@ const LoginPage = {
     });
 
     document.getElementById('btnFillAdmin')?.addEventListener('click', () => {
-      if (emailInput) emailInput.value = 'admin@medora.com';
+      if (emailInput) emailInput.value = 'admin@kkpharmacy.com';
       if (passInput) passInput.value = 'admin123';
       Toast.show('Filled Admin Demo Credentials', 'info');
     });

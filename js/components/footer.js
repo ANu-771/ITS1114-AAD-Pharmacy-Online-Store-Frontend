@@ -75,7 +75,7 @@ const FooterComponent = {
                   <i class="bi bi-telephone text-primary fs-6"></i> +94 11 234 5678
                 </li>
                 <li class="d-flex align-items-center gap-2 mb-2">
-                  <i class="bi bi-envelope text-primary fs-6"></i> clinical@medora.lk
+                  <i class="bi bi-envelope text-primary fs-6"></i> clinical@kkpharmacy.lk
                 </li>
                 <li class="d-flex align-items-center gap-2">
                   <i class="bi bi-geo-alt text-primary fs-6"></i> Colombo 07, Sri Lanka

@@ -193,9 +193,9 @@ const CartPage = {
     // Apply coupon
     document.getElementById('applyCouponBtn')?.addEventListener('click', () => {
       const code = document.getElementById('couponCodeInput')?.value.trim().toUpperCase();
-      if (code === 'MEDORA10') {
+      if (code === 'KKPHARMACY10' || code === 'MEDORA10' || code === 'KK10') {
         CartPage.discountRate = 0.10;
-        Toast.show('Coupon MEDORA10 applied! 10% discount added.', 'success');
+        Toast.show('Coupon KKPHARMACY10 applied! 10% discount added.', 'success');
         CartPage.renderCart();
       } else if (code) {
         Toast.show('Invalid or expired coupon code.', 'warning');
