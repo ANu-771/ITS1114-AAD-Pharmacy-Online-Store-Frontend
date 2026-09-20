@@ -205,6 +205,49 @@
   .pharmacy-footer {
     padding: 2.5rem 0 1.5rem 0;
   }
+
+  /* About page floating corner logo bubbles on mobile */
+  .about-hero-showcase {
+    padding: 1rem 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .floating-logo-bubble {
+    width: 40px;
+    height: 40px;
+  }
+
+  .floating-logo-bubble .logo-icon {
+    font-size: 1.15rem;
+  }
+
+  .corner-orb-pill {
+    bottom: 6%;
+    left: -2%;
+    width: 42px;
+    height: 42px;
+  }
+
+  .corner-orb-shield {
+    bottom: -3%;
+    left: 10%;
+    width: 46px;
+    height: 46px;
+  }
+
+  .corner-orb-heart {
+    bottom: 18%;
+    left: 4%;
+    width: 38px;
+    height: 38px;
+  }
+
+  .corner-orb-syringe {
+    bottom: 2%;
+    left: 22%;
+    width: 40px;
+    height: 40px;
+  }
 }
 
 /* Extra Small Devices (Up to 480px) */

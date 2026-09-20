@@ -349,5 +349,20 @@ The *"4 Pillars of Medical Trust"* and core healthcare value boxes are upgraded 
 - **Trust Badges (`.trust-tag`)**: Departmental certification markers embedded into each card (*"Regulatory Approved"*, *"2°C – 8°C Monitored"*, *"Clinical Oversight"*, *"24/7 Care & Refills"*).
 
 ---
+
+## 15. ABOUT US CORNER FLOATING LOGO ORB CLUSTER & STAR PARTICLES
+
+The floating UI on the **About Us** page hero showcase has been streamlined into pure floating glassmorphic logo bubbles clustered around the hero image corner:
+
+- **Word Removal & Pure Logo Orbs (`.floating-logo-bubble`)**: Replaced rectangular text pills with sleek, frosted-glass circular logo bubbles containing pure pharmaceutical glyphs/emojis (`💊`, `🛡️ NMRA Shield`, `🩺 Heartbeat Care`, `💉 Dispense`).
+- **Corner Constellation & Separate Independent Floating**:
+  1. **💊 3D Pill Capsule Orb (`.corner-orb-pill`)**: Floats up & down with rotational swing (`orbFloatSeparate1`).
+  2. **🛡️ NMRA Shield Orb (`.corner-orb-shield`)**: Royal sapphire floating bubble with independent oscillation (`orbFloatSeparate2`).
+  3. **🩺 Heartbeat Care Orb (`.corner-orb-heart`)**: Mint-emerald floating pulse orb (`orbFloatSeparate3`).
+  4. **💉 Digital Dispense Orb (`.corner-orb-syringe`)**: Indigo-cyan floating syringe orb (`orbFloatSeparate4`).
+- **Twinkling Star Particles (`.floating-star`)**: 4 glowing star sparkles (`bi-stars`, `bi-sparkle`, `bi-plus-lg`, `bi-star-fill`) continuing to twinkle and float like stars across the hero image.
+- **Hover Interactions**: Hovering over any orb pauses its floating motion and smoothly scales it to `1.24x` with an illuminated medical halo.
+
+---
 *Document maintained automatically with each build increment.*
 

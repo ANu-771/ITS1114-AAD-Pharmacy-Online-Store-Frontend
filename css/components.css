@@ -2192,3 +2192,261 @@
   background-color: #DDEEFA;
 }
 
+/* ==========================================================================
+   17. ABOUT US PAGE — FLOATING PHARMACY UI & STAR SPARKLE PARTICLES
+   ========================================================================== */
+
+.about-hero-showcase {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  padding: 1.5rem 1.25rem;
+}
+
+/* Background ambient clinical glow aura */
+.about-glow-aura {
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  right: 15%;
+  bottom: 15%;
+  background: radial-gradient(circle, rgba(0, 102, 179, 0.18) 0%, rgba(56, 189, 248, 0.1) 50%, transparent 75%);
+  filter: blur(40px);
+  z-index: 0;
+  pointer-events: none;
+  animation: glowPulseAbout 6s ease-in-out infinite alternate;
+}
+
+.about-main-img {
+  position: relative;
+  z-index: 1;
+  border-radius: 24px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.about-hero-showcase:hover .about-main-img {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 59, 102, 0.16) !important;
+}
+
+/* Base Floating Pharmacy Circular Logo Bubble */
+.floating-logo-bubble {
+  position: absolute;
+  z-index: 3;
+  cursor: pointer;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 24px rgba(0, 59, 102, 0.14), 0 2px 8px rgba(0, 102, 179, 0.08);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.floating-logo-bubble:hover {
+  animation-play-state: paused !important;
+  transform: scale(1.24) !important;
+  background: #FFFFFF;
+  border-color: var(--primary-blue);
+  box-shadow: 0 16px 36px rgba(0, 102, 179, 0.3), 0 0 24px rgba(56, 189, 248, 0.45);
+}
+
+.floating-logo-bubble .logo-icon {
+  font-size: 1.55rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.floating-logo-bubble:hover .logo-icon {
+  transform: scale(1.1);
+}
+
+/* Individual Themed Variants in the Corner cluster (Floating Separately) */
+/* 1. Pill Capsule Logo */
+.corner-orb-pill {
+  bottom: 8%;
+  left: -4%;
+  width: 54px;
+  height: 54px;
+  background: radial-gradient(circle at 30% 30%, #FFFFFF 20%, #E0F2FE 100%);
+  border-color: rgba(56, 189, 248, 0.7);
+  animation: orbFloatSeparate1 5.2s ease-in-out infinite alternate;
+}
+
+/* 2. Medical Shield / NMRA Logo */
+.corner-orb-shield {
+  bottom: -4%;
+  left: 10%;
+  width: 58px;
+  height: 58px;
+  background: radial-gradient(circle at 30% 30%, #FFFFFF 20%, #DBEAFE 100%);
+  color: #0066B3;
+  border-color: rgba(0, 102, 179, 0.6);
+  box-shadow: 0 10px 26px rgba(0, 102, 179, 0.2);
+  animation: orbFloatSeparate2 4.4s ease-in-out infinite alternate 0.5s;
+}
+
+/* 3. Heartbeat / Clinical Care Logo */
+.corner-orb-heart {
+  bottom: 22%;
+  left: 3%;
+  width: 48px;
+  height: 48px;
+  background: radial-gradient(circle at 30% 30%, #FFFFFF 20%, #D1FAE5 100%);
+  color: #059669;
+  border-color: rgba(52, 211, 153, 0.7);
+  box-shadow: 0 8px 22px rgba(5, 150, 105, 0.18);
+  animation: orbFloatSeparate3 4.8s ease-in-out infinite alternate 1s;
+}
+
+/* 4. Digital Dispense Syringe Logo */
+.corner-orb-syringe {
+  bottom: 2%;
+  left: 24%;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle at 30% 30%, #FFFFFF 20%, #EEF2FF 100%);
+  color: #4F46E5;
+  border-color: rgba(129, 140, 248, 0.7);
+  box-shadow: 0 8px 22px rgba(99, 102, 241, 0.18);
+  animation: orbFloatSeparate4 5.6s ease-in-out infinite alternate 1.6s;
+}
+
+/* Floating Sparkling Stars like Stars in the Sky */
+.floating-star {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0099FF;
+}
+
+.star-1 {
+  top: 18%;
+  left: 8%;
+  font-size: 1.25rem;
+  color: #38BDF8;
+  animation: sparkleFloat 4.2s ease-in-out infinite;
+}
+
+.star-2 {
+  top: 12%;
+  right: 22%;
+  font-size: 1rem;
+  color: #F59E0B;
+  animation: sparkleFloat 3.6s ease-in-out infinite 0.7s;
+}
+
+.star-3 {
+  bottom: 22%;
+  left: 12%;
+  font-size: 1.15rem;
+  color: #10B981;
+  animation: sparkleFloat 4.8s ease-in-out infinite 1.4s;
+}
+
+.star-4 {
+  bottom: 28%;
+  right: 10%;
+  font-size: 0.9rem;
+  color: #6366F1;
+  animation: sparkleFloat 3.8s ease-in-out infinite 2s;
+}
+
+/* --- Floating Keyframe Animations for Separate Movements --- */
+@keyframes orbFloatSeparate1 {
+  0% {
+    transform: translateY(0px) rotate(-10deg) scale(1);
+  }
+  50% {
+    transform: translateY(-16px) rotate(4deg) scale(1.04);
+  }
+  100% {
+    transform: translateY(-24px) rotate(14deg) scale(1.02);
+  }
+}
+
+@keyframes orbFloatSeparate2 {
+  0% {
+    transform: translateY(0px) rotate(8deg) scale(1);
+  }
+  50% {
+    transform: translateY(-22px) rotate(-6deg) scale(1.06);
+  }
+  100% {
+    transform: translateY(-30px) rotate(-12deg) scale(1);
+  }
+}
+
+@keyframes orbFloatSeparate3 {
+  0% {
+    transform: translateY(0px) rotate(-6deg) scale(1);
+  }
+  50% {
+    transform: translateY(-14px) rotate(8deg) scale(1.03);
+  }
+  100% {
+    transform: translateY(-20px) rotate(12deg) scale(1.05);
+  }
+}
+
+@keyframes orbFloatSeparate4 {
+  0% {
+    transform: translateY(0px) rotate(10deg) scale(1);
+  }
+  50% {
+    transform: translateY(-18px) rotate(-4deg) scale(1.04);
+  }
+  100% {
+    transform: translateY(-26px) rotate(-8deg) scale(1.02);
+  }
+}
+
+@keyframes pillSpinSoft {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(20deg) scale(1.12);
+  }
+}
+
+@keyframes sparkleFloat {
+  0% {
+    transform: translateY(0px) scale(0.65) rotate(0deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-18px) scale(1.3) rotate(180deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+  100% {
+    transform: translateY(-34px) scale(0.7) rotate(360deg);
+    opacity: 0.15;
+  }
+}
+
+@keyframes glowPulseAbout {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.15);
+    opacity: 0.85;
+  }
+}
+
+
