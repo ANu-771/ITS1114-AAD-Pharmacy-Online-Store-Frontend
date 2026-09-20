@@ -1428,232 +1428,361 @@
   border-color: var(--primary-blue);
 }
 
-/* Department Specific Variants (Supports both Slugs and Numeric IDs) */
-/* 1. Medicines */
+/* Department Specific Variants (Eye-Comfort Harmonic Color Palettes) */
+/* 1. Medicines (Soft Sky Azure) */
 .category-card-medicines,
 .category-card-1 {
-  background: radial-gradient(circle at 100% 100%, rgba(224, 242, 254, 0.7) 0%, #FFFFFF 70%);
-  border-color: rgba(0, 102, 179, 0.18);
+  background: linear-gradient(145deg, #F0F9FF 0%, #E0F2FE 55%, #BAE6FD 100%) !important;
+  border-color: rgba(2, 132, 199, 0.28) !important;
 }
 .category-card-medicines::before,
 .category-card-1::before {
-  background: linear-gradient(90deg, #0066B3, #38BDF8);
+  background: linear-gradient(90deg, #0284C7, #38BDF8) !important;
+}
+.category-card-medicines .category-icon-wrapper,
+.category-card-1 .category-icon-wrapper {
+  background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3) !important;
 }
 .category-card-medicines .category-bg-watermark,
 .category-card-1 .category-bg-watermark {
-  color: #0066B3;
+  color: #0284C7 !important;
+}
+.category-card-medicines .category-count-badge,
+.category-card-1 .category-count-badge {
+  background: #FFFFFF !important;
+  color: #0284C7 !important;
+  border: 1.5px solid #7DD3FC !important;
 }
 .category-card-medicines:hover,
 .category-card-1:hover {
-  border-color: #0066B3;
-  box-shadow: 0 18px 36px rgba(0, 102, 179, 0.14);
+  border-color: #0284C7 !important;
+  box-shadow: 0 18px 36px rgba(2, 132, 199, 0.22) !important;
 }
 
-/* 2. Prescription Medicines */
+/* 2. Prescription Medicines (Soft Lavender Indigo) */
 .category-card-prescription,
 .category-card-2 {
-  background: radial-gradient(circle at 100% 100%, rgba(219, 234, 254, 0.7) 0%, #FFFFFF 70%);
-  border-color: rgba(37, 99, 235, 0.18);
+  background: linear-gradient(145deg, #F5F3FF 0%, #EDE9FE 55%, #DDD6FE 100%) !important;
+  border-color: rgba(99, 102, 241, 0.28) !important;
 }
 .category-card-prescription::before,
 .category-card-2::before {
-  background: linear-gradient(90deg, #2563EB, #60A5FA);
+  background: linear-gradient(90deg, #4F46E5, #818CF8) !important;
 }
 .category-card-prescription .category-icon-wrapper,
 .category-card-2 .category-icon-wrapper {
-  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
-  color: #1D4ED8;
+  background: linear-gradient(135deg, #818CF8 0%, #4F46E5 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3) !important;
 }
 .category-card-prescription .category-bg-watermark,
 .category-card-2 .category-bg-watermark {
-  color: #2563EB;
+  color: #4F46E5 !important;
+}
+.category-card-prescription .category-count-badge,
+.category-card-2 .category-count-badge {
+  background: #FFFFFF !important;
+  color: #4F46E5 !important;
+  border: 1.5px solid #C7D2FE !important;
 }
 .category-card-prescription:hover,
 .category-card-2:hover {
-  border-color: #2563EB;
-  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.14);
+  border-color: #4F46E5 !important;
+  box-shadow: 0 18px 36px rgba(79, 70, 229, 0.22) !important;
 }
 
-/* 3. Medical Equipment */
+/* 3. Medical Equipment (Soft Clinical Mint) */
 .category-card-equipment,
 .category-card-3 {
-  background: radial-gradient(circle at 100% 100%, rgba(204, 251, 241, 0.7) 0%, #FFFFFF 70%);
-  border-color: rgba(13, 148, 136, 0.2);
+  background: linear-gradient(145deg, #F0FDF4 0%, #DCFCE7 55%, #BBF7D0 100%) !important;
+  border-color: rgba(16, 185, 129, 0.28) !important;
 }
 .category-card-equipment::before,
 .category-card-3::before {
-  background: linear-gradient(90deg, #0D9488, #2DD4BF);
+  background: linear-gradient(90deg, #059669, #34D399) !important;
 }
 .category-card-equipment .category-icon-wrapper,
 .category-card-3 .category-icon-wrapper {
-  background: linear-gradient(135deg, #CCFBF1 0%, #99F6E4 100%);
-  color: #0F766E;
+  background: linear-gradient(135deg, #34D399 0%, #059669 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3) !important;
 }
 .category-card-equipment .category-bg-watermark,
 .category-card-3 .category-bg-watermark {
-  color: #0D9488;
+  color: #059669 !important;
 }
 .category-card-equipment .category-count-badge,
 .category-card-3 .category-count-badge {
-  background: #CCFBF1;
-  color: #0F766E;
-  border-color: rgba(45, 212, 191, 0.4);
+  background: #FFFFFF !important;
+  color: #059669 !important;
+  border: 1.5px solid #86EFAC !important;
 }
 .category-card-equipment:hover,
 .category-card-3:hover {
-  border-color: #0D9488;
-  box-shadow: 0 18px 36px rgba(13, 148, 136, 0.14);
+  border-color: #059669 !important;
+  box-shadow: 0 18px 36px rgba(5, 150, 105, 0.22) !important;
 }
 
-/* 4. Vitamins & Supplements */
+/* 4. Vitamins & Supplements (Soft Warm Amber Peach) */
 .category-card-vitamins,
 .category-card-4 {
-  background: radial-gradient(circle at 100% 100%, rgba(254, 243, 199, 0.7) 0%, #FFFFFF 70%);
-  border-color: rgba(217, 119, 6, 0.2);
+  background: linear-gradient(145deg, #FFFBEB 0%, #FEF3C7 55%, #FDE68A 100%) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
 }
 .category-card-vitamins::before,
 .category-card-4::before {
-  background: linear-gradient(90deg, #D97706, #FBBF24);
+  background: linear-gradient(90deg, #D97706, #FBBF24) !important;
 }
 .category-card-vitamins .category-icon-wrapper,
 .category-card-4 .category-icon-wrapper {
-  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-  color: #B45309;
+  background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3) !important;
 }
 .category-card-vitamins .category-bg-watermark,
 .category-card-4 .category-bg-watermark {
-  color: #D97706;
+  color: #D97706 !important;
 }
 .category-card-vitamins .category-count-badge,
 .category-card-4 .category-count-badge {
-  background: #FEF3C7;
-  color: #B45309;
-  border-color: rgba(251, 191, 36, 0.4);
+  background: #FFFFFF !important;
+  color: #B45309 !important;
+  border: 1.5px solid #FCD34D !important;
 }
 .category-card-vitamins:hover,
 .category-card-4:hover {
-  border-color: #D97706;
-  box-shadow: 0 18px 36px rgba(217, 119, 6, 0.14);
+  border-color: #D97706 !important;
+  box-shadow: 0 18px 36px rgba(217, 119, 6, 0.22) !important;
 }
 
-/* 5. Personal Care */
+/* 5. Personal Care (Soft Aqua Cyan) */
 .category-card-personal-care,
 .category-card-5 {
-  background: radial-gradient(circle at 100% 100%, rgba(207, 250, 254, 0.7) 0%, #FFFFFF 70%);
-  border-color: rgba(6, 182, 212, 0.2);
+  background: linear-gradient(145deg, #ECFEFF 0%, #CFFAFE 55%, #A5F3FC 100%) !important;
+  border-color: rgba(6, 182, 212, 0.28) !important;
 }
 .category-card-personal-care::before,
 .category-card-5::before {
-  background: linear-gradient(90deg, #0891B2, #22D3EE);
+  background: linear-gradient(90deg, #0891B2, #22D3EE) !important;
 }
 .category-card-personal-care .category-icon-wrapper,
 .category-card-5 .category-icon-wrapper {
-  background: linear-gradient(135deg, #CFFAFE 0%, #A5F3FC 100%);
-  color: #0E7490;
+  background: linear-gradient(135deg, #22D3EE 0%, #0891B2 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(8, 145, 178, 0.3) !important;
 }
 .category-card-personal-care .category-bg-watermark,
 .category-card-5 .category-bg-watermark {
-  color: #0891B2;
+  color: #0891B2 !important;
 }
 .category-card-personal-care .category-count-badge,
 .category-card-5 .category-count-badge {
-  background: #ECFEFF;
-  color: #0E7490;
-  border-color: rgba(34, 211, 238, 0.4);
+  background: #FFFFFF !important;
+  color: #0E7490 !important;
+  border: 1.5px solid #67E8F9 !important;
 }
 .category-card-personal-care:hover,
 .category-card-5:hover {
-  border-color: #0891B2;
-  box-shadow: 0 18px 36px rgba(8, 145, 178, 0.14);
+  border-color: #0891B2 !important;
+  box-shadow: 0 18px 36px rgba(8, 145, 178, 0.22) !important;
 }
 
-/* 6. Baby Care / Baby & Mother Care */
+/* 6. Baby Care / Baby & Mother Care (Soft Rose Blossom) */
 .category-card-baby-care,
 .category-card-baby,
 .category-card-6 {
-  background: radial-gradient(circle at 100% 100%, rgba(255, 228, 230, 0.7) 0%, #FFFFFF 70%);
-  border-color: rgba(244, 63, 94, 0.2);
+  background: linear-gradient(145deg, #FDF2F8 0%, #FCE7F3 55%, #FBCFE8 100%) !important;
+  border-color: rgba(236, 72, 153, 0.28) !important;
 }
 .category-card-baby-care::before,
 .category-card-baby::before,
 .category-card-6::before {
-  background: linear-gradient(90deg, #E11D48, #FB7185);
+  background: linear-gradient(90deg, #DB2777, #F472B6) !important;
 }
 .category-card-baby-care .category-icon-wrapper,
 .category-card-baby .category-icon-wrapper,
 .category-card-6 .category-icon-wrapper {
-  background: linear-gradient(135deg, #FFE4E6 0%, #FECDD3 100%);
-  color: #BE123C;
+  background: linear-gradient(135deg, #F472B6 0%, #DB2777 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(219, 39, 119, 0.3) !important;
 }
 .category-card-baby-care .category-bg-watermark,
 .category-card-baby .category-bg-watermark,
 .category-card-6 .category-bg-watermark {
-  color: #E11D48;
+  color: #DB2777 !important;
 }
 .category-card-baby-care .category-count-badge,
 .category-card-baby .category-count-badge,
 .category-card-6 .category-count-badge {
-  background: #FFE4E6;
-  color: #BE123C;
-  border-color: rgba(251, 113, 133, 0.4);
+  background: #FFFFFF !important;
+  color: #BE123C !important;
+  border: 1.5px solid #F9A8D4 !important;
 }
 .category-card-baby-care:hover,
 .category-card-baby:hover,
 .category-card-6:hover {
-  border-color: #E11D48;
-  box-shadow: 0 18px 36px rgba(225, 29, 72, 0.14);
+  border-color: #DB2777 !important;
+  box-shadow: 0 18px 36px rgba(219, 39, 119, 0.22) !important;
 }
 
-/* Standard Quick Category Cards (Home Page Carousel / Grid) */
+/* 7. First Aid / Emergency (Soft Medical Coral Ruby) */
+.category-card-first-aid,
+.category-card-7 {
+  background: linear-gradient(145deg, #FEF2F2 0%, #FEE2E2 55%, #FECACA 100%) !important;
+  border-color: rgba(239, 68, 68, 0.28) !important;
+}
+.category-card-first-aid::before,
+.category-card-7::before {
+  background: linear-gradient(90deg, #DC2626, #EF4444) !important;
+}
+.category-card-first-aid .category-icon-wrapper,
+.category-card-7 .category-icon-wrapper {
+  background: linear-gradient(135deg, #F87171 0%, #DC2626 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3) !important;
+}
+.category-card-first-aid .category-bg-watermark,
+.category-card-7 .category-bg-watermark {
+  color: #DC2626 !important;
+}
+.category-card-first-aid .category-count-badge,
+.category-card-7 .category-count-badge {
+  background: #FFFFFF !important;
+  color: #991B1B !important;
+  border: 1.5px solid #FCA5A5 !important;
+}
+.category-card-first-aid:hover,
+.category-card-7:hover {
+  border-color: #DC2626 !important;
+  box-shadow: 0 18px 36px rgba(220, 38, 38, 0.22) !important;
+}
+
+/* Standard Quick Category Cards & Infinite Horizontal Marquee Carousel */
+.category-marquee-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 0.75rem 0 1rem 0;
+}
+
+.category-marquee-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+}
+
+.category-marquee-track {
+  display: flex;
+  gap: 1.25rem;
+  width: max-content;
+  animation: categoryMarqueeLoop 32s linear infinite;
+  will-change: transform;
+}
+
+/* Pause animation on hover */
+.category-marquee-wrapper:hover .category-marquee-track {
+  animation-play-state: paused;
+}
+
+.category-marquee-item {
+  width: 210px;
+  min-width: 210px;
+  flex-shrink: 0;
+}
+
 .category-card {
   position: relative;
   overflow: hidden;
   background: var(--white);
-  border-radius: var(--radius-md);
-  padding: 1.5rem 1rem;
+  border-radius: 18px;
+  padding: 1.6rem 1.1rem 1.4rem 1.1rem;
   text-align: center;
-  border: 1px solid var(--border-color);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(217, 232, 242, 0.9);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   height: 100%;
+  min-height: 185px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(0, 59, 102, 0.04);
+  box-shadow: 0 4px 16px rgba(0, 59, 102, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  user-select: none;
+}
+
+/* Top colored linear gradient accent bar */
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-blue), #38BDF8);
+  border-radius: 18px 18px 0 0;
+  transition: height 0.3s ease;
 }
 
 .category-card:hover {
   border-color: var(--primary-blue);
-  box-shadow: 0 12px 28px rgba(0, 102, 179, 0.12);
-  transform: translateY(-5px);
+  box-shadow: 0 16px 32px rgba(0, 102, 179, 0.16);
+  transform: translateY(-8px) scale(1.03);
+}
+
+.category-card .category-bg-watermark {
+  position: absolute;
+  right: -10px;
+  bottom: -15px;
+  font-size: 5.2rem;
+  line-height: 1;
+  opacity: 0.06;
+  color: var(--primary-blue);
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(-10deg);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.category-card:hover .category-bg-watermark {
+  opacity: 0.16;
+  transform: scale(1.18) rotate(0deg) translate(-4px, -4px);
 }
 
 .category-card .category-icon-wrapper {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
+  position: relative;
+  z-index: 1;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
   background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
   color: var(--primary-blue);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  margin-bottom: 0.9rem;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 1.65rem;
+  margin-bottom: 0.85rem;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 4px 12px rgba(0, 102, 179, 0.12);
 }
 
 .category-card:hover .category-icon-wrapper {
-  transform: scale(1.1) rotate(4deg);
+  transform: scale(1.12) rotate(6deg);
 }
 
 .category-card .category-title {
-  font-size: 0.95rem;
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-heading);
+  font-size: 1rem;
   font-weight: 700;
   color: var(--dark-navy);
   margin-bottom: 0.25rem;
   transition: color 0.2s ease;
+  line-height: 1.25;
 }
 
 .category-card:hover .category-title {
@@ -1661,9 +1790,20 @@
 }
 
 .category-card .category-count {
+  position: relative;
+  z-index: 1;
   font-size: 0.775rem;
   font-weight: 600;
   color: var(--text-muted);
+}
+
+@keyframes categoryMarqueeLoop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* --- 5. Product Cards (Reusable Component) --- */

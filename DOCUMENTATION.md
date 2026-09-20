@@ -831,5 +831,32 @@ Resolved an issue where live Spring Boot REST API responses (which return numeri
 - **CSS Selector Mapping**: Supported both numeric IDs (`.category-card-1` through `.category-card-6`) and department slugs so all background radial gradients, glowing squircle icons, and top indicator bars render with live API data.
 
 ---
+
+## 18. HOMEPAGE INFINITE HORIZONTAL MOVING CATEGORY MARQUEE
+
+The **"Essential Healthcare Categories"** section on the homepage ([index.html](file:///d:/sem%202/API%20Development/API%20Final%20Course%20Work/Pharmacy%20website/pharmacy_frontend/index.html)) has been converted from a multi-line wrapping grid into a continuous, single-line **infinite loop horizontal marquee carousel**:
+
+- **Single Horizontal Line (`.category-marquee-track`)**: Category cards are locked into a single horizontal row with fixed `210px` card widths.
+- **Seamless Infinite Moving Loop (`@keyframes categoryMarqueeLoop`)**: Automatically and smoothly glides horizontally (`translateX(0)` to `translateX(-50%)`) in a loop using a duplicated card set.
+- **Edge Fading Masks**: Dual-sided gradient fade mask (`mask-image: linear-gradient(...)`) creating a smooth transition at the left and right edges.
+- **Pause on Hover**: Hovering over the marquee track or any individual category card pauses the animation, lifts the card with a 3D elevation (`translateY(-8px) scale(1.03)`), illuminates the squircle icon (`rotate(6deg)`), and allows immediate category filtering on click.
+
+---
+
+## 19. EYE-COMFORT COLORFUL CATEGORY TILES & AVATAR PALETTE SYSTEM
+
+Every healthcare category tile across the infinite horizontal carousel and category overview has been upgraded with distinct, eye-comfort pastel-mesh backgrounds and vibrant medical avatar icon boxes for high contrast and visual harmony:
+
+- **Eye-Comfort Departmental Palettes**:
+  1. **Medicines (`.category-card-medicines`, `.category-card-1`)**: Soft Sky Azure gradient (`#F0F9FF` -> `#BAE6FD`), Sky Blue squircle avatar icon box (`#0284C7`), cyan top accent bar, and subtle watermarked capsule.
+  2. **Prescription Medicines (`.category-card-prescription`, `.category-card-2`)**: Soft Lavender Indigo gradient (`#F5F3FF` -> `#DDD6FE`), Royal Indigo squircle avatar icon box (`#4F46E5`), indigo top accent bar, and watermarked medical prescription glyph.
+  3. **Medical Equipment (`.category-card-equipment`, `.category-card-3`)**: Soft Clinical Mint gradient (`#F0FDF4` -> `#BBF7D0`), Emerald squircle avatar icon box (`#059669`), emerald top accent bar, and watermarked heartbeat pulse.
+  4. **Vitamins & Supplements (`.category-card-vitamins`, `.category-card-4`)**: Soft Warm Amber/Peach gradient (`#FFFBEB` -> `#FDE68A`), Amber Gold squircle avatar icon box (`#D97706`), amber top accent bar, and watermarked lightning energy charge.
+  5. **Personal Care (`.category-card-personal-care`, `.category-card-5`)**: Soft Aqua Cyan gradient (`#ECFEFF` -> `#A5F3FC`), Deep Aqua Cyan squircle avatar icon box (`#0891B2`), cyan top accent bar, and watermarked hygiene droplet.
+  6. **Baby & Mother Care (`.category-card-baby-care`, `.category-card-baby`, `.category-card-6`)**: Soft Rose Blossom gradient (`#FDF2F8` -> `#FBCFE8`), Rose Pink squircle avatar icon box (`#DB2777`), pink top accent bar, and watermarked happy baby smile.
+  7. **First Aid & Emergency (`.category-card-first-aid`, `.category-card-7`)**: Soft Coral Ruby gradient (`#FEF2F2` -> `#FECACA`), Ruby Red squircle avatar icon box (`#DC2626`), crimson top accent bar, and watermarked bandaid glyph.
+- **Enhanced Avatar Contrast**: Squircle icon boxes use vibrant background gradients with a crisp white icon glyph and soft matching drop shadows, ensuring instant visual recognition without harsh eye strain.
+
+---
 *Document maintained automatically with each build increment.*
 

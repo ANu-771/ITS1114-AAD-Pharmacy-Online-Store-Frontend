@@ -132,7 +132,7 @@ const HomePage = {
   },
 
   /**
-   * Load and render quick categories
+   * Load and render quick categories in infinite horizontal marquee
    */
   loadCategories: async () => {
     const container = document.getElementById('categories-grid');
@@ -140,16 +140,21 @@ const HomePage = {
 
     try {
       const categories = await ProductService.getCategories();
-      let html = '';
-      categories.forEach(cat => {
-        html += createCategoryCard(cat);
-      });
-      container.innerHTML = html;
+      if (!categories || categories.length === 0) return;
 
-      // Add click listener to category cards
+      let cardsHtml = '';
+      categories.forEach(cat => {
+        cardsHtml += createCategoryCard(cat);
+      });
+
+      // Duplicate cards to create seamless infinite loop (Set 1 + Set 2)
+      container.innerHTML = cardsHtml + cardsHtml;
+
+      // Add click listener to all category cards
       container.querySelectorAll('.category-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const categoryId = card.getAttribute('data-category');
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          const categoryId = card.closest('[data-category]')?.getAttribute('data-category') || card.getAttribute('data-category');
           HomePage.filterProducts(categoryId);
           document.getElementById('featured-section')?.scrollIntoView({ behavior: 'smooth' });
         });

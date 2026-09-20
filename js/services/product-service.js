@@ -10,7 +10,8 @@ const ProductService = {
     { id: 'equipment', name: 'Medical Equipment', icon: 'bi-heart-pulse', count: '420+ Devices', desc: 'Blood pressure, glucose monitors & devices' },
     { id: 'vitamins', name: 'Vitamins & Supplements', icon: 'bi-lightning-charge', count: '650+ Products', desc: 'Multivitamins, minerals & immune boosters' },
     { id: 'personal-care', name: 'Personal Care', icon: 'bi-droplet-half', count: '980+ Items', desc: 'Skincare, oral care & daily hygiene' },
-    { id: 'baby-care', name: 'Baby Care', icon: 'bi-emoji-smile', count: '340+ Items', desc: 'Baby nutrition, skincare & formula' }
+    { id: 'baby-care', name: 'Baby Care', icon: 'bi-emoji-smile', count: '340+ Items', desc: 'Baby nutrition, skincare & formula' },
+    { id: 'first-aid', name: 'First Aid & Emergency', icon: 'bi-bandaid', count: '290+ Items', desc: 'Antiseptics, bandages & wound care' }
   ],
 
   _mockProducts: [
@@ -403,6 +404,17 @@ const ProductService = {
         desc: category.description && category.description !== 'Healthcare & pharmaceutical supplies' 
           ? category.description 
           : 'Baby nutrition, gentle skincare & formula'
+      };
+    }
+    if (name.includes('first') || name.includes('aid') || name.includes('emergency') || name.includes('wound') || idStr === 'first-aid' || idStr === '7') {
+      return {
+        slug: 'first-aid',
+        icon: 'bi-bandaid',
+        watermark: 'bi-bandaid-fill',
+        count: category.productCount ? `${category.productCount} Items` : '290+ Items',
+        desc: category.description && category.description !== 'Healthcare & pharmaceutical supplies' 
+          ? category.description 
+          : 'Antiseptics, bandages & emergency wound care'
       };
     }
     // Default Medicines

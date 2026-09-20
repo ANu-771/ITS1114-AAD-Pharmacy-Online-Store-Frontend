@@ -162,6 +162,34 @@
     padding: 0.85rem;
   }
 
+  /* Category Infinite Marquee on Mobile */
+  .category-marquee-item {
+    width: 175px;
+    min-width: 175px;
+  }
+
+  .category-marquee-item .category-card {
+    padding: 1.25rem 0.85rem 1.1rem 0.85rem;
+    min-height: 165px;
+    border-radius: 15px;
+  }
+
+  .category-marquee-item .category-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    font-size: 1.35rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .category-marquee-item .category-title {
+    font-size: 0.88rem;
+  }
+
+  .category-marquee-track {
+    gap: 0.85rem;
+    animation-duration: 24s;
+  }
+
   .stat-card {
     padding: 1.1rem 0.6rem 0.9rem 0.6rem;
     border-radius: 14px;
