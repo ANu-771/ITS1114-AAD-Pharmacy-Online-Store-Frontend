@@ -147,8 +147,8 @@ const HomePage = {
         cardsHtml += createCategoryCard(cat);
       });
 
-      // Duplicate cards to create seamless infinite loop (Set 1 + Set 2)
-      container.innerHTML = cardsHtml + cardsHtml;
+      // Duplicate cards 4 times for a continuous, seamless, non-breaking infinite stream across all screen widths
+      container.innerHTML = cardsHtml + cardsHtml + cardsHtml + cardsHtml;
 
       // Add click listener to all category cards
       container.querySelectorAll('.category-card').forEach(card => {

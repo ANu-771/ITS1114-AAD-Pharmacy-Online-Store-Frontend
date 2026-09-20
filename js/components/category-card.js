@@ -13,7 +13,7 @@ function createCategoryCard(category) {
   const countText = category.count || meta.count || '';
 
   return `
-    <div class="col-6 col-md-4 col-lg-2">
+    <div class="category-marquee-item">
       <div class="category-card category-card-${catSlug}" data-category="${category.id}">
         <div class="category-bg-watermark"><i class="bi ${watermarkIcon}"></i></div>
         <div class="category-icon-wrapper">

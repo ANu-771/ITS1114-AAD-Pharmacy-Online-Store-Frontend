@@ -834,10 +834,11 @@ Resolved an issue where live Spring Boot REST API responses (which return numeri
 
 ## 18. HOMEPAGE INFINITE HORIZONTAL MOVING CATEGORY MARQUEE
 
-The **"Essential Healthcare Categories"** section on the homepage ([index.html](file:///d:/sem%202/API%20Development/API%20Final%20Course%20Work/Pharmacy%20website/pharmacy_frontend/index.html)) has been converted from a multi-line wrapping grid into a continuous, single-line **infinite loop horizontal marquee carousel**:
+The **"Essential Healthcare Categories"** section on the homepage ([index.html](file:///d:/sem%202/API%20Development/API%20Final%20Course%20Work/Pharmacy%20website/pharmacy_frontend/index.html)) has been converted from a multi-line wrapping grid into a continuous, single-line **non-breaking infinite loop horizontal marquee carousel**:
 
-- **Single Horizontal Line (`.category-marquee-track`)**: Category cards are locked into a single horizontal row with fixed `210px` card widths.
-- **Seamless Infinite Moving Loop (`@keyframes categoryMarqueeLoop`)**: Automatically and smoothly glides horizontally (`translateX(0)` to `translateX(-50%)`) in a loop using a duplicated card set.
+- **Single Horizontal Stream (`.category-marquee-track`)**: Category cards are locked into a single horizontal row with fixed `220px` card widths and uniform `1.25rem` item margins.
+- **Continuous Non-Breaking Stream (4x Quadrupled Set)**: Category tiles are rendered in a 4-fold sequence (Set 1 + Set 2 + Set 3 + Set 4) creating a wide (~6,700px) continuous stream that prevents any edge cutoff, empty screen spaces, or resets on any screen resolution (including 4K displays).
+- **Mathematically Seamless Infinite Loop (`@keyframes categoryMarqueeLoop`)**: Smoothly glides horizontally from `translateX(0)` to `translateX(-25%)` in 30s. When resetting from -25% to 0%, the start of Set 2 perfectly aligns with Set 1's starting position for a 100% invisible, hitch-free continuous glide.
 - **Edge Fading Masks**: Dual-sided gradient fade mask (`mask-image: linear-gradient(...)`) creating a smooth transition at the left and right edges.
 - **Pause on Hover**: Hovering over the marquee track or any individual category card pauses the animation, lifts the card with a 3D elevation (`translateY(-8px) scale(1.03)`), illuminates the squircle icon (`rotate(6deg)`), and allows immediate category filtering on click.
 
