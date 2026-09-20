@@ -39,7 +39,7 @@ const AdminProductsPage = {
               <img src="${imgSrc}" alt="${p.name}" class="rounded-2 border p-1" style="width: 44px; height: 44px; object-fit: contain; background: #FFF;" onerror="this.onerror=null; this.src='${fallbackImg}';">
               <div>
                 <strong class="text-navy small d-block">${p.name}</strong>
-                <small class="text-muted">Brand: ${p.brand}</small>
+                <small class="text-muted">Brand: ${p.brand || 'KK PHARMACY'}</small>
               </div>
             </div>
           </td>
@@ -99,14 +99,18 @@ const AdminProductsPage = {
     // Delete Product
     const tbody = document.getElementById('adminProductsTableBody');
     if (tbody) {
-      tbody.addEventListener('click', (e) => {
+      tbody.addEventListener('click', async (e) => {
         const deleteBtn = e.target.closest('.btn-delete-product');
         if (deleteBtn) {
           const id = parseInt(deleteBtn.getAttribute('data-id'), 10);
           if (confirm('Are you sure you want to remove this product from the catalog?')) {
-            AdminProductsPage.productsList = AdminProductsPage.productsList.filter(p => p.id !== id);
-            AdminProductsPage.renderTable(AdminProductsPage.productsList);
-            Toast.show('Product removed from database catalog.', 'info');
+            try {
+              await ProductService.deleteProduct(id);
+              Toast.show('Product removed from database catalog.', 'info');
+              await AdminProductsPage.loadProducts();
+            } catch (err) {
+              Toast.show(err.message || 'Failed to delete product.', 'error');
+            }
           }
         }
       });
@@ -115,32 +119,59 @@ const AdminProductsPage = {
     // Add Product Form
     const crudForm = document.getElementById('productCrudForm');
     if (crudForm) {
-      crudForm.addEventListener('submit', (e) => {
+      crudForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const newProduct = {
-          id: AdminProductsPage.productsList.length + 1,
+
+        const catSelect = document.getElementById('mProdCategory');
+        const catValue = catSelect.value;
+        const catText = catSelect.options[catSelect.selectedIndex]?.text || 'Medicines';
+
+        // Map category ID fallback
+        let catId = 1;
+        if (catValue === 'equipment') catId = 2;
+        else if (catValue === 'vitamins') catId = 3;
+        else if (catValue === 'personal-care') catId = 4;
+
+        const newProductPayload = {
           name: document.getElementById('mProdName').value.trim(),
           brand: document.getElementById('mProdBrand').value.trim(),
-          category: document.getElementById('mProdCategory').value,
-          categoryName: document.getElementById('mProdCategory').options[document.getElementById('mProdCategory').selectedIndex].text,
+          brandId: 1, // Default verified brand ID
+          category: catValue,
+          categoryName: catText,
+          categoryId: catId,
           price: parseFloat(document.getElementById('mProdPrice').value),
-          activeIngredient: document.getElementById('mProdIngredient').value.trim() || 'Clinical Grade Compound',
-          dosageForm: document.getElementById('mProdForm').value.trim() || 'Unit Pack',
-          description: document.getElementById('mProdDesc').value.trim() || 'Newly added certified healthcare product.',
-          requiresPrescription: document.getElementById('mProdRx').checked,
-          inStock: true,
-          rating: 5.0,
-          reviewsCount: 1,
-          image: 'assets/images/medicine_1.png'
+          activeIngredient: document.getElementById('mProdIngredient')?.value.trim() || 'Clinical Grade Compound',
+          dosageForm: document.getElementById('mProdForm')?.value.trim() || 'Unit Pack',
+          description: document.getElementById('mProdDesc')?.value.trim() || 'Newly added certified healthcare product.',
+          requiresPrescription: document.getElementById('mProdRx')?.checked || false,
+          rxRequired: document.getElementById('mProdRx')?.checked || false,
+          image: 'assets/images/medicine_1.png',
+          initialStock: 50,
+          reorderLevel: 10
         };
 
-        AdminProductsPage.productsList.unshift(newProduct);
-        AdminProductsPage.renderTable(AdminProductsPage.productsList);
-        
-        const modal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
-        if (modal) modal.hide();
-        crudForm.reset();
-        Toast.show(`Product "${newProduct.name}" added successfully!`, 'success');
+        const submitBtn = crudForm.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving...';
+        }
+
+        try {
+          const created = await ProductService.createProduct(newProductPayload);
+          const modalEl = document.getElementById('addProductModal');
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+          crudForm.reset();
+          Toast.show(`Product "${created.name || newProductPayload.name}" added successfully!`, 'success');
+          await AdminProductsPage.loadProducts();
+        } catch (err) {
+          Toast.show(err.message || 'Failed to add product.', 'error');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Save to Catalog';
+          }
+        }
       });
     }
   }

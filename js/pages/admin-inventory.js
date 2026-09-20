@@ -1,6 +1,6 @@
 /**
  * KK PHARMACY ONLINE PHARMACY - ADMIN INVENTORY CONTROLLER (js/pages/admin-inventory.js)
- * Manages inventory stock tables, batch expiration tracking, and inward stock intake.
+ * Manages inventory stock tables, batch expiration tracking, and inward stock intake via Spring Boot API.
  */
 const AdminInventoryPage = {
   inventoryList: [],
@@ -27,7 +27,7 @@ const AdminInventoryPage = {
 
     let html = '';
     inventory.forEach(item => {
-      const isLow = item.stock <= item.reorderLevel;
+      const isLow = item.stock <= (item.reorderLevel || 10);
       const statusBadge = isLow
         ? '<span class="badge-status badge-lowstock"><i class="bi bi-exclamation-triangle-fill"></i> Low Stock</span>'
         : '<span class="badge-status badge-instock"><i class="bi bi-check-circle-fill"></i> Optimal</span>';
@@ -40,9 +40,9 @@ const AdminInventoryPage = {
           </td>
           <td><span class="badge-category-yellow">${item.category}</span></td>
           <td><strong class="text-navy">${item.stock} units</strong></td>
-          <td><span class="small text-muted">${item.reorderLevel} units</span></td>
-          <td><code>${item.batch}</code></td>
-          <td><span class="small ${item.expiry.startsWith('2026') ? 'text-danger fw-bold' : 'text-muted'}">${item.expiry}</span></td>
+          <td><span class="small text-muted">${item.reorderLevel || 10} units</span></td>
+          <td><code>${item.batch || 'N/A'}</code></td>
+          <td><span class="small ${String(item.expiry).startsWith('2026') ? 'text-danger fw-bold' : 'text-muted'}">${item.expiry || 'N/A'}</span></td>
           <td>${statusBadge}</td>
         </tr>
       `;
@@ -54,26 +54,42 @@ const AdminInventoryPage = {
   attachListeners: () => {
     const form = document.getElementById('inwardBatchForm');
     if (form) {
-      form.addEventListener('submit', (e) => {
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const prodId = parseInt(document.getElementById('batchProdSelect').value, 10);
         const batchNum = document.getElementById('batchNumberInput').value.trim();
         const qty = parseInt(document.getElementById('batchQtyInput').value, 10);
         const expiry = document.getElementById('batchExpiryInput').value;
 
-        const item = AdminInventoryPage.inventoryList.find(i => i.id === prodId);
-        if (item) {
-          item.stock += qty;
-          item.batch = batchNum;
-          item.expiry = expiry;
-          StorageService.setItem('medora_admin_inventory', AdminInventoryPage.inventoryList);
-          AdminInventoryPage.renderTable(AdminInventoryPage.inventoryList);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Inwarding...';
         }
 
-        const modal = bootstrap.Modal.getInstance(document.getElementById('addBatchModal'));
-        if (modal) modal.hide();
-        form.reset();
-        Toast.show(`Received ${qty} units for Batch ${batchNum}. Stock updated!`, 'success');
+        try {
+          await AdminService.addBatch({
+            productId: prodId,
+            batchNumber: batchNum,
+            quantity: qty,
+            expiryDate: expiry,
+            manufacturer: 'Certified Pharma Supplier'
+          });
+
+          const modalEl = document.getElementById('addBatchModal');
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+          form.reset();
+          Toast.show(`Received ${qty} units for Batch ${batchNum}. Stock updated!`, 'success');
+          await AdminInventoryPage.loadInventory();
+        } catch (err) {
+          Toast.show(err.message || 'Failed to record batch.', 'error');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="bi bi-box-arrow-in-down me-1"></i> Receive Inward Batch';
+          }
+        }
       });
     }
   }

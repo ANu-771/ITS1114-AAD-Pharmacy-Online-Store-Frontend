@@ -13,6 +13,20 @@ const AdminOrdersPage = {
 
   loadOrders: async () => {
     try {
+      if (!CONFIG.USE_MOCK_DATA) {
+        try {
+          const response = await OrderAPI.getAllOrders({ page: 0, size: 50 });
+          const list = Array.isArray(response) ? response : (response.content || []);
+          if (list.length > 0) {
+            AdminOrdersPage.ordersList = list.map(OrderService._normalizeOrder);
+            AdminOrdersPage.renderTable(AdminOrdersPage.ordersList);
+            return;
+          }
+        } catch (e) {
+          console.warn('[AdminOrdersPage] Live getAllOrders failed, falling back:', e.message);
+        }
+      }
+
       const data = await OrderService.getMyOrders();
       AdminOrdersPage.ordersList = data;
       AdminOrdersPage.renderTable(data);
@@ -39,14 +53,14 @@ const AdminOrdersPage = {
         <tr data-id="${order.id || order.orderNumber}">
           <td>
             <strong class="text-navy small d-block">${order.orderNumber || order.id}</strong>
-            <small class="text-muted">${order.items.length} items ordered</small>
+            <small class="text-muted">${(order.items || []).length} items ordered</small>
           </td>
           <td>
             <div class="small fw-bold text-navy">${order.customerName || 'Sarah Perera'}</div>
             <small class="text-muted">${order.shippingAddress ? order.shippingAddress.substring(0, 30) + '...' : 'Colombo'}</small>
           </td>
           <td><span class="small text-muted">${order.date || '2026-08-28'}</span></td>
-          <td><strong class="text-primary small">Rs. ${order.total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
+          <td><strong class="text-primary small">Rs. ${(parseFloat(order.total) || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
           <td><span class="badge-payment-method">${order.paymentMethod || 'Credit Card'}</span></td>
           <td><span class="badge-status ${badgeClass}" id="badge-${order.id}">${order.status}</span></td>
           <td class="text-end">
@@ -75,7 +89,7 @@ const AdminOrdersPage = {
           const newStatus = select.value;
           try {
             await AdminService.updateOrderStatus(orderId, newStatus);
-            Toast.show(`Order ${orderId} updated to status: ${newStatus}`, 'success');
+            Toast.show(`Order #${orderId} status updated to: ${newStatus}`, 'success');
             await AdminOrdersPage.loadOrders();
           } catch (err) {
             Toast.show('Failed to update order status.', 'error');

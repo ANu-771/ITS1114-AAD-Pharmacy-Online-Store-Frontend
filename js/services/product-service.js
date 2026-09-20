@@ -311,14 +311,58 @@ const ProductService = {
   ],
 
   /**
-   * Fetch categories
+   * Helper to normalize product DTO from backend
+   */
+  _normalizeProduct: (p) => {
+    if (!p) return null;
+    return {
+      id: p.id,
+      name: p.name || 'Healthcare Product',
+      sku: p.sku || `MED-SKU-${p.id}`,
+      brand: p.brand || 'KK PHARMACY',
+      brandId: p.brandId || null,
+      category: p.category || (p.categoryName ? p.categoryName.toLowerCase().replace(/\s+/g, '-') : 'general'),
+      categoryName: p.categoryName || p.category || 'General Health',
+      categoryId: p.categoryId || null,
+      price: parseFloat(p.price) || 0,
+      oldPrice: p.oldPrice ? parseFloat(p.oldPrice) : null,
+      rating: p.rating !== undefined && p.rating !== null ? parseFloat(p.rating) : 4.8,
+      reviewsCount: p.reviewsCount || 0,
+      inStock: p.inStock !== undefined ? !!p.inStock : (p.stock !== undefined ? p.stock > 0 : true),
+      requiresPrescription: p.requiresPrescription !== undefined ? !!p.requiresPrescription : !!p.rxRequired,
+      rxRequired: p.rxRequired !== undefined ? !!p.rxRequired : !!p.requiresPrescription,
+      image: p.image || 'assets/images/medicine_1.png',
+      images: Array.isArray(p.images) && p.images.length > 0 ? p.images : [p.image || 'assets/images/medicine_1.png'],
+      badge: p.badge || (p.requiresPrescription ? 'Rx Required' : 'OTC'),
+      description: p.description || 'Certified healthcare product conforming to pharmaceutical safety standards.',
+      activeIngredient: p.activeIngredient || 'Pharmaceutical Grade Compound',
+      strength: p.strength || 'Standard Dosage',
+      dosageForm: p.dosageForm || 'Unit Pack',
+      manufacturer: p.manufacturer || (p.brand ? `${p.brand} Healthcare Ltd` : 'KK PHARMACY Lab'),
+      storageInfo: p.storageInfo || 'Store below 25°C in a dry place.'
+    };
+  },
+
+  /**
+   * Fetch categories from live API or mock fallback
    */
   getCategories: async () => {
     if (CONFIG.USE_MOCK_DATA) {
       return ProductService._mockCategories;
     }
     try {
-      return await CategoryAPI.getAllCategories();
+      const data = await CategoryAPI.getAllCategories();
+      if (Array.isArray(data) && data.length > 0) {
+        return data.map(c => ({
+          id: c.id ? String(c.id) : (c.name ? c.name.toLowerCase().replace(/\s+/g, '-') : 'general'),
+          categoryId: c.id,
+          name: c.name,
+          icon: c.icon || 'bi-capsule',
+          count: c.productCount ? `${c.productCount} Products` : 'Available in Stock',
+          desc: c.description || 'Healthcare & pharmaceutical supplies'
+        }));
+      }
+      return ProductService._mockCategories;
     } catch (e) {
       console.warn('[ProductService] REST API unavailable, falling back to mock categories.');
       return ProductService._mockCategories;
@@ -326,24 +370,45 @@ const ProductService = {
   },
 
   /**
-   * Fetch products with optional category filter
+   * Fetch products with optional filters (category, search, price, sort)
    */
-  getProducts: async (category = 'all') => {
-    if (CONFIG.USE_MOCK_DATA) {
-      if (!category || category === 'all') {
-        return ProductService._mockProducts;
-      }
-      return ProductService._mockProducts.filter(p => p.category === category);
+  getProducts: async (filters = 'all') => {
+    let queryParams = {};
+    if (typeof filters === 'string') {
+      if (filters !== 'all' && filters) queryParams.category = filters;
+    } else if (typeof filters === 'object' && filters !== null) {
+      queryParams = { ...filters };
+      if (queryParams.category === 'all') delete queryParams.category;
     }
-    try {
-      if (category && category !== 'all') {
-        return await ProductAPI.getProductsByCategory(category);
+
+    if (CONFIG.USE_MOCK_DATA) {
+      let result = [...ProductService._mockProducts];
+      if (queryParams.category) {
+        result = result.filter(p => p.category === queryParams.category);
       }
-      return await ProductAPI.getAllProducts();
+      if (queryParams.search) {
+        const q = queryParams.search.toLowerCase().trim();
+        result = result.filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+      }
+      return result;
+    }
+
+    try {
+      const response = await ProductAPI.getAllProducts(queryParams);
+      // Unpack PageResponse<ProductDTO>
+      const list = Array.isArray(response) ? response : (response.content || []);
+      if (list.length > 0) {
+        return list.map(ProductService._normalizeProduct);
+      }
+      // If live backend returned empty page, return empty array
+      return [];
     } catch (e) {
-      console.warn('[ProductService] REST API unavailable, falling back to mock products.');
-      if (!category || category === 'all') return ProductService._mockProducts;
-      return ProductService._mockProducts.filter(p => p.category === category);
+      console.warn('[ProductService] REST API unavailable, falling back to mock products:', e.message);
+      let result = [...ProductService._mockProducts];
+      if (queryParams.category) {
+        result = result.filter(p => p.category === queryParams.category);
+      }
+      return result;
     }
   },
 
@@ -356,8 +421,13 @@ const ProductService = {
       return ProductService._mockProducts.find(p => p.id === numericId) || ProductService._mockProducts[0];
     }
     try {
-      return await ProductAPI.getProductById(numericId);
+      const liveProduct = await ProductAPI.getProductById(numericId);
+      if (liveProduct && liveProduct.id) {
+        return ProductService._normalizeProduct(liveProduct);
+      }
+      return ProductService._mockProducts.find(p => p.id === numericId) || ProductService._mockProducts[0];
     } catch (e) {
+      console.warn('[ProductService] Live product get failed, using fallback:', e.message);
       return ProductService._mockProducts.find(p => p.id === numericId) || ProductService._mockProducts[0];
     }
   },
@@ -372,16 +442,63 @@ const ProductService = {
       return ProductService._mockProducts.filter(p => 
         p.name.toLowerCase().includes(q) || 
         p.brand.toLowerCase().includes(q) ||
-        p.categoryName.toLowerCase().includes(q)
+        (p.categoryName && p.categoryName.toLowerCase().includes(q))
       );
     }
     try {
-      return await ProductAPI.searchProducts(query);
+      const list = await ProductAPI.searchProducts(query);
+      if (Array.isArray(list) && list.length > 0) {
+        return list.map(ProductService._normalizeProduct);
+      }
+      return [];
     } catch (e) {
       return ProductService._mockProducts.filter(p => 
         p.name.toLowerCase().includes(q) || 
         p.brand.toLowerCase().includes(q)
       );
     }
+  },
+
+  /**
+   * Admin: Create product
+   */
+  createProduct: async (productData) => {
+    if (CONFIG.USE_MOCK_DATA) {
+      const newProd = {
+        id: ProductService._mockProducts.length + 1,
+        ...productData
+      };
+      ProductService._mockProducts.unshift(newProd);
+      return newProd;
+    }
+    const created = await ProductAPI.createProduct(productData);
+    return ProductService._normalizeProduct(created);
+  },
+
+  /**
+   * Admin: Update product
+   */
+  updateProduct: async (id, productData) => {
+    if (CONFIG.USE_MOCK_DATA) {
+      const index = ProductService._mockProducts.findIndex(p => p.id === Number(id));
+      if (index > -1) {
+        ProductService._mockProducts[index] = { ...ProductService._mockProducts[index], ...productData };
+        return ProductService._mockProducts[index];
+      }
+      return productData;
+    }
+    const updated = await ProductAPI.updateProduct(id, productData);
+    return ProductService._normalizeProduct(updated);
+  },
+
+  /**
+   * Admin: Delete product
+   */
+  deleteProduct: async (id) => {
+    if (CONFIG.USE_MOCK_DATA) {
+      ProductService._mockProducts = ProductService._mockProducts.filter(p => p.id !== Number(id));
+      return { status: 200, message: 'Deleted' };
+    }
+    return await ProductAPI.deleteProduct(id);
   }
 };

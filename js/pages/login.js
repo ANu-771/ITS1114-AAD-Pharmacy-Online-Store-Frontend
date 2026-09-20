@@ -1,10 +1,10 @@
 /**
  * KK PHARMACY ONLINE PHARMACY - LOGIN PAGE CONTROLLER (js/pages/login.js)
- * Manages form authentication, JWT storage, role-based redirects, and demo switcher buttons.
+ * Manages form authentication, JWT storage, role-based redirects, and demo credentials.
  */
 const LoginPage = {
   init: () => {
-    // If already authenticated, redirect to profile or home
+    // If already authenticated, redirect to profile or admin dashboard
     if (AuthService.isAuthenticated()) {
       if (AuthService.hasRole('ROLE_ADMIN')) {
         window.location.href = '../admin/dashboard.html';
@@ -21,34 +21,41 @@ const LoginPage = {
     const form = document.getElementById('standaloneLoginForm');
     const emailInput = document.getElementById('loginEmailInput');
     const passInput = document.getElementById('loginPasswordInput');
+    const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
     // Demo Fill Buttons
     document.getElementById('btnFillUser')?.addEventListener('click', () => {
-      emailInput.value = 'user@example.com';
-      passInput.value = 'password123';
+      if (emailInput) emailInput.value = 'user@example.com';
+      if (passInput) passInput.value = 'password123';
       Toast.show('Filled Customer Demo Credentials', 'info');
     });
 
     document.getElementById('btnFillAdmin')?.addEventListener('click', () => {
-      emailInput.value = 'admin@medora.com';
-      passInput.value = 'admin123';
+      if (emailInput) emailInput.value = 'admin@medora.com';
+      if (passInput) passInput.value = 'admin123';
       Toast.show('Filled Admin Demo Credentials', 'info');
     });
 
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = emailInput.value.trim();
-        const password = passInput.value.trim();
+        const email = emailInput ? emailInput.value.trim() : '';
+        const password = passInput ? passInput.value.trim() : '';
 
         if (!email || !password) {
           Toast.show('Please enter both email and password.', 'warning');
           return;
         }
 
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Authenticating...';
+        }
+
         try {
-          const user = await AuthService.login(email, password);
-          Toast.show(`Authentication Successful! Logged in as ${user.fullName}`, 'success');
+          const authRes = await AuthService.login(email, password);
+          const userName = (authRes.user && authRes.user.fullName) || authRes.fullName || email.split('@')[0];
+          Toast.show(`Authentication Successful! Welcome, ${userName}.`, 'success');
 
           setTimeout(() => {
             if (AuthService.hasRole('ROLE_ADMIN')) {
@@ -59,6 +66,10 @@ const LoginPage = {
           }, 800);
         } catch (err) {
           Toast.show(err.message || 'Login failed. Please check credentials.', 'error');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Sign In to Account';
+          }
         }
       });
     }

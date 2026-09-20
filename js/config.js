@@ -5,15 +5,19 @@ const CONFIG = {
   // Spring Boot REST API Base URL
   API_BASE_URL: 'http://localhost:8080/api/v1',
   
-  // Set to true to use rich realistic mock data when Spring Boot backend is offline
-  USE_MOCK_DATA: true,
+  // When false: uses real Spring Boot REST API. When true: uses fallback mock data
+  USE_MOCK_DATA: false,
   
-  // LocalStorage Keys
+  // Centralized LocalStorage Keys
   STORAGE_KEYS: {
-    AUTH_TOKEN: 'medora_jwt_token',
-    USER_INFO: 'medora_user_info',
-    CART_ITEMS: 'medora_cart_items',
-    WISHLIST: 'medora_wishlist'
+    ACCESS_TOKEN: 'kk_access_token',
+    REFRESH_TOKEN: 'kk_refresh_token',
+    AUTH_TOKEN: 'kk_access_token', // Alias for backward compatibility
+    USER: 'kk_user_info',
+    USER_INFO: 'kk_user_info',     // Alias
+    ROLE: 'kk_user_role',
+    CART_ITEMS: 'kk_cart_items',
+    WISHLIST: 'kk_wishlist'
   },
   
   // E-Commerce Settings

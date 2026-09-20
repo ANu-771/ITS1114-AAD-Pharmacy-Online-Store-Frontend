@@ -143,41 +143,487 @@ All endpoints return standard JSON payloads with consistent HTTP status codes:
 - `404 Not Found`: Entity not found
 - `500 Internal Server Error`: Unhandled server exception
 
-### 5.1 Authentication API (`/api/v1/auth`)
-| Method | Endpoint | Description | Access |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/v1/auth/login` | Authenticate user & issue JWT Bearer token | Public |
-| `POST` | `/api/v1/auth/register` | Register new customer account | Public |
-| `POST` | `/api/v1/auth/refresh-token`| Renew expiring JWT token | Authenticated |
-| `POST` | `/api/v1/auth/logout` | Invalidate active server session | Authenticated |
+### 5.0 Standard Response Envelope & HTTP Status Codes
+All Spring Boot REST endpoints adhere to RFC 7807 and standardized DTO envelopes:
+- `200 OK`: Successful data retrieval or state update
+- `201 Created`: Resource successfully created (Users, Orders, Products, Batches)
+- `204 No Content`: Successful action with empty response body
+- `400 Bad Request`: Validation failure or malformed payload (`ErrorResponse`)
+- `401 Unauthorized`: Missing, expired, or invalid JWT Bearer token (`ErrorResponse`)
+- `403 Forbidden`: Authenticated user lacks required role authority (`ErrorResponse`)
+- `404 Not Found`: Requested entity not found (`ErrorResponse`)
+- `500 Internal Server Error`: Unhandled server exception (`ErrorResponse`)
 
-### 5.2 Products & Catalog API (`/api/v1/products`)
-| Method | Endpoint | Query Params | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/v1/products` | `category`, `search`, `minPrice`, `maxPrice`, `sort`, `page` | Get paginated products |
-| `GET` | `/api/v1/products/{id}`| - | Get detailed product by ID |
-| `POST` | `/api/v1/products` | - | Create new product (Admin only) |
-| `PUT` | `/api/v1/products/{id}`| - | Update product details (Admin only) |
-| `DELETE` | `/api/v1/products/{id}`| - | Soft delete product (Admin only) |
+---
 
-### 5.3 Cart & Order API (`/api/v1/orders`, `/api/v1/cart`)
-| Method | Endpoint | Description | Access |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/v1/cart` | Get current user's shopping cart | `ROLE_USER` |
-| `POST` | `/api/v1/cart/items` | Add product to cart | `ROLE_USER` |
-| `DELETE` | `/api/v1/cart/items/{id}`| Remove product from cart | `ROLE_USER` |
-| `POST` | `/api/v1/orders` | Place new order with address & payment | `ROLE_USER` |
-| `GET` | `/api/v1/orders/my-orders`| Retrieve user's order history | `ROLE_USER` |
-| `GET` | `/api/v1/orders/{id}` | Get itemized invoice & tracking | `ROLE_USER` / `ROLE_ADMIN` |
-| `PATCH` | `/api/v1/orders/{id}/status`| Update order fulfillment status | `ROLE_ADMIN` |
+### 5.1 Authentication Endpoints (`AuthController.java`)
 
-### 5.4 Admin & Inventory API (`/api/v1/admin`)
-| Method | Endpoint | Description | Access |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/v1/admin/dashboard-stats` | KPI metrics (Revenue, Orders, Low stock) | `ROLE_ADMIN` |
-| `GET` | `/api/v1/admin/inventory/low-stock` | Low stock items beneath reorder level | `ROLE_ADMIN` |
-| `POST` | `/api/v1/admin/inventory/batch` | Record incoming batch with expiry | `ROLE_ADMIN` |
-| `GET` | `/api/v1/admin/reports/sales` | Generate sales aggregations for Jasper | `ROLE_ADMIN` |
+#### 1. Register Customer Account
+- **METHOD**: `POST`
+- **FULL URL**: `http://localhost:8080/api/v1/auth/register`
+- **AUTHENTICATION**: Public
+- **ROLE**: `NONE`
+- **REQUEST HEADERS**: `Content-Type: application/json`, `Accept: application/json`
+- **REQUEST BODY**:
+  ```json
+  {
+    "fullName": "Sarah Perera",
+    "email": "user@example.com",
+    "password": "password123",
+    "phone": "+94 77 123 4567"
+  }
+  ```
+- **SUCCESS RESPONSE (201 Created)**:
+  ```json
+  {
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+    "token": "eyJhbGciOiJIUzI1NiJ9...",
+    "refreshToken": "d8e3b4a2-...",
+    "tokenType": "Bearer",
+    "expiresIn": 86400000,
+    "user": {
+      "id": 1,
+      "email": "user@example.com",
+      "fullName": "Sarah Perera",
+      "phone": "+94 77 123 4567",
+      "roles": ["ROLE_USER"],
+      "enabled": true
+    },
+    "roles": ["ROLE_USER"]
+  }
+  ```
+- **ERROR RESPONSES**: `400 Bad Request` (Email already in use / validation failed)
+- **FRONTEND FILE USING ENDPOINT**: `js/api/auth-api.js`, `js/services/auth-service.js`, `js/pages/register.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.AuthController`
+
+#### 2. User Login
+- **METHOD**: `POST`
+- **FULL URL**: `http://localhost:8080/api/v1/auth/login`
+- **AUTHENTICATION**: Public
+- **ROLE**: `NONE`
+- **REQUEST HEADERS**: `Content-Type: application/json`, `Accept: application/json`
+- **REQUEST BODY**:
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "password123"
+  }
+  ```
+- **SUCCESS RESPONSE (200 OK)**:
+  ```json
+  {
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+    "token": "eyJhbGciOiJIUzI1NiJ9...",
+    "refreshToken": "d8e3b4a2-...",
+    "tokenType": "Bearer",
+    "expiresIn": 86400000,
+    "user": {
+      "id": 1,
+      "email": "user@example.com",
+      "fullName": "Sarah Perera",
+      "phone": "+94 77 123 4567",
+      "roles": ["ROLE_USER"],
+      "enabled": true
+    },
+    "roles": ["ROLE_USER"]
+  }
+  ```
+- **ERROR RESPONSES**: `401 Unauthorized` (Invalid credentials), `400 Bad Request`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/auth-api.js`, `js/services/auth-service.js`, `js/pages/login.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.AuthController`
+
+#### 3. Refresh JWT Access Token
+- **METHOD**: `POST`
+- **FULL URL**: `http://localhost:8080/api/v1/auth/refresh-token`
+- **AUTHENTICATION**: Public
+- **ROLE**: `NONE`
+- **REQUEST HEADERS**: `Content-Type: application/json`, `Accept: application/json`
+- **REQUEST BODY**:
+  ```json
+  {
+    "refreshToken": "d8e3b4a2-..."
+  }
+  ```
+- **SUCCESS RESPONSE (200 OK)**:
+  ```json
+  {
+    "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+    "token": "eyJhbGciOiJIUzI1NiJ9...",
+    "refreshToken": "d8e3b4a2-...",
+    "tokenType": "Bearer",
+    "expiresIn": 86400000,
+    "user": { ... },
+    "roles": ["ROLE_USER"]
+  }
+  ```
+- **ERROR RESPONSES**: `401 Unauthorized` (Expired or invalid refresh token)
+- **FRONTEND FILE USING ENDPOINT**: `js/api/api-client.js`, `js/api/auth-api.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.AuthController`
+
+#### 4. Get Current User Session
+- **METHOD**: `GET`
+- **FULL URL**: `http://localhost:8080/api/v1/auth/me`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_USER`, `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **REQUEST HEADERS**: `Authorization: Bearer <JWT>`, `Accept: application/json`
+- **SUCCESS RESPONSE (200 OK)**:
+  ```json
+  {
+    "id": 1,
+    "email": "user@example.com",
+    "fullName": "Sarah Perera",
+    "phone": "+94 77 123 4567",
+    "roles": ["ROLE_USER"],
+    "enabled": true
+  }
+  ```
+- **ERROR RESPONSES**: `401 Unauthorized`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/auth-api.js`, `js/services/auth-service.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.AuthController`
+
+#### 5. User Logout
+- **METHOD**: `POST`
+- **FULL URL**: `http://localhost:8080/api/v1/auth/logout`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_USER`, `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **REQUEST HEADERS**: `Authorization: Bearer <JWT>`, `Accept: application/json`
+- **SUCCESS RESPONSE (200 OK)**:
+  ```json
+  {
+    "status": 200,
+    "message": "Logged out successfully",
+    "data": null
+  }
+  ```
+- **ERROR RESPONSES**: `401 Unauthorized`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/auth-api.js`, `js/services/auth-service.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.AuthController`
+
+---
+
+### 5.2 Products & Catalog Endpoints (`ProductController.java`)
+
+#### 6. Get Filtered & Paginated Products Catalog
+- **METHOD**: `GET`
+- **FULL URL**: `http://localhost:8080/api/v1/products`
+- **AUTHENTICATION**: Public
+- **ROLE**: `NONE`
+- **QUERY PARAMETERS**: `category` (string), `search` (string), `minPrice` (decimal), `maxPrice` (decimal), `sort` (string), `page` (int, default 0), `size` (int, default 12)
+- **REQUEST HEADERS**: `Accept: application/json`
+- **SUCCESS RESPONSE (200 OK)**:
+  ```json
+  {
+    "content": [
+      {
+        "id": 1,
+        "name": "Amoxicillin 500mg Antibiotic Capsules",
+        "sku": "RX-AMX-500",
+        "brand": "GlaxoSmithKline",
+        "category": "medicines",
+        "categoryName": "Medicines",
+        "price": 650.00,
+        "oldPrice": 750.00,
+        "rating": 4.8,
+        "reviewsCount": 42,
+        "inStock": true,
+        "requiresPrescription": true,
+        "rxRequired": true,
+        "image": "assets/images/medicine_1.png",
+        "description": "Amoxicillin is a broad-spectrum penicillin-class antibiotic...",
+        "activeIngredient": "Amoxicillin Trihydrate 500mg",
+        "strength": "500mg per capsule",
+        "dosageForm": "Hard Gelatin Capsules",
+        "manufacturer": "GlaxoSmithKline Pharmaceuticals Ltd",
+        "storageInfo": "Store below 25°C in a dry place."
+      }
+    ],
+    "page": 0,
+    "size": 12,
+    "totalElements": 24,
+    "totalPages": 2,
+    "last": false
+  }
+  ```
+- **ERROR RESPONSES**: `400 Bad Request`, `500 Internal Server Error`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/product-api.js`, `js/services/product-service.js`, `js/pages/products.js`, `js/pages/home.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.ProductController`
+
+#### 7. Get Product Details by ID
+- **METHOD**: `GET`
+- **FULL URL**: `http://localhost:8080/api/v1/products/{id}`
+- **AUTHENTICATION**: Public
+- **ROLE**: `NONE`
+- **PATH PARAMETERS**: `id` (Long, e.g. 1)
+- **SUCCESS RESPONSE (200 OK)**: Returns single `ProductDTO`
+- **ERROR RESPONSES**: `404 Not Found` (Product not found)
+- **FRONTEND FILE USING ENDPOINT**: `js/api/product-api.js`, `js/services/product-service.js`, `js/pages/product-details.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.ProductController`
+
+#### 8. Create Product (Admin Only)
+- **METHOD**: `POST`
+- **FULL URL**: `http://localhost:8080/api/v1/products`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_ADMIN`
+- **REQUEST BODY**:
+  ```json
+  {
+    "name": "Paracetamol Extra Strength 500mg",
+    "sku": "OTC-PCM-100",
+    "categoryId": 1,
+    "category": "medicines",
+    "brandId": 1,
+    "brand": "GSK",
+    "price": 480.00,
+    "requiresPrescription": false,
+    "description": "Fast-acting pain reliever and antipyretic caplets.",
+    "activeIngredient": "Paracetamol 500mg",
+    "dosageForm": "100s Bottle",
+    "initialStock": 50,
+    "reorderLevel": 10
+  }
+  ```
+- **SUCCESS RESPONSE (201 Created)**: Returns created `ProductDTO`
+- **ERROR RESPONSES**: `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/product-api.js`, `js/services/product-service.js`, `js/pages/admin-products.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.ProductController`
+
+#### 9. Delete Product (Admin Only)
+- **METHOD**: `DELETE`
+- **FULL URL**: `http://localhost:8080/api/v1/products/{id}`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_ADMIN`
+- **PATH PARAMETERS**: `id` (Long)
+- **SUCCESS RESPONSE (200 OK)**:
+  ```json
+  {
+    "status": 200,
+    "message": "Product deleted successfully",
+    "data": null
+  }
+  ```
+- **ERROR RESPONSES**: `401 Unauthorized`, `403 Forbidden`, `404 Not Found`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/product-api.js`, `js/services/product-service.js`, `js/pages/admin-products.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.ProductController`
+
+---
+
+### 5.3 Shopping Cart Endpoints (`CartController.java`)
+
+#### 10. Get User Cart
+- **METHOD**: `GET`
+- **FULL URL**: `http://localhost:8080/api/v1/cart`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_USER`, `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **REQUEST HEADERS**: `Authorization: Bearer <JWT>`, `Accept: application/json`
+- **SUCCESS RESPONSE (200 OK)**:
+  ```json
+  {
+    "items": [
+      {
+        "id": 1,
+        "productId": 2,
+        "name": "Digital Blood Pressure Monitor",
+        "brand": "Omron Healthcare",
+        "price": 14850.00,
+        "image": "assets/images/bp_monitor.png",
+        "category": "equipment",
+        "requiresPrescription": false,
+        "quantity": 1,
+        "subtotal": 14850.00,
+        "availableStock": 15
+      }
+    ],
+    "count": 1,
+    "subtotal": 14850.00,
+    "deliveryFee": 0.00,
+    "total": 14850.00,
+    "freeShippingEligible": true,
+    "freeShippingThreshold": 5000.00,
+    "amountNeededForFreeShipping": 0.00
+  }
+  ```
+- **ERROR RESPONSES**: `401 Unauthorized`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/cart-api.js`, `js/services/cart-service.js`, `js/pages/cart.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.CartController`
+
+#### 11. Add Item to Cart
+- **METHOD**: `POST`
+- **FULL URL**: `http://localhost:8080/api/v1/cart/items`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_USER`, `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **REQUEST BODY**:
+  ```json
+  {
+    "productId": 2,
+    "quantity": 1
+  }
+  ```
+- **SUCCESS RESPONSE (200 OK)**: Returns updated `CartResponseDTO`
+- **ERROR RESPONSES**: `400 Bad Request` (Insufficient stock), `401 Unauthorized`, `404 Not Found`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/cart-api.js`, `js/services/cart-service.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.CartController`
+
+#### 12. Remove Item from Cart
+- **METHOD**: `DELETE`
+- **FULL URL**: `http://localhost:8080/api/v1/cart/items/{id}`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_USER`, `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **PATH PARAMETERS**: `id` (Long - cart item ID)
+- **SUCCESS RESPONSE (200 OK)**: Returns updated `CartResponseDTO`
+- **ERROR RESPONSES**: `401 Unauthorized`, `404 Not Found`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/cart-api.js`, `js/services/cart-service.js`, `js/pages/cart.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.CartController`
+
+---
+
+### 5.4 Orders & Checkout Endpoints (`OrderController.java`)
+
+#### 13. Create & Place Order
+- **METHOD**: `POST`
+- **FULL URL**: `http://localhost:8080/api/v1/orders`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_USER`, `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **REQUEST BODY**:
+  ```json
+  {
+    "customerName": "Sarah Perera",
+    "customerEmail": "user@example.com",
+    "phone": "+94 77 123 4567",
+    "address": "No. 45, Galle Road",
+    "city": "Colombo",
+    "postalCode": "00300",
+    "shippingAddress": "No. 45, Galle Road, Colombo, 00300",
+    "paymentMethod": "Credit Card",
+    "items": [
+      {
+        "productId": 2,
+        "quantity": 1,
+        "price": 14850.00,
+        "name": "Digital Blood Pressure Monitor"
+      }
+    ],
+    "subtotal": 14850.00,
+    "deliveryFee": 0.00,
+    "discount": 0.00,
+    "total": 14850.00
+  }
+  ```
+- **SUCCESS RESPONSE (201 Created)**:
+  ```json
+  {
+    "id": 101,
+    "orderNumber": "MED-2026-101",
+    "date": "2026-09-20",
+    "customerName": "Sarah Perera",
+    "shippingAddress": "No. 45, Galle Road, Colombo, 00300",
+    "paymentMethod": "Credit Card",
+    "paymentStatus": "PAID",
+    "status": "PENDING",
+    "subtotal": 14850.00,
+    "deliveryFee": 0.00,
+    "total": 14850.00,
+    "trackingId": "MED-TRK-101",
+    "estimatedDelivery": "2026-09-22",
+    "items": [ ... ]
+  }
+  ```
+- **ERROR RESPONSES**: `400 Bad Request` (Stock validation), `401 Unauthorized`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/order-api.js`, `js/services/order-service.js`, `js/pages/checkout.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.OrderController`
+
+#### 14. Get User Order History
+- **METHOD**: `GET`
+- **FULL URL**: `http://localhost:8080/api/v1/orders/my-orders`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_USER`, `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **SUCCESS RESPONSE (200 OK)**: Returns `List<OrderResponseDTO>`
+- **ERROR RESPONSES**: `401 Unauthorized`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/order-api.js`, `js/services/order-service.js`, `js/pages/orders.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.OrderController`
+
+#### 15. Get Order Details & Invoice
+- **METHOD**: `GET`
+- **FULL URL**: `http://localhost:8080/api/v1/orders/{id}`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_USER`, `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **PATH PARAMETERS**: `id` (Long)
+- **SUCCESS RESPONSE (200 OK)**: Returns single `OrderResponseDTO`
+- **ERROR RESPONSES**: `401 Unauthorized`, `404 Not Found`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/order-api.js`, `js/services/order-service.js`, `js/pages/order-details.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.OrderController`
+
+---
+
+### 5.5 Admin Management & Inventory Endpoints (`AdminController.java`, `InventoryController.java`)
+
+#### 16. Get Dashboard KPI Stats
+- **METHOD**: `GET`
+- **FULL URL**: `http://localhost:8080/api/v1/admin/dashboard-stats`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_ADMIN`
+- **SUCCESS RESPONSE (200 OK)**:
+  ```json
+  {
+    "totalRevenue": 284500.00,
+    "revenueChange": "+14.8%",
+    "totalOrders": 64,
+    "ordersChange": "+8.2%",
+    "totalProducts": 48,
+    "lowStockCount": 3,
+    "totalUsers": 142
+  }
+  ```
+- **ERROR RESPONSES**: `401 Unauthorized`, `403 Forbidden`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/admin-api.js`, `js/services/admin-service.js`, `js/pages/admin-dashboard.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.AdminController`
+
+#### 17. Get Low-Stock Inventory Alerts
+- **METHOD**: `GET`
+- **FULL URL**: `http://localhost:8080/api/v1/admin/inventory/low-stock`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **SUCCESS RESPONSE (200 OK)**: Returns `List<InventoryDTO>`
+- **ERROR RESPONSES**: `401 Unauthorized`, `403 Forbidden`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/admin-api.js`, `js/services/admin-service.js`, `js/pages/admin-dashboard.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.InventoryController`
+
+#### 18. Add Inventory Batch
+- **METHOD**: `POST`
+- **FULL URL**: `http://localhost:8080/api/v1/admin/inventory/batch`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **REQUEST BODY**:
+  ```json
+  {
+    "productId": 1,
+    "batchNumber": "AMX24-09",
+    "quantity": 50,
+    "expiryDate": "2027-12-31",
+    "manufacturer": "GSK Pharma Ltd"
+  }
+  ```
+- **SUCCESS RESPONSE (201 Created)**: Returns created `InventoryBatchDTO`
+- **ERROR RESPONSES**: `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/admin-api.js`, `js/services/admin-service.js`, `js/pages/admin-inventory.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.InventoryController`
+
+#### 19. Update Order Fulfillment Status
+- **METHOD**: `PATCH`
+- **FULL URL**: `http://localhost:8080/api/v1/admin/orders/{id}/status`
+- **AUTHENTICATION**: Bearer JWT
+- **ROLE**: `ROLE_ADMIN`, `ROLE_PHARMACIST`
+- **PATH PARAMETERS**: `id` (Long)
+- **REQUEST BODY**:
+  ```json
+  {
+    "status": "DISPATCHED",
+    "trackingId": "MED-TRK-78912"
+  }
+  ```
+- **SUCCESS RESPONSE (200 OK)**: Returns updated `OrderResponseDTO`
+- **ERROR RESPONSES**: `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`
+- **FRONTEND FILE USING ENDPOINT**: `js/api/order-api.js`, `js/services/admin-service.js`, `js/pages/admin-orders.js`
+- **BACKEND CONTROLLER**: `lk.ijse.pharmacy_backend.controller.AdminController`
 
 ---
 
