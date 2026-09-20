@@ -1299,56 +1299,331 @@
   background: #EFF6FF;
 }
 
-/* --- 4. Category Cards --- */
+/* ==========================================================================
+   4. CATEGORY CARDS — PREMIUM PHARMACEUTICAL TILES
+   ========================================================================== */
+
+/* Full Category Page Tiles (pages/categories.html) */
+.category-card-premium {
+  position: relative;
+  overflow: hidden;
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 2rem 1.4rem 1.6rem 1.4rem;
+  border: 1px solid rgba(217, 232, 242, 0.9);
+  box-shadow: 0 4px 20px rgba(0, 59, 102, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 1;
+  height: 100%;
+  text-decoration: none;
+}
+
+/* Top colored linear gradient accent bar */
+.category-card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-blue), #38BDF8);
+  border-radius: 20px 20px 0 0;
+  transition: height 0.3s ease;
+}
+
+/* Translucent Background Watermark */
+.category-bg-watermark {
+  position: absolute;
+  right: -10px;
+  bottom: -15px;
+  font-size: 5.5rem;
+  line-height: 1;
+  opacity: 0.06;
+  color: var(--primary-blue);
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(-10deg);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.category-card-premium:hover .category-bg-watermark {
+  opacity: 0.16;
+  transform: scale(1.18) rotate(0deg) translate(-4px, -4px);
+}
+
+.category-card-premium:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 36px rgba(0, 59, 102, 0.12);
+}
+
+.category-card-premium .category-icon-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+  color: var(--primary-blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 14px rgba(0, 102, 179, 0.14);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.category-card-premium:hover .category-icon-wrapper {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.category-card-premium .category-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--dark-navy);
+  margin-bottom: 0.4rem;
+  transition: color 0.2s ease;
+}
+
+.category-card-premium:hover .category-title {
+  color: var(--primary-blue);
+}
+
+.category-card-premium .category-desc {
+  position: relative;
+  z-index: 1;
+  font-size: 0.85rem;
+  color: #64748B;
+  line-height: 1.5;
+  margin-bottom: 1.1rem;
+  flex-grow: 1;
+}
+
+.category-card-premium .category-count-badge {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  background: #E0F2FE;
+  color: #0284C7;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  margin-top: auto;
+  transition: all 0.25s ease;
+}
+
+.category-card-premium:hover .category-count-badge {
+  background: var(--primary-blue);
+  color: #FFFFFF;
+  border-color: var(--primary-blue);
+}
+
+/* Department Specific Variants */
+/* 1. Medicines */
+.category-card-medicines {
+  background: radial-gradient(circle at 100% 100%, rgba(224, 242, 254, 0.7) 0%, #FFFFFF 70%);
+  border-color: rgba(0, 102, 179, 0.18);
+}
+.category-card-medicines::before {
+  background: linear-gradient(90deg, #0066B3, #38BDF8);
+}
+.category-card-medicines .category-bg-watermark {
+  color: #0066B3;
+}
+.category-card-medicines:hover {
+  border-color: #0066B3;
+  box-shadow: 0 18px 36px rgba(0, 102, 179, 0.14);
+}
+
+/* 2. Prescription Medicines */
+.category-card-prescription {
+  background: radial-gradient(circle at 100% 100%, rgba(219, 234, 254, 0.7) 0%, #FFFFFF 70%);
+  border-color: rgba(37, 99, 235, 0.18);
+}
+.category-card-prescription::before {
+  background: linear-gradient(90deg, #2563EB, #60A5FA);
+}
+.category-card-prescription .category-icon-wrapper {
+  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+  color: #1D4ED8;
+}
+.category-card-prescription .category-bg-watermark {
+  color: #2563EB;
+}
+.category-card-prescription:hover {
+  border-color: #2563EB;
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.14);
+}
+
+/* 3. Medical Equipment */
+.category-card-equipment {
+  background: radial-gradient(circle at 100% 100%, rgba(204, 251, 241, 0.7) 0%, #FFFFFF 70%);
+  border-color: rgba(13, 148, 136, 0.2);
+}
+.category-card-equipment::before {
+  background: linear-gradient(90deg, #0D9488, #2DD4BF);
+}
+.category-card-equipment .category-icon-wrapper {
+  background: linear-gradient(135deg, #CCFBF1 0%, #99F6E4 100%);
+  color: #0F766E;
+}
+.category-card-equipment .category-bg-watermark {
+  color: #0D9488;
+}
+.category-card-equipment .category-count-badge {
+  background: #CCFBF1;
+  color: #0F766E;
+  border-color: rgba(45, 212, 191, 0.4);
+}
+.category-card-equipment:hover {
+  border-color: #0D9488;
+  box-shadow: 0 18px 36px rgba(13, 148, 136, 0.14);
+}
+
+/* 4. Vitamins & Supplements */
+.category-card-vitamins {
+  background: radial-gradient(circle at 100% 100%, rgba(254, 243, 199, 0.7) 0%, #FFFFFF 70%);
+  border-color: rgba(217, 119, 6, 0.2);
+}
+.category-card-vitamins::before {
+  background: linear-gradient(90deg, #D97706, #FBBF24);
+}
+.category-card-vitamins .category-icon-wrapper {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  color: #B45309;
+}
+.category-card-vitamins .category-bg-watermark {
+  color: #D97706;
+}
+.category-card-vitamins .category-count-badge {
+  background: #FEF3C7;
+  color: #B45309;
+  border-color: rgba(251, 191, 36, 0.4);
+}
+.category-card-vitamins:hover {
+  border-color: #D97706;
+  box-shadow: 0 18px 36px rgba(217, 119, 6, 0.14);
+}
+
+/* 5. Personal Care */
+.category-card-personal-care {
+  background: radial-gradient(circle at 100% 100%, rgba(207, 250, 254, 0.7) 0%, #FFFFFF 70%);
+  border-color: rgba(6, 182, 212, 0.2);
+}
+.category-card-personal-care::before {
+  background: linear-gradient(90deg, #0891B2, #22D3EE);
+}
+.category-card-personal-care .category-icon-wrapper {
+  background: linear-gradient(135deg, #CFFAFE 0%, #A5F3FC 100%);
+  color: #0E7490;
+}
+.category-card-personal-care .category-bg-watermark {
+  color: #0891B2;
+}
+.category-card-personal-care .category-count-badge {
+  background: #ECFEFF;
+  color: #0E7490;
+  border-color: rgba(34, 211, 238, 0.4);
+}
+.category-card-personal-care:hover {
+  border-color: #0891B2;
+  box-shadow: 0 18px 36px rgba(8, 145, 178, 0.14);
+}
+
+/* 6. Baby Care */
+.category-card-baby-care {
+  background: radial-gradient(circle at 100% 100%, rgba(255, 228, 230, 0.7) 0%, #FFFFFF 70%);
+  border-color: rgba(244, 63, 94, 0.2);
+}
+.category-card-baby-care::before {
+  background: linear-gradient(90deg, #E11D48, #FB7185);
+}
+.category-card-baby-care .category-icon-wrapper {
+  background: linear-gradient(135deg, #FFE4E6 0%, #FECDD3 100%);
+  color: #BE123C;
+}
+.category-card-baby-care .category-bg-watermark {
+  color: #E11D48;
+}
+.category-card-baby-care .category-count-badge {
+  background: #FFE4E6;
+  color: #BE123C;
+  border-color: rgba(251, 113, 133, 0.4);
+}
+.category-card-baby-care:hover {
+  border-color: #E11D48;
+  box-shadow: 0 18px 36px rgba(225, 29, 72, 0.14);
+}
+
+/* Standard Quick Category Cards (Home Page Carousel / Grid) */
 .category-card {
+  position: relative;
+  overflow: hidden;
   background: var(--white);
   border-radius: var(--radius-md);
   padding: 1.5rem 1rem;
   text-align: center;
   border: 1px solid var(--border-color);
-  transition: var(--transition-normal);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 59, 102, 0.04);
 }
 
 .category-card:hover {
   border-color: var(--primary-blue);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 102, 179, 0.12);
+  transform: translateY(-5px);
 }
 
-.category-icon-wrapper {
+.category-card .category-icon-wrapper {
   width: 56px;
   height: 56px;
-  border-radius: 50%;
-  background-color: var(--light-medical-blue);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
   color: var(--primary-blue);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
   margin-bottom: 0.9rem;
-  transition: var(--transition-fast);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 12px rgba(0, 102, 179, 0.12);
 }
 
 .category-card:hover .category-icon-wrapper {
-  background-color: var(--primary-blue);
-  color: var(--white);
+  transform: scale(1.1) rotate(4deg);
 }
 
-.category-title {
+.category-card .category-title {
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--dark-navy);
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
+  transition: color 0.2s ease;
 }
 
-.category-count {
+.category-card:hover .category-title {
+  color: var(--primary-blue);
+}
+
+.category-card .category-count {
   font-size: 0.775rem;
+  font-weight: 600;
   color: var(--text-muted);
 }
 

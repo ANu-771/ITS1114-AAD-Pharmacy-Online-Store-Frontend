@@ -6,6 +6,7 @@ function createCategoryCard(category) {
   return `
     <div class="col-6 col-md-4 col-lg-2">
       <div class="category-card" data-category="${category.id}">
+        <div class="category-bg-watermark"><i class="bi ${category.icon}"></i></div>
         <div class="category-icon-wrapper">
           <i class="bi ${category.icon}"></i>
         </div>

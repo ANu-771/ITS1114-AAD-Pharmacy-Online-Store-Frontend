@@ -364,5 +364,16 @@ The floating UI on the **About Us** page hero showcase has been streamlined into
 - **Hover Interactions**: Hovering over any orb pauses its floating motion and smoothly scales it to `1.24x` with an illuminated medical halo.
 
 ---
+
+## 16. MEDICAL CATEGORY TILE SUITE & CLINICAL AESTHETICS
+
+The 6 departmental category tiles on [categories.html](file:///d:/sem%202/API%20Development/API%20Final%20Course%20Work/Pharmacy%20website/pharmacy_frontend/pages/categories.html) and homepage quick navigation are enhanced with professional pharmacy design language:
+
+- **Departmental Radial Gradients (`.category-card-premium`)**: Individual soft clinical color meshes tailored to each healthcare division (Medicines cyan, Prescription cobalt, Equipment mint-teal, Vitamins amber, Personal Care azure, and Baby Care soft rose).
+- **Background Pharmaceutical Watermarks (`.category-bg-watermark`)**: Large, subtle vector glyphs (`bi-capsule`, `bi-file-earmark-medical`, `bi-heart-pulse-fill`, `bi-lightning-charge-fill`, `bi-droplet-fill`, `bi-emoji-smile-fill`) in the bottom-right corner with 0.06 -> 0.16 hover expansion.
+- **Top Accent Color Bars**: Linear gradient top indicator bars for visual department demarcation.
+- **Micro-Interactions**: Smooth `translateY(-8px)` lift on hover with glowing squircle icon rotational pulse (`scale(1.1) rotate(5deg)`) and active pill badge transitions.
+
+---
 *Document maintained automatically with each build increment.*
 
