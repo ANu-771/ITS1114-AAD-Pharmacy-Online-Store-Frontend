@@ -62,6 +62,10 @@ Spring Boot REST API (Spring Security, JWT, JPA/Hibernate, MySQL)
 - **Asset Resolution Engine (`resolveImagePath`)**: Seamlessly normalizes image URIs across root (`/index.html`) and nested subdirectories (`/pages/`, `/admin/`) to guarantee zero 404 image errors with automatic fallback handling.
 - **Cart Lifecycle & Re-ordering**: Following successful order checkout, the active cart clears its state while preserving real-time re-synchronization with `localStorage`, enabling users to seamlessly browse and add new items without page refresh or stale session conflicts.
 
+### 2.2 Two-Tier Modern Glassmorphism & Centered Floating Capsule Navigation
+- **Tier 1 (Top Main Header)**: Full-width glass capsule containing the **KK PHARMACY** brand logo with interactive 3D animated pills graphic, live search dropdown, wishlist counter badge, shopping cart counter badge, and patient account auth pill button.
+- **Tier 2 (Under-Navbar Floating Bubble Bar)**: Horizontally centered standalone capsule navbar (`border-radius: 50px`, `backdrop-filter: blur(20px)`) holding category and store routing pills (Home, Products, Medicines, Equipment, Categories, About Us, Contact) with solid Healthcare Blue active indicator and smooth hover animations.
+
 ### Architectural Layer Responsibilities:
 - **Layer 1 — Presentation & Pages (`pages/`, `admin/`, `index.html`)**: Defines semantic DOM structures, accessibility markers, and forms without hardcoded API calls.
 - **Layer 2 — Reusable UI Components (`js/components/`)**: Pure UI rendering functions (`renderProductCard`, `renderNavbar`, `Toast.show`, `Modal.showQuickView`, `LoadingState`).

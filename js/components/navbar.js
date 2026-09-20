@@ -31,9 +31,13 @@ const NavbarComponent = {
     container.innerHTML = `
       <div class="floating-header-wrapper" id="floatingHeaderWrapper">
         <div class="container">
-          <nav class="navbar navbar-expand-xl pharmacy-glass-navbar" aria-label="Main Navigation">
+          
+          <!-- =========================================================
+               TIER 1: TOP MAIN NAVBAR (BRAND + ACTIONS + AUTH)
+               ========================================================= -->
+          <nav class="navbar pharmacy-main-navbar d-flex align-items-center justify-content-between" aria-label="Top Brand Navigation">
             
-            <!-- 1. LEFT: Brand & Animated Pills Icon -->
+            <!-- LEFT: Brand & Animated Pills Icon -->
             <a class="navbar-brand navbar-brand-logo" href="${p}index.html" aria-label="KK PHARMACY Home">
               <div class="navbar-brand-pill-wrapper">
                 <img src="${p}assets/images/pills_logo.svg" alt="KK PHARMACY Pills Animation" class="brand-pill-anim-img">
@@ -46,58 +50,8 @@ const NavbarComponent = {
               </div>
             </a>
 
-            <!-- 2. CENTER: Floating Pill/Bubble Navigation Menu -->
-            <div class="collapse navbar-collapse justify-content-center" id="pharmacyNav">
-              <div class="nav-bubble-pill-group">
-                <ul class="navbar-nav align-items-center">
-                  <li class="nav-item">
-                    <a class="nav-link nav-bubble ${isHome ? 'active' : ''}" href="${p}index.html">
-                      <i class="bi bi-house-door me-1"></i> Home
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link nav-bubble ${isProducts ? 'active' : ''}" href="${p}pages/products.html">
-                      <i class="bi bi-grid-fill me-1"></i> Products
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link nav-bubble ${isMed ? 'active' : ''}" href="${p}pages/products.html?category=medicines">
-                      <i class="bi bi-capsule me-1"></i> Medicines
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link nav-bubble ${isEquip ? 'active' : ''}" href="${p}pages/products.html?category=equipment">
-                      <i class="bi bi-hospital me-1"></i> Equipment
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link nav-bubble ${isCategories ? 'active' : ''}" href="${p}pages/categories.html">
-                      <i class="bi bi-collection me-1"></i> Categories
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link nav-bubble ${isAbout ? 'active' : ''}" href="${p}pages/about.html">
-                      <i class="bi bi-info-circle me-1"></i> About Us
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link nav-bubble ${isContact ? 'active' : ''}" href="${p}pages/contact.html">
-                      <i class="bi bi-telephone me-1"></i> Contact
-                    </a>
-                  </li>
-                  ${isAdmin ? `
-                    <li class="nav-item">
-                      <a class="nav-link nav-bubble nav-bubble-admin" href="${p}admin/dashboard.html">
-                        <i class="bi bi-speedometer2 me-1"></i> Admin Panel
-                      </a>
-                    </li>
-                  ` : ''}
-                </ul>
-              </div>
-            </div>
-
-            <!-- 3. RIGHT: Actions (Search, Wishlist, Cart, Profile / Auth) -->
-            <div class="header-actions-group d-flex align-items-center gap-2 ms-auto ms-xl-0">
+            <!-- RIGHT: Actions (Search, Wishlist, Cart, Profile / Auth, Mobile Toggle) -->
+            <div class="header-actions-group d-flex align-items-center gap-2">
               
               <!-- Quick Search Bubble -->
               <div class="header-search-wrapper position-relative">
@@ -162,12 +116,73 @@ const NavbarComponent = {
               </div>
 
               <!-- Mobile Hamburger Toggler Bubble -->
-              <button class="navbar-toggler header-action-bubble border-0 d-xl-none" type="button" data-bs-toggle="collapse" data-bs-target="#pharmacyNav" aria-controls="pharmacyNav" aria-expanded="false" aria-label="Toggle navigation">
+              <button class="header-action-bubble border-0 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#floatingCapsuleNavCollapse" aria-controls="floatingCapsuleNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="bi bi-list fs-5"></i>
               </button>
 
             </div>
           </nav>
+
+          <!-- =========================================================
+               TIER 2: CENTERED FLOATING CAPSULE / BUBBLE NAVBAR
+               ========================================================= -->
+          <div class="floating-capsule-nav-container d-flex justify-content-center collapse d-lg-flex" id="floatingCapsuleNavCollapse">
+            <nav class="floating-capsule-navbar" aria-label="Category and Page Navigation">
+              <ul class="capsule-nav-list d-flex align-items-center list-unstyled m-0 p-0">
+                <li class="capsule-nav-item">
+                  <a class="capsule-nav-link ${isHome ? 'active' : ''}" href="${p}index.html">
+                    <i class="bi bi-house-door-fill"></i>
+                    <span>Home</span>
+                  </a>
+                </li>
+                <li class="capsule-nav-item">
+                  <a class="capsule-nav-link ${isProducts ? 'active' : ''}" href="${p}pages/products.html">
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Products</span>
+                  </a>
+                </li>
+                <li class="capsule-nav-item">
+                  <a class="capsule-nav-link ${isMed ? 'active' : ''}" href="${p}pages/products.html?category=medicines">
+                    <i class="bi bi-capsule"></i>
+                    <span>Medicines</span>
+                  </a>
+                </li>
+                <li class="capsule-nav-item">
+                  <a class="capsule-nav-link ${isEquip ? 'active' : ''}" href="${p}pages/products.html?category=equipment">
+                    <i class="bi bi-hospital"></i>
+                    <span>Equipment</span>
+                  </a>
+                </li>
+                <li class="capsule-nav-item">
+                  <a class="capsule-nav-link ${isCategories ? 'active' : ''}" href="${p}pages/categories.html">
+                    <i class="bi bi-collection"></i>
+                    <span>Categories</span>
+                  </a>
+                </li>
+                <li class="capsule-nav-item">
+                  <a class="capsule-nav-link ${isAbout ? 'active' : ''}" href="${p}pages/about.html">
+                    <i class="bi bi-info-circle"></i>
+                    <span>About Us</span>
+                  </a>
+                </li>
+                <li class="capsule-nav-item">
+                  <a class="capsule-nav-link ${isContact ? 'active' : ''}" href="${p}pages/contact.html">
+                    <i class="bi bi-telephone"></i>
+                    <span>Contact</span>
+                  </a>
+                </li>
+                ${isAdmin ? `
+                  <li class="capsule-nav-item">
+                    <a class="capsule-nav-link capsule-nav-admin" href="${p}admin/dashboard.html">
+                      <i class="bi bi-speedometer2"></i>
+                      <span>Admin Panel</span>
+                    </a>
+                  </li>
+                ` : ''}
+              </ul>
+            </nav>
+          </div>
+
         </div>
       </div>
     `;

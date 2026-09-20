@@ -30,6 +30,61 @@
 
 /* Tablet (768px to 991px) */
 @media (max-width: 991px) {
+  .floating-header-wrapper {
+    top: 6px;
+    padding: 0.25rem 0 0.4rem 0;
+  }
+
+  .pharmacy-main-navbar {
+    padding: 0.45rem 1rem;
+    border-radius: 28px;
+  }
+
+  .navbar-brand-pill-wrapper {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+  }
+
+  .brand-pill-anim-img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-title {
+    font-size: 1.15rem;
+  }
+
+  .floating-capsule-nav-container {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .floating-capsule-navbar {
+    width: 100%;
+    border-radius: 22px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.98);
+  }
+
+  .capsule-nav-list {
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+  }
+
+  .capsule-nav-item {
+    width: 100%;
+  }
+
+  .capsule-nav-link {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.6rem 1.1rem;
+    font-size: 0.95rem;
+    border-radius: 14px;
+  }
+
   .hero-wrapper {
     padding: 2.25rem 1.75rem;
     text-align: center;
