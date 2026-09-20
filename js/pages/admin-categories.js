@@ -42,7 +42,7 @@ const AdminCategoriesPage = {
           </td>
           <td><code>${cat.id}</code></td>
           <td><span class="small text-muted">${cat.desc || 'General category'}</span></td>
-          <td><span class="badge bg-light text-navy border small">${cat.count || 'N/A'}</span></td>
+          <td><span class="badge-category-yellow">${cat.count || '0'} Items</span></td>
           <td><span class="badge-status badge-instock"><i class="bi bi-check-circle-fill"></i> Active</span></td>
           <td class="text-end">
             <a href="../pages/products.html?category=${cat.id}" class="btn-action-icon" title="View in Storefront" target="_blank">

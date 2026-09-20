@@ -43,7 +43,7 @@ const AdminProductsPage = {
               </div>
             </div>
           </td>
-          <td><span class="badge bg-light text-navy border small">${p.categoryName || p.category}</span></td>
+          <td><span class="badge-category-yellow">${p.categoryName || p.category}</span></td>
           <td><span class="fw-bold text-primary small">Rs. ${p.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span></td>
           <td>
             ${p.requiresPrescription ? '<span class="badge bg-warning-subtle text-warning border border-warning-subtle small">Rx Required</span>' : '<span class="badge bg-light text-muted border small">OTC / General</span>'}

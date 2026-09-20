@@ -47,7 +47,7 @@ const AdminOrdersPage = {
           </td>
           <td><span class="small text-muted">${order.date || '2026-08-28'}</span></td>
           <td><strong class="text-primary small">Rs. ${order.total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
-          <td><span class="badge bg-light text-navy border small">${order.paymentMethod || 'Credit Card'}</span></td>
+          <td><span class="badge-payment-method">${order.paymentMethod || 'Credit Card'}</span></td>
           <td><span class="badge-status ${badgeClass}" id="badge-${order.id}">${order.status}</span></td>
           <td class="text-end">
             <select class="form-select form-select-sm status-updater-select d-inline-block" data-id="${order.id || order.orderNumber}" style="width: 140px;">

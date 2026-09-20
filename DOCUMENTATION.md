@@ -317,4 +317,15 @@ The system now hosts an expanded catalog of 14 certified healthcare products acr
 | **14**| Calcium Carbonate + Vitamin D3 60s | Vita-Premium | Vitamins | Rs. 2,800.00 | Calcium 600mg + Vit D3 400IU Bone Density |
 
 ---
+
+## 12. ADMIN PANEL UI & HIGH-CONTRAST BADGE SYSTEM
+
+To ensure optimal accessibility and readability across the Admin Management views (Products, Inventory, Categories, Orders):
+
+- **Category Badges (`.badge-category-yellow`, `.badge-category`)**: Styled with a high-contrast soft amber/yellow background (`#FEF08A`), deep amber/brown text (`#854D0E`), golden border (`#FACC15`), and rounded pill geometry with 600 weight typography. This resolves contrast issues with white table row backgrounds.
+- **Payment Method Badges (`.badge-payment-method`)**: Soft teal-blue pill badge with dark navy text.
+- **Text Utility (`.text-navy`)**: Explicitly defined `#003B66 !important` to ensure text retains high contrast inside custom badges and light components.
+
+---
 *Document maintained automatically with each build increment.*
+

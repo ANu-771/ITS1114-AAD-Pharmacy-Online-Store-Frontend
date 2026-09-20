@@ -182,6 +182,26 @@ a:hover {
   color: #D97706;
 }
 
+.badge-category-yellow,
+.badge-category {
+  background-color: #FEF08A !important;
+  color: #854D0E !important;
+  border: 1px solid #FACC15 !important;
+  font-weight: 600 !important;
+  font-size: 0.775rem !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: var(--radius-pill) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.3rem !important;
+  box-shadow: 0 1px 3px rgba(133, 77, 14, 0.08) !important;
+  white-space: nowrap !important;
+}
+
+.text-navy {
+  color: var(--dark-navy) !important;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

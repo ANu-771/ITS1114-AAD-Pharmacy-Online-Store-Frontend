@@ -38,7 +38,7 @@ const AdminInventoryPage = {
             <strong class="text-navy small d-block">${item.name}</strong>
             <small class="text-muted">SKU: <code>${item.sku}</code></small>
           </td>
-          <td><span class="badge bg-light text-navy border small">${item.category}</span></td>
+          <td><span class="badge-category-yellow">${item.category}</span></td>
           <td><strong class="text-navy">${item.stock} units</strong></td>
           <td><span class="small text-muted">${item.reorderLevel} units</span></td>
           <td><code>${item.batch}</code></td>

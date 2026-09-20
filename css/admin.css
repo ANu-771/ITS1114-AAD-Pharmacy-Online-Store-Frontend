@@ -279,6 +279,38 @@
 .badge-lowstock { background-color: #FEF3C7; color: #B45309; }
 .badge-outofstock { background-color: #FEE2E2; color: #B91C1C; }
 
+/* Yellow Category Badges (High Visibility in Admin Panel) */
+.badge-category-yellow,
+.badge-category {
+  background-color: #FEF08A !important;
+  color: #854D0E !important;
+  border: 1px solid #FACC15 !important;
+  font-weight: 600 !important;
+  font-size: 0.775rem !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 50px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.3rem !important;
+  box-shadow: 0 1px 3px rgba(133, 77, 14, 0.08) !important;
+  white-space: nowrap !important;
+}
+
+.badge-payment-method {
+  background-color: #F1F5F9 !important;
+  color: #334155 !important;
+  border: 1px solid #CBD5E1 !important;
+  font-weight: 600 !important;
+  font-size: 0.775rem !important;
+  padding: 0.35rem 0.65rem !important;
+  border-radius: 50px !important;
+  display: inline-flex !important;
+}
+
+.text-navy {
+  color: #003B66 !important;
+}
+
 /* Action Buttons */
 .btn-action-icon {
   width: 32px;
