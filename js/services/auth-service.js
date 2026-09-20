@@ -149,6 +149,7 @@ const AuthService = {
         password: userData.password ? userData.password.trim() : '',
         phone: userData.phone ? userData.phone.trim() : ''
       };
+      
 
       const response = await AuthAPI.register(requestPayload);
       console.log('[AuthService] Registration successful:', response);
