@@ -119,6 +119,7 @@ const AuthService = {
    * Register method
    */
   register: async (userData) => {
+    console.log('[AuthService] Registering user with data:', userData);
     if (CONFIG.USE_MOCK_DATA) {
       const mockToken = 'mock_jwt_token_kk_pharmacy_' + Date.now();
       const mockUser = {
@@ -150,6 +151,8 @@ const AuthService = {
       };
 
       const response = await AuthAPI.register(requestPayload);
+      console.log('[AuthService] Registration successful:', response);
+      alert('Registration successful! Please check your email for verification.');
 
       const token = response.accessToken || response.token;
       const user = response.user || {

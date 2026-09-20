@@ -1428,139 +1428,178 @@
   border-color: var(--primary-blue);
 }
 
-/* Department Specific Variants */
+/* Department Specific Variants (Supports both Slugs and Numeric IDs) */
 /* 1. Medicines */
-.category-card-medicines {
+.category-card-medicines,
+.category-card-1 {
   background: radial-gradient(circle at 100% 100%, rgba(224, 242, 254, 0.7) 0%, #FFFFFF 70%);
   border-color: rgba(0, 102, 179, 0.18);
 }
-.category-card-medicines::before {
+.category-card-medicines::before,
+.category-card-1::before {
   background: linear-gradient(90deg, #0066B3, #38BDF8);
 }
-.category-card-medicines .category-bg-watermark {
+.category-card-medicines .category-bg-watermark,
+.category-card-1 .category-bg-watermark {
   color: #0066B3;
 }
-.category-card-medicines:hover {
+.category-card-medicines:hover,
+.category-card-1:hover {
   border-color: #0066B3;
   box-shadow: 0 18px 36px rgba(0, 102, 179, 0.14);
 }
 
 /* 2. Prescription Medicines */
-.category-card-prescription {
+.category-card-prescription,
+.category-card-2 {
   background: radial-gradient(circle at 100% 100%, rgba(219, 234, 254, 0.7) 0%, #FFFFFF 70%);
   border-color: rgba(37, 99, 235, 0.18);
 }
-.category-card-prescription::before {
+.category-card-prescription::before,
+.category-card-2::before {
   background: linear-gradient(90deg, #2563EB, #60A5FA);
 }
-.category-card-prescription .category-icon-wrapper {
+.category-card-prescription .category-icon-wrapper,
+.category-card-2 .category-icon-wrapper {
   background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
   color: #1D4ED8;
 }
-.category-card-prescription .category-bg-watermark {
+.category-card-prescription .category-bg-watermark,
+.category-card-2 .category-bg-watermark {
   color: #2563EB;
 }
-.category-card-prescription:hover {
+.category-card-prescription:hover,
+.category-card-2:hover {
   border-color: #2563EB;
   box-shadow: 0 18px 36px rgba(37, 99, 235, 0.14);
 }
 
 /* 3. Medical Equipment */
-.category-card-equipment {
+.category-card-equipment,
+.category-card-3 {
   background: radial-gradient(circle at 100% 100%, rgba(204, 251, 241, 0.7) 0%, #FFFFFF 70%);
   border-color: rgba(13, 148, 136, 0.2);
 }
-.category-card-equipment::before {
+.category-card-equipment::before,
+.category-card-3::before {
   background: linear-gradient(90deg, #0D9488, #2DD4BF);
 }
-.category-card-equipment .category-icon-wrapper {
+.category-card-equipment .category-icon-wrapper,
+.category-card-3 .category-icon-wrapper {
   background: linear-gradient(135deg, #CCFBF1 0%, #99F6E4 100%);
   color: #0F766E;
 }
-.category-card-equipment .category-bg-watermark {
+.category-card-equipment .category-bg-watermark,
+.category-card-3 .category-bg-watermark {
   color: #0D9488;
 }
-.category-card-equipment .category-count-badge {
+.category-card-equipment .category-count-badge,
+.category-card-3 .category-count-badge {
   background: #CCFBF1;
   color: #0F766E;
   border-color: rgba(45, 212, 191, 0.4);
 }
-.category-card-equipment:hover {
+.category-card-equipment:hover,
+.category-card-3:hover {
   border-color: #0D9488;
   box-shadow: 0 18px 36px rgba(13, 148, 136, 0.14);
 }
 
 /* 4. Vitamins & Supplements */
-.category-card-vitamins {
+.category-card-vitamins,
+.category-card-4 {
   background: radial-gradient(circle at 100% 100%, rgba(254, 243, 199, 0.7) 0%, #FFFFFF 70%);
   border-color: rgba(217, 119, 6, 0.2);
 }
-.category-card-vitamins::before {
+.category-card-vitamins::before,
+.category-card-4::before {
   background: linear-gradient(90deg, #D97706, #FBBF24);
 }
-.category-card-vitamins .category-icon-wrapper {
+.category-card-vitamins .category-icon-wrapper,
+.category-card-4 .category-icon-wrapper {
   background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
   color: #B45309;
 }
-.category-card-vitamins .category-bg-watermark {
+.category-card-vitamins .category-bg-watermark,
+.category-card-4 .category-bg-watermark {
   color: #D97706;
 }
-.category-card-vitamins .category-count-badge {
+.category-card-vitamins .category-count-badge,
+.category-card-4 .category-count-badge {
   background: #FEF3C7;
   color: #B45309;
   border-color: rgba(251, 191, 36, 0.4);
 }
-.category-card-vitamins:hover {
+.category-card-vitamins:hover,
+.category-card-4:hover {
   border-color: #D97706;
   box-shadow: 0 18px 36px rgba(217, 119, 6, 0.14);
 }
 
 /* 5. Personal Care */
-.category-card-personal-care {
+.category-card-personal-care,
+.category-card-5 {
   background: radial-gradient(circle at 100% 100%, rgba(207, 250, 254, 0.7) 0%, #FFFFFF 70%);
   border-color: rgba(6, 182, 212, 0.2);
 }
-.category-card-personal-care::before {
+.category-card-personal-care::before,
+.category-card-5::before {
   background: linear-gradient(90deg, #0891B2, #22D3EE);
 }
-.category-card-personal-care .category-icon-wrapper {
+.category-card-personal-care .category-icon-wrapper,
+.category-card-5 .category-icon-wrapper {
   background: linear-gradient(135deg, #CFFAFE 0%, #A5F3FC 100%);
   color: #0E7490;
 }
-.category-card-personal-care .category-bg-watermark {
+.category-card-personal-care .category-bg-watermark,
+.category-card-5 .category-bg-watermark {
   color: #0891B2;
 }
-.category-card-personal-care .category-count-badge {
+.category-card-personal-care .category-count-badge,
+.category-card-5 .category-count-badge {
   background: #ECFEFF;
   color: #0E7490;
   border-color: rgba(34, 211, 238, 0.4);
 }
-.category-card-personal-care:hover {
+.category-card-personal-care:hover,
+.category-card-5:hover {
   border-color: #0891B2;
   box-shadow: 0 18px 36px rgba(8, 145, 178, 0.14);
 }
 
-/* 6. Baby Care */
-.category-card-baby-care {
+/* 6. Baby Care / Baby & Mother Care */
+.category-card-baby-care,
+.category-card-baby,
+.category-card-6 {
   background: radial-gradient(circle at 100% 100%, rgba(255, 228, 230, 0.7) 0%, #FFFFFF 70%);
   border-color: rgba(244, 63, 94, 0.2);
 }
-.category-card-baby-care::before {
+.category-card-baby-care::before,
+.category-card-baby::before,
+.category-card-6::before {
   background: linear-gradient(90deg, #E11D48, #FB7185);
 }
-.category-card-baby-care .category-icon-wrapper {
+.category-card-baby-care .category-icon-wrapper,
+.category-card-baby .category-icon-wrapper,
+.category-card-6 .category-icon-wrapper {
   background: linear-gradient(135deg, #FFE4E6 0%, #FECDD3 100%);
   color: #BE123C;
 }
-.category-card-baby-care .category-bg-watermark {
+.category-card-baby-care .category-bg-watermark,
+.category-card-baby .category-bg-watermark,
+.category-card-6 .category-bg-watermark {
   color: #E11D48;
 }
-.category-card-baby-care .category-count-badge {
+.category-card-baby-care .category-count-badge,
+.category-card-baby .category-count-badge,
+.category-card-6 .category-count-badge {
   background: #FFE4E6;
   color: #BE123C;
   border-color: rgba(251, 113, 133, 0.4);
 }
-.category-card-baby-care:hover {
+.category-card-baby-care:hover,
+.category-card-baby:hover,
+.category-card-6:hover {
   border-color: #E11D48;
   box-shadow: 0 18px 36px rgba(225, 29, 72, 0.14);
 }

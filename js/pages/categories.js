@@ -11,14 +11,17 @@ const CategoriesPage = {
       const categories = await ProductService.getCategories();
       let html = '';
       categories.forEach(cat => {
-        const catVariant = `category-card-${cat.id || 'medicines'}`;
+        const catVariant = `category-card-${cat.slug || cat.id || 'medicines'}`;
+        const displayIcon = cat.icon || 'bi-capsule';
+        const watermarkIcon = cat.watermark || cat.icon || 'bi-capsule';
+
         html += `
           <div class="col-12 col-sm-6 col-lg-4">
             <a href="products.html?category=${cat.id}" class="text-decoration-none">
               <div class="category-card-premium ${catVariant} h-100 text-center">
-                <div class="category-bg-watermark"><i class="bi ${cat.icon || 'bi-capsule'}"></i></div>
+                <div class="category-bg-watermark"><i class="bi ${watermarkIcon}"></i></div>
                 <div class="category-icon-wrapper mx-auto mb-3">
-                  <i class="bi ${cat.icon || 'bi-capsule'}"></i>
+                  <i class="bi ${displayIcon}"></i>
                 </div>
                 <h5 class="category-title mb-1">${cat.name}</h5>
                 <p class="category-desc mb-3">${cat.desc || 'Explore medical essentials'}</p>

@@ -344,6 +344,80 @@ const ProductService = {
   },
 
   /**
+   * Intelligently resolve category visual metadata (icon, watermark, slug, desc, count)
+   */
+  _resolveCategoryMeta: (category) => {
+    const name = (category.name || '').toLowerCase();
+    const idStr = String(category.id || category.categoryId || '').toLowerCase();
+
+    if (name.includes('prescription') || name.includes('rx') || idStr === 'prescription' || idStr === '2') {
+      return {
+        slug: 'prescription',
+        icon: 'bi-file-earmark-medical',
+        watermark: 'bi-file-earmark-medical',
+        count: category.productCount ? `${category.productCount} Products` : '850+ Products',
+        desc: category.description && category.description !== 'Healthcare & pharmaceutical supplies' 
+          ? category.description 
+          : 'Rx medicines requiring verified doctor prescription'
+      };
+    }
+    if (name.includes('equipment') || name.includes('device') || name.includes('diagnostic') || idStr === 'equipment' || idStr === '3') {
+      return {
+        slug: 'equipment',
+        icon: 'bi-heart-pulse',
+        watermark: 'bi-heart-pulse-fill',
+        count: category.productCount ? `${category.productCount} Devices` : '420+ Devices',
+        desc: category.description && category.description !== 'Healthcare & pharmaceutical supplies' 
+          ? category.description 
+          : 'Clinical diagnostic instruments & health monitoring devices'
+      };
+    }
+    if (name.includes('vitamin') || name.includes('supplement') || name.includes('immune') || idStr === 'vitamins' || idStr === '4') {
+      return {
+        slug: 'vitamins',
+        icon: 'bi-lightning-charge',
+        watermark: 'bi-lightning-charge-fill',
+        count: category.productCount ? `${category.productCount} Products` : '650+ Products',
+        desc: category.description && category.description !== 'Healthcare & pharmaceutical supplies' 
+          ? category.description 
+          : 'Multivitamins, minerals & immune boosters'
+      };
+    }
+    if (name.includes('personal') || name.includes('hygiene') || name.includes('skin') || idStr === 'personal-care' || idStr === '5') {
+      return {
+        slug: 'personal-care',
+        icon: 'bi-droplet-half',
+        watermark: 'bi-droplet-fill',
+        count: category.productCount ? `${category.productCount} Items` : '980+ Items',
+        desc: category.description && category.description !== 'Healthcare & pharmaceutical supplies' 
+          ? category.description 
+          : 'Skincare, oral care & daily hygiene'
+      };
+    }
+    if (name.includes('baby') || name.includes('mother') || name.includes('infant') || name.includes('child') || idStr === 'baby-care' || idStr === '6') {
+      return {
+        slug: 'baby-care',
+        icon: 'bi-emoji-smile',
+        watermark: 'bi-emoji-smile-fill',
+        count: category.productCount ? `${category.productCount} Items` : '340+ Items',
+        desc: category.description && category.description !== 'Healthcare & pharmaceutical supplies' 
+          ? category.description 
+          : 'Baby nutrition, gentle skincare & formula'
+      };
+    }
+    // Default Medicines
+    return {
+      slug: 'medicines',
+      icon: 'bi-capsule',
+      watermark: 'bi-capsule',
+      count: category.productCount ? `${category.productCount} Products` : '1,200+ Products',
+      desc: category.description && category.description !== 'Healthcare & pharmaceutical supplies' 
+        ? category.description 
+        : 'Over-the-counter & essential remedies'
+    };
+  },
+
+  /**
    * Fetch categories from live API or mock fallback
    */
   getCategories: async () => {
@@ -353,14 +427,19 @@ const ProductService = {
     try {
       const data = await CategoryAPI.getAllCategories();
       if (Array.isArray(data) && data.length > 0) {
-        return data.map(c => ({
-          id: c.id ? String(c.id) : (c.name ? c.name.toLowerCase().replace(/\s+/g, '-') : 'general'),
-          categoryId: c.id,
-          name: c.name,
-          icon: c.icon || 'bi-capsule',
-          count: c.productCount ? `${c.productCount} Products` : 'Available in Stock',
-          desc: c.description || 'Healthcare & pharmaceutical supplies'
-        }));
+        return data.map(c => {
+          const meta = ProductService._resolveCategoryMeta(c);
+          return {
+            id: c.id ? String(c.id) : meta.slug,
+            categoryId: c.id,
+            slug: meta.slug,
+            name: c.name || (meta.slug.charAt(0).toUpperCase() + meta.slug.slice(1)),
+            icon: c.icon && c.icon !== 'bi-capsule' ? c.icon : meta.icon,
+            watermark: meta.watermark,
+            count: c.productCount ? `${c.productCount} Products` : meta.count,
+            desc: c.description && c.description !== 'Healthcare & pharmaceutical supplies' ? c.description : meta.desc
+          };
+        });
       }
       return ProductService._mockCategories;
     } catch (e) {
