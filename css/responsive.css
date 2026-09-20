@@ -162,8 +162,35 @@
     padding: 0.85rem;
   }
 
+  .stat-card {
+    padding: 1.1rem 0.6rem 0.9rem 0.6rem;
+    border-radius: 14px;
+  }
+
+  .stat-bg-watermark {
+    font-size: 3.8rem;
+    right: -6px;
+    bottom: -10px;
+  }
+
+  .stat-icon-wrapper {
+    width: 42px;
+    height: 42px;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
   .stat-number {
     font-size: 1.35rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+
+  .stat-tag {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.45rem;
   }
 
   .newsletter-card {

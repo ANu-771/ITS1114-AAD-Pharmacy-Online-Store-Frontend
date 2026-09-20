@@ -327,5 +327,16 @@ To ensure optimal accessibility and readability across the Admin Management view
 - **Text Utility (`.text-navy`)**: Explicitly defined `#003B66 !important` to ensure text retains high contrast inside custom badges and light components.
 
 ---
+
+## 13. HEALTHCARE STANDARD STAT TILES & PHARMACEUTICAL WATERMARK SYSTEM
+
+The four core trust & volume metric tiles under *"The KK PHARMACY Healthcare Standard"* are styled with dynamic pharmaceutical visuals:
+
+- **Background Art & Radial Gradients**: Soft themed radial gradients (`rgba(224, 242, 254, 0.65)` for Medicines, emerald for Patients, sapphire indigo for Delivery, and warm amber for Genuine Quality).
+- **Embedded Pharmaceutical Watermarks (`.stat-bg-watermark`)**: Large, subtle (opacity 0.07 -> 0.15 on hover) pharmaceutical vector glyphs (`bi-capsule`, `bi-heart-pulse-fill`, `bi-truck-front-fill`, `bi-award-fill`) that rotate and smoothly expand when hovered.
+- **Top Glow Accent Bars**: Multi-color linear gradient top caps representing each healthcare department.
+- **Verification Micro-Badges (`.stat-tag`)**: Trust markers attached to each metric (*"Rx & OTC Verified"*, *"Trusted Care"*, *"Islandwide Express"*, *"NMRA Approved"*).
+
+---
 *Document maintained automatically with each build increment.*
 
