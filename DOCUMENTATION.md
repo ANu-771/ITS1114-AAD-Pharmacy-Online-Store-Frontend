@@ -907,5 +907,24 @@ Resolved the defect where submitting the registration form on `pages/register.ht
   - Automatically captures `Delivery Street Address` and `City / District` on registration, preserving them in the authenticated customer's session for zero-friction checkout and profile management.
 
 ---
+
+## 23. HEADER OVERLAY STACKING ISOLATION & PROFESSIONAL PROFILE CIRCLE
+
+Resolved visual collision between Tier 1 header profile dropdown and Tier 2 capsule navigation bar, modernizing profile UI to enterprise standards:
+
+- **Stacking Context & Z-Index Isolation (`css/components.css`)**:
+  - Added explicit stacking hierarchy: `.pharmacy-main-navbar` (`z-index: 1050;`), `#nav-auth-container` (`z-index: 1060;`), and `.glass-dropdown-menu` (`z-index: 9999 !important;`).
+  - Tier 2 navigation `.floating-capsule-nav-container` and `.floating-capsule-navbar` pinned to lower context (`z-index: 1010;`), ensuring dropdown menus render completely unobstructed above all header elements and hero banners.
+- **Admin Panel Relocation & Architecture (`js/components/navbar.js`)**:
+  - Removed intrusive `Admin Panel` button from customer category navigation (Tier 2), keeping storefront catalog purely customer-facing.
+  - Relocated Administrator quick-access to Tier 1 top action bar via `.header-admin-pill` alongside Cart/Wishlist for instant 1-click access.
+  - Added an integrated **Admin Control Center** launch card and role badge (`ADMIN`) inside the user profile dropdown card.
+- **Professional Web Store Profile Circle Avatar (`js/components/navbar.js` & `css/components.css`)**:
+  - Implemented dynamic user initials bubble (e.g., `KK`) styled with medical blue gradient avatar circles, replacing default generic icons.
+  - Formatted desktop trigger as a sleek capsule pill with custom subtle chevron (`bi-chevron-down`).
+  - Responsive optimization: transforms into a circular 38px touch bubble on mobile viewports (< 768px) matching other action icons.
+  - Isolated glassmorphism dropdown menu with enhanced entry animation (`dropdownFadeSlideIn`), shadow depth, and user identity header.
+
+---
 *Document maintained automatically with each build increment.*
 

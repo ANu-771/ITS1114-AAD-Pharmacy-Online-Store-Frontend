@@ -127,6 +127,27 @@
     font-size: 0.75rem;
     text-align: center;
   }
+
+  /* Header Profile Circle on Mobile */
+  .header-user-bubble {
+    padding: 3px;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    justify-content: center;
+  }
+  .header-user-bubble .user-bubble-chevron {
+    display: none !important;
+  }
+  .header-user-bubble .user-avatar-bubble {
+    width: 30px;
+    height: 30px;
+    font-size: 0.78rem;
+  }
+  .glass-dropdown-menu {
+    min-width: 260px !important;
+    right: 0 !important;
+  }
   
   .hero-wrapper {
     padding: 1.75rem 1rem;

@@ -18,6 +18,21 @@ const NavbarComponent = {
     const isAdmin = AuthService.hasRole('ROLE_ADMIN');
     const cartCount = CartService.getCartCount();
 
+    // Compute initials for professional profile circle avatar
+    let initials = 'U';
+    if (user && user.fullName) {
+      const parts = user.fullName.trim().split(/\s+/);
+      if (parts.length >= 2) {
+        initials = (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      } else if (parts[0].length >= 2) {
+        initials = parts[0].substring(0, 2).toUpperCase();
+      } else {
+        initials = parts[0][0].toUpperCase();
+      }
+    } else if (user && user.email) {
+      initials = user.email.substring(0, 2).toUpperCase();
+    }
+
     // Check active links
     const isHome = path.endsWith('index.html') || path.endsWith('/') || (!path.includes('.html') && !path.includes('/pages/'));
     const isProducts = path.includes('products.html') && !window.location.search.includes('medicines') && !window.location.search.includes('equipment') && !window.location.search.includes('vitamins');
@@ -81,30 +96,66 @@ const NavbarComponent = {
                 <span class="bubble-badge cart-badge-count">${cartCount}</span>
               </a>
 
-              <!-- User Profile / Auth State Section -->
+              ${isAdmin ? `
+                <!-- Admin Quick Switch Pill for Store Administrators -->
+                <a href="${p}admin/dashboard.html" class="header-admin-pill d-none d-sm-inline-flex align-items-center gap-1" title="Go to Admin Dashboard" aria-label="Admin Dashboard">
+                  <i class="bi bi-speedometer2"></i>
+                  <span>Admin</span>
+                </a>
+              ` : ''}
+
+              <!-- User Profile / Auth State Section (Professional Web Store Circle Avatar) -->
               <div id="nav-auth-container" class="ms-1">
                 ${isAuthenticated ? `
                   <div class="dropdown">
-                    <button class="header-user-bubble dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="User account dropdown">
+                    <button class="header-user-bubble dropdown-toggle" type="button" id="headerUserDropdownBtn" data-bs-toggle="dropdown" data-bs-offset="0,10" aria-expanded="false" aria-label="User account dropdown">
                       <div class="user-avatar-bubble">
-                        <i class="bi bi-person-fill"></i>
+                        ${initials}
                       </div>
                       <span class="d-none d-md-inline fw-semibold text-navy small pe-1">${user.fullName ? user.fullName.split(' ')[0] : 'Account'}</span>
+                      <i class="bi bi-chevron-down user-bubble-chevron ms-1"></i>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end glass-dropdown-menu shadow-lg border-0 mt-2">
-                      <li class="px-3 py-2 border-bottom mb-1">
-                        <div class="fw-bold text-navy small">${user.fullName || 'Signed In Patient'}</div>
-                        <small class="text-muted" style="font-size: 0.75rem;">${user.email || 'patient@kkpharmacy.lk'}</small>
+                    <ul class="dropdown-menu dropdown-menu-end glass-dropdown-menu shadow-lg border-0 mt-2" aria-labelledby="headerUserDropdownBtn">
+                      <!-- User Info Header Card -->
+                      <li class="dropdown-user-header">
+                        <div class="d-flex align-items-center gap-2">
+                          <div class="user-avatar-circle-lg">
+                            ${initials}
+                          </div>
+                          <div class="user-info-text overflow-hidden">
+                            <div class="d-flex align-items-center gap-1">
+                              <span class="fw-bold text-navy text-truncate small">${user.fullName || 'Signed In User'}</span>
+                              ${isAdmin ? '<span class="badge-role-admin">ADMIN</span>' : '<span class="badge-role-patient">PATIENT</span>'}
+                            </div>
+                            <div class="text-muted text-truncate" style="font-size: 0.73rem;">${user.email || 'patient@kkpharmacy.lk'}</div>
+                          </div>
+                        </div>
                       </li>
-                      <li><a class="dropdown-item glass-dropdown-item" href="${p}pages/profile.html"><i class="bi bi-person me-2 text-primary"></i>My Healthcare Profile</a></li>
+
+                      ${isAdmin ? `
+                        <!-- Admin Control Center Launch Card -->
+                        <li class="px-1 my-1">
+                          <a class="dropdown-item glass-dropdown-item admin-quick-card d-flex align-items-center justify-content-between p-2 rounded-3" href="${p}admin/dashboard.html">
+                            <div class="d-flex align-items-center gap-2">
+                              <div class="admin-quick-icon-circle">
+                                <i class="bi bi-speedometer2"></i>
+                              </div>
+                              <div>
+                                <div class="fw-bold text-danger small">Admin Dashboard</div>
+                                <div class="text-muted" style="font-size: 0.69rem;">Store & Inventory Management</div>
+                              </div>
+                            </div>
+                            <i class="bi bi-chevron-right text-danger small"></i>
+                          </a>
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                      ` : ''}
+
+                      <li><a class="dropdown-item glass-dropdown-item" href="${p}pages/profile.html"><i class="bi bi-person-badge me-2 text-primary"></i>My Healthcare Profile</a></li>
                       <li><a class="dropdown-item glass-dropdown-item" href="${p}pages/orders.html"><i class="bi bi-box-seam me-2 text-primary"></i>My Orders & Prescriptions</a></li>
                       <li><a class="dropdown-item glass-dropdown-item" href="${p}pages/wishlist.html"><i class="bi bi-heart me-2 text-primary"></i>My Wishlist</a></li>
-                      ${isAdmin ? `
-                        <li><hr class="dropdown-divider my-1"></li>
-                        <li><a class="dropdown-item glass-dropdown-item text-danger fw-semibold" href="${p}admin/dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a></li>
-                      ` : ''}
                       <li><hr class="dropdown-divider my-1"></li>
-                      <li><button class="dropdown-item glass-dropdown-item text-danger btn-logout" type="button"><i class="bi bi-box-arrow-right me-2"></i>Logout</button></li>
+                      <li><button class="dropdown-item glass-dropdown-item text-danger btn-logout d-flex align-items-center gap-2" type="button"><i class="bi bi-box-arrow-right"></i><span>Logout</span></button></li>
                     </ul>
                   </div>
                 ` : `
@@ -171,14 +222,6 @@ const NavbarComponent = {
                     <span>Contact</span>
                   </a>
                 </li>
-                ${isAdmin ? `
-                  <li class="capsule-nav-item">
-                    <a class="capsule-nav-link capsule-nav-admin" href="${p}admin/dashboard.html">
-                      <i class="bi bi-speedometer2"></i>
-                      <span>Admin Panel</span>
-                    </a>
-                  </li>
-                ` : ''}
               </ul>
             </nav>
           </div>
