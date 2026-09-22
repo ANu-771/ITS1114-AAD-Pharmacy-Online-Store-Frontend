@@ -892,5 +892,20 @@ Cleaned up all coursework demo credential buttons and hardcoded pre-filled value
   - Spring Boot database admin credentials authenticate against MySQL via `/api/v1/auth/login` and automatically grant `ROLE_ADMIN` routing to `/admin/dashboard.html`.
 
 ---
+
+## 22. CUSTOMER REGISTRATION FORM BOOTSTRAPPING & PERSISTENCE FIX
+
+Resolved the defect where submitting the registration form on `pages/register.html` triggered a native browser GET query-string reload (`register.html?`) without saving the new user to MySQL:
+
+- **App Router Registration (`js/app.js`)**:
+  - Added explicit routing for `register-page-main` (`RegisterPage.init()`) and `login-page-main` (`LoginPage.init()`) within the DOM ready lifecycle.
+- **Self-Bootstrapping Guarantees (`js/pages/register.js` & `js/pages/login.js`)**:
+  - Attached automatic `DOMContentLoaded` listeners inside `register.js` and `login.js` so form event listeners are guaranteed to attach regardless of script execution order.
+- **Defensive HTML Submission Guards (`pages/register.html` & `pages/login.html`)**:
+  - Added `action="javascript:void(0);"` and `onsubmit="return false;"` to `<form id="registerForm">` and `<form id="standaloneLoginForm">` to eliminate inadvertent page refreshes.
+- **Address Data Preservation**:
+  - Automatically captures `Delivery Street Address` and `City / District` on registration, preserving them in the authenticated customer's session for zero-friction checkout and profile management.
+
+---
 *Document maintained automatically with each build increment.*
 

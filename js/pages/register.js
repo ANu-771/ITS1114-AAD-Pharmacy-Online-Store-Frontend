@@ -29,6 +29,9 @@ const RegisterPage = {
         return;
       }
 
+      const city = document.getElementById('regCity')?.value || 'Colombo';
+      const address = document.getElementById('regAddress')?.value.trim() || '';
+
       const userData = {
         fullName: document.getElementById('regFullName')?.value.trim() || '',
         email: document.getElementById('regEmail')?.value.trim() || '',
@@ -39,22 +42,40 @@ const RegisterPage = {
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Creating Account...';
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Creating Account in Database...';
       }
 
       try {
         await AuthService.register(userData);
-        Toast.show('Account created successfully! Logging you in...', 'success');
+
+        // Store user address in local session for instant pre-fill in profile & checkout
+        const currentUser = AuthService.getCurrentUser();
+        if (currentUser) {
+          currentUser.city = city;
+          currentUser.address = address;
+          StorageService.setItem(CONFIG.STORAGE_KEYS.USER, currentUser);
+          StorageService.setItem(CONFIG.STORAGE_KEYS.USER_INFO, currentUser);
+        }
+
+        Toast.show('Account created successfully! Welcome to KK PHARMACY.', 'success');
         setTimeout(() => {
           window.location.href = 'profile.html';
-        }, 1000);
+        }, 800);
       } catch (err) {
+        console.error('[RegisterPage] Registration error:', err);
         Toast.show(err.message || 'Registration failed. Please check your details.', 'error');
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = 'Create Account';
+          submitBtn.innerHTML = '<i class="bi bi-shield-check me-1"></i> Register & Create Account';
         }
       }
     });
   }
 };
+
+// Auto-initialize on DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => RegisterPage.init());
+} else {
+  RegisterPage.init();
+}

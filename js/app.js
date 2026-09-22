@@ -42,6 +42,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     await OrderDetailsPage.init();
   } else if (document.getElementById('wishlist-page-main') && typeof WishlistPage !== 'undefined') {
     await WishlistPage.init();
+  } else if (document.getElementById('register-page-main') && typeof RegisterPage !== 'undefined') {
+    RegisterPage.init();
+  } else if (document.getElementById('login-page-main') && typeof LoginPage !== 'undefined') {
+    LoginPage.init();
   } else if (document.getElementById('admin-dashboard-main') && typeof AdminDashboardPage !== 'undefined') {
     await AdminDashboardPage.init();
   } else if (document.getElementById('admin-products-main') && typeof AdminProductsPage !== 'undefined') {
