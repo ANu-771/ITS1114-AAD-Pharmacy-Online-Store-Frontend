@@ -3,7 +3,8 @@
  */
 const CONFIG = {
   // Spring Boot REST API Base URL
-  API_BASE_URL: 'http://localhost:8080/api/v1',
+  // API_BASE_URL: 'http://localhost:8080/api/v1',
+  API_BASE_URL: 'https://kkpharmacy.onrender.com/api/v1',
   
   // When false: uses real Spring Boot REST API. When true: uses fallback mock data
   USE_MOCK_DATA: false,
