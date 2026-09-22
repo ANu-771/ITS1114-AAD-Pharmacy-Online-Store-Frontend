@@ -3200,4 +3200,240 @@
   }
 }
 
+/* ==========================================================================
+   KK PHARMACY SERVER CONNECTIVITY GATE & BRANDED SPLASH SCREEN
+   ========================================================================== */
+#kk-server-gate-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999999;
+  background: radial-gradient(circle at 50% 38%, #003B66 0%, #001A33 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #FFFFFF;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  user-select: none;
+  font-family: inherit;
+}
+
+#kk-server-gate-overlay.gate-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Branded Pulsing Logo Container */
+.gate-brand-wrapper {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: gateFadeIn 0.5s ease-out;
+}
+
+.gate-brand-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #0080FF 0%, #005299 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  color: #FFFFFF;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 0 35px rgba(0, 128, 255, 0.45);
+  animation: gateHeartbeat 1.8s infinite ease-in-out;
+}
+
+@keyframes gateHeartbeat {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 30px rgba(0, 128, 255, 0.4);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 60px rgba(0, 180, 255, 0.75);
+  }
+}
+
+.gate-brand-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.gate-brand-subtitle {
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  color: #60A5FA;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+  margin-bottom: 1.8rem;
+}
+
+/* Modern Medical Status & Animated Progress Bar */
+.gate-status-text {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.85rem;
+}
+
+.gate-loader-bar {
+  width: 220px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  position: relative;
+}
+
+.gate-loader-track {
+  width: 50%;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #00E5FF, #0080FF);
+  position: absolute;
+  animation: gateLoaderMove 1.4s infinite ease-in-out;
+}
+
+@keyframes gateLoaderMove {
+  0% {
+    left: -50%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Strict Server Offline Blocker Card */
+.gate-offline-card {
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 24px;
+  padding: 2.25rem 2rem;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(239, 68, 68, 0.15);
+  text-align: center;
+  color: #FFFFFF;
+  animation: gateCardPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes gateCardPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.gate-offline-icon {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.15);
+  border: 2px solid rgba(239, 68, 68, 0.4);
+  color: #EF4444;
+  font-size: 1.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  animation: gateAlertPulse 2s infinite ease-in-out;
+}
+
+@keyframes gateAlertPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.45);
+  }
+}
+
+.gate-offline-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 0.65rem;
+}
+
+.gate-offline-msg {
+  font-size: 0.88rem;
+  color: #94A3B8;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.gate-offline-url {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 0.76rem;
+  color: #F87171;
+  word-break: break-all;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+
+.btn-gate-retry {
+  background: linear-gradient(135deg, #0066B3 0%, #004D80 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 102, 179, 0.45);
+  cursor: pointer;
+}
+
+.btn-gate-retry:hover {
+  background: linear-gradient(135deg, #0080FF 0%, #0066B3 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 128, 255, 0.55);
+  color: #FFFFFF;
+}
+
+.btn-gate-retry:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@keyframes gateFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 

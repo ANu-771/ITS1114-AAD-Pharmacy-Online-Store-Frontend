@@ -5,6 +5,15 @@
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('💊 Bootstrapping KK PHARMACY Pharmacy System...');
 
+  // 0. Strict Server Connectivity Gate (Verify backend is online before booting UI)
+  if (typeof ServerGate !== 'undefined') {
+    const isOnline = await ServerGate.verify();
+    if (!isOnline) {
+      console.warn('⛔ [App] Server is offline. Halting application boot.');
+      return;
+    }
+  }
+
   // 1. Render global Navbar & Footer if present on page
   if (document.getElementById('main-navbar-container')) {
     NavbarComponent.render('main-navbar-container');
