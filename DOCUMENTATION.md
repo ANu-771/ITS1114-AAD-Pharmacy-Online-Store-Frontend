@@ -872,5 +872,25 @@ The key healthcare performance metrics on the About Us page ([pages/about.html](
 - **Scroll Re-Trigger Support**: When the user scrolls past the section and returns, the observer re-activates the count-up sequence.
 
 ---
+
+## 21. REAL CUSTOMER AUTHENTICATION & REMOVAL OF DEMO CREDENTIALS UI
+
+Cleaned up all coursework demo credential buttons and hardcoded pre-filled values to provide a **production-grade authentication experience** for real customer registrations and database admin accounts:
+
+- **Clean & Professional Login Modal (`js/app.js`)**:
+  - Removed hardcoded `user@example.com` and `password123` values.
+  - Removed the coursework demo buttons container (`User Demo` / `Admin Demo`).
+  - Added clean, accessible placeholders (`name@example.com` and `Enter your password`) with proper `autocomplete` attributes.
+- **Standalone Login Page Cleanup (`pages/login.html` & `js/pages/login.js`)**:
+  - Removed the *Instant Coursework Role Switcher* block.
+  - Cleaned up demo button event listeners.
+- **Seamless New Customer Registration (`js/services/auth-service.js` & `pages/register.html`)**:
+  - Removed legacy blocking alert popup upon registration.
+  - Direct connection to Spring Boot `/api/v1/auth/register` creates new customer accounts directly in the database with BCrypt-hashed passwords and `ROLE_USER`.
+  - Automatically stores JWT tokens in `StorageService` upon registration, immediately logging the new user into their session and redirecting them to their profile.
+- **Full Database Admin Support Maintained**:
+  - Spring Boot database admin credentials authenticate against MySQL via `/api/v1/auth/login` and automatically grant `ROLE_ADMIN` routing to `/admin/dashboard.html`.
+
+---
 *Document maintained automatically with each build increment.*
 

@@ -54,14 +54,20 @@ const AuthService = {
    * Login method
    */
   login: async (email, password) => {
+    const cleanEmail = (email || '').trim();
+    const cleanPass = (password || '').trim();
+
     if (CONFIG.USE_MOCK_DATA) {
       const mockToken = 'mock_jwt_token_kk_pharmacy_' + Date.now();
+      const isAdmin = cleanEmail.toLowerCase().includes('admin');
       const mockUser = {
-        id: 101,
-        fullName: email.includes('admin') ? 'System Administrator' : 'Sarah Perera',
-        email: email || 'user@example.com',
+        id: Math.floor(100 + Math.random() * 900),
+        fullName: isAdmin 
+          ? 'System Administrator' 
+          : cleanEmail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        email: cleanEmail || 'customer@kkpharmacy.lk',
         phone: '+94 77 123 4567',
-        roles: email.includes('admin') ? ['ROLE_USER', 'ROLE_ADMIN'] : ['ROLE_USER'],
+        roles: isAdmin ? ['ROLE_ADMIN', 'ROLE_USER'] : ['ROLE_USER'],
         enabled: true
       };
 
@@ -78,14 +84,14 @@ const AuthService = {
 
     try {
       const response = await AuthAPI.login({
-        email: email.trim(),
-        password: password.trim()
+        email: cleanEmail,
+        password: cleanPass
       });
 
       const token = response.accessToken || response.token;
       const user = response.user || {
-        email: email,
-        fullName: email.split('@')[0],
+        email: cleanEmail,
+        fullName: cleanEmail.split('@')[0],
         roles: response.roles || ['ROLE_USER']
       };
       if (response.roles && (!user.roles || user.roles.length === 0)) {
@@ -119,14 +125,20 @@ const AuthService = {
    * Register method
    */
   register: async (userData) => {
-    console.log('[AuthService] Registering user with data:', userData);
+    const cleanEmail = (userData.email || '').trim();
+    const cleanFullName = (userData.fullName || '').trim();
+    const cleanPhone = (userData.phone || '').trim();
+    const cleanPassword = (userData.password || '').trim();
+
+    console.log('[AuthService] Registering customer account:', cleanEmail);
+
     if (CONFIG.USE_MOCK_DATA) {
       const mockToken = 'mock_jwt_token_kk_pharmacy_' + Date.now();
       const mockUser = {
         id: Math.floor(100 + Math.random() * 900),
-        fullName: userData.fullName || 'Registered Customer',
-        email: userData.email,
-        phone: userData.phone || '',
+        fullName: cleanFullName || cleanEmail.split('@')[0],
+        email: cleanEmail,
+        phone: cleanPhone || '',
         roles: ['ROLE_USER'],
         enabled: true
       };
@@ -144,22 +156,20 @@ const AuthService = {
 
     try {
       const requestPayload = {
-        fullName: userData.fullName ? userData.fullName.trim() : '',
-        email: userData.email ? userData.email.trim() : '',
-        password: userData.password ? userData.password.trim() : '',
-        phone: userData.phone ? userData.phone.trim() : ''
+        fullName: cleanFullName,
+        email: cleanEmail,
+        password: cleanPassword,
+        phone: cleanPhone
       };
-      
 
       const response = await AuthAPI.register(requestPayload);
       console.log('[AuthService] Registration successful:', response);
-      alert('Registration successful! Please check your email for verification.');
 
       const token = response.accessToken || response.token;
       const user = response.user || {
-        email: requestPayload.email,
-        fullName: requestPayload.fullName,
-        phone: requestPayload.phone,
+        email: cleanEmail,
+        fullName: cleanFullName,
+        phone: cleanPhone,
         roles: response.roles || ['ROLE_USER']
       };
       if (response.roles && (!user.roles || user.roles.length === 0)) {

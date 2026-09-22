@@ -79,14 +79,14 @@ const App = {
                     <label class="form-label small fw-semibold">Email or Username</label>
                     <div class="input-group">
                       <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-envelope"></i></span>
-                      <input type="email" id="modalLoginEmail" class="form-control border-start-0 ps-0" placeholder="user@example.com" required value="user@example.com">
+                      <input type="email" id="modalLoginEmail" class="form-control border-start-0 ps-0" placeholder="name@example.com" required autocomplete="username">
                     </div>
                   </div>
                   <div class="mb-3">
                     <label class="form-label small fw-semibold">Password</label>
                     <div class="input-group">
                       <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-key"></i></span>
-                      <input type="password" id="modalLoginPassword" class="form-control border-start-0 ps-0" placeholder="••••••••" required value="password123">
+                      <input type="password" id="modalLoginPassword" class="form-control border-start-0 ps-0" placeholder="Enter your password" required autocomplete="current-password">
                     </div>
                   </div>
                   <div class="d-flex justify-content-between align-items-center mb-3">
@@ -94,22 +94,14 @@ const App = {
                       <input type="checkbox" class="form-check-input" id="modalRememberMe" checked>
                       <label class="form-check-label small" for="modalRememberMe">Remember me</label>
                     </div>
-                    <a href="#" class="small text-primary">Forgot Password?</a>
+                    <a href="#" class="small text-primary text-decoration-none">Forgot Password?</a>
                   </div>
                   <button type="submit" class="btn btn-primary-pharmacy w-100 py-2 mb-3">
-                    <i class="bi bi-box-arrow-in-right"></i> Sign In to Account
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Account
                   </button>
                   
-                  <div class="p-3 bg-light rounded-3 mb-3 small text-muted text-center">
-                    <div><strong>Coursework Demo Credentials:</strong></div>
-                    <div class="mt-1">
-                      <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 me-1" onclick="document.getElementById('modalLoginEmail').value='user@example.com';document.getElementById('modalLoginPassword').value='password123';">User Demo</button>
-                      <button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" onclick="document.getElementById('modalLoginEmail').value='admin@medora.com';document.getElementById('modalLoginPassword').value='admin123';">Admin Demo</button>
-                    </div>
-                  </div>
-                  
-                  <div class="text-center small text-muted">
-                    Don't have an account yet? <a href="pages/register.html" class="fw-semibold text-primary">Create Account</a>
+                  <div class="text-center small text-muted pt-2 border-top">
+                    Don't have an account yet? <a href="${window.location.pathname.includes('/pages/') ? 'register.html' : 'pages/register.html'}" class="fw-bold text-primary text-decoration-none">Create an Account</a>
                   </div>
                 </form>
               </div>

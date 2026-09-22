@@ -23,19 +23,6 @@ const LoginPage = {
     const passInput = document.getElementById('loginPasswordInput');
     const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
-    // Demo Fill Buttons
-    document.getElementById('btnFillUser')?.addEventListener('click', () => {
-      if (emailInput) emailInput.value = 'user@example.com';
-      if (passInput) passInput.value = 'password123';
-      Toast.show('Filled Customer Demo Credentials', 'info');
-    });
-
-    document.getElementById('btnFillAdmin')?.addEventListener('click', () => {
-      if (emailInput) emailInput.value = 'admin@kkpharmacy.com';
-      if (passInput) passInput.value = 'admin123';
-      Toast.show('Filled Admin Demo Credentials', 'info');
-    });
-
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
