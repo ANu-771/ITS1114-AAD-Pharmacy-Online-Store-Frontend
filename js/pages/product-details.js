@@ -121,6 +121,28 @@ const ProductDetailsPage = {
     document.getElementById('specForm').textContent = product.dosageForm || 'Unit Packaging';
     document.getElementById('specManufacturer').textContent = product.manufacturer || product.brand;
     document.getElementById('specStorage').textContent = product.storageInfo || 'Store in a cool, dry place away from direct sunlight.';
+
+    const specExpiryEl = document.getElementById('specExpiry');
+    if (specExpiryEl) {
+      if (product.expiryDate) {
+        const exp = new Date(product.expiryDate);
+        if (!isNaN(exp.getTime())) {
+          const diffDays = Math.ceil((exp.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+          const dateStr = exp.toISOString().split('T')[0];
+          if (diffDays <= 0) {
+            specExpiryEl.innerHTML = `<span class="text-danger fw-bold"><i class="bi bi-exclamation-octagon-fill me-1"></i>Expired (${dateStr}) - Unsafe for Dispensing</span>`;
+          } else if (diffDays <= 90) {
+            specExpiryEl.innerHTML = `<span class="badge bg-warning-subtle text-warning border border-warning fw-medium"><i class="bi bi-clock-history me-1"></i>${dateStr} (Short Shelf Life: ${diffDays} days)</span>`;
+          } else {
+            specExpiryEl.innerHTML = `<span class="text-success fw-bold"><i class="bi bi-shield-check me-1"></i>Verified Batch: Expires ${dateStr} (Fresh & Safe)</span>`;
+          }
+        } else {
+          specExpiryEl.textContent = product.expiryDate;
+        }
+      } else {
+        specExpiryEl.innerHTML = '<span class="text-success fw-semibold"><i class="bi bi-patch-check-fill me-1"></i>Standard 2-Year Manufacturer Quality Guarantee</span>';
+      }
+    }
   },
 
   loadRelatedProducts: async (category, currentId) => {

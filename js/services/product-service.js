@@ -26,6 +26,9 @@ const ProductService = {
       rating: 4.8,
       reviewsCount: 42,
       inStock: true,
+      stock: 45,
+      expiryDate: '2027-09-30',
+      expiringSoon: false,
       requiresPrescription: true,
       image: 'assets/images/medicine_1.png',
       badge: 'Popular',
@@ -47,6 +50,9 @@ const ProductService = {
       rating: 4.9,
       reviewsCount: 128,
       inStock: true,
+      stock: 50,
+      expiryDate: 'N/A (Device)',
+      expiringSoon: false,
       requiresPrescription: false,
       image: 'assets/images/bp_monitor.png',
       badge: 'Top Rated',
@@ -68,9 +74,12 @@ const ProductService = {
       rating: 4.7,
       reviewsCount: 89,
       inStock: true,
+      stock: 6,
+      expiryDate: '2026-10-15',
+      expiringSoon: true,
       requiresPrescription: false,
       image: 'assets/images/vitamins_1.png',
-      badge: 'Best Value',
+      badge: 'Expiring Soon (< 3M)',
       description: 'Comprehensive daily multivitamin formula packed with Vitamin C, Vitamin D3, Zinc, B-Complex, and essential minerals to support vitality and immune health.',
       activeIngredient: 'Multivitamins A, B-Complex, C, D3, E, Zinc, Iron',
       strength: '100% Daily Value RDA',
@@ -341,7 +350,13 @@ const ProductService = {
       strength: p.strength || 'Standard Dosage',
       dosageForm: p.dosageForm || 'Unit Pack',
       manufacturer: p.manufacturer || (p.brand ? `${p.brand} Healthcare Ltd` : 'KK PHARMACY Lab'),
-      storageInfo: p.storageInfo || 'Store below 25°C in a dry place.'
+      storageInfo: p.storageInfo || 'Store below 25°C in a dry place.',
+      expiryDate: p.expiryDate || (p.category === 'equipment' ? 'N/A (Device)' : '2027-10-30'),
+      expiringSoon: p.expiringSoon !== undefined ? !!p.expiringSoon : (() => {
+        if (!p.expiryDate || p.expiryDate.includes('N/A')) return false;
+        const diff = (new Date(p.expiryDate) - new Date()) / (1000 * 60 * 60 * 24);
+        return diff <= 90;
+      })()
     };
   },
 

@@ -33,6 +33,7 @@ function createProductCard(product) {
         <!-- Badge Group -->
         <div class="product-badge-group">
           ${product.badge ? `<span class="badge badge-pharmacy badge-light-blue">${product.badge}</span>` : ''}
+          ${product.expiringSoon ? `<span class="badge badge-pharmacy bg-warning-subtle text-warning-emphasis border border-warning"><i class="bi bi-clock-history me-1"></i>Short Expiry</span>` : ''}
           ${product.requiresPrescription ? `<span class="badge badge-pharmacy badge-warning-soft"><i class="bi bi-file-earmark-medical me-1"></i>Rx Required</span>` : ''}
         </div>
 

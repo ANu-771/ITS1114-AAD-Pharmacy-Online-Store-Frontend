@@ -49,6 +49,51 @@
       <!-- Main Body -->
       <main class="admin-body">
         
+        <!-- Real-Time Expiry & Low Stock Alerts Section (3-Month Early Warning System) -->
+        <div id="adminAlertsContainer" class="mb-4 d-none">
+          <div class="row g-3">
+            <div class="col-12 col-md-6" id="nearExpiryAlertCol">
+              <div class="card border-warning bg-warning-subtle shadow-sm rounded-3 p-3">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="rounded-circle bg-warning text-dark p-2 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; flex-shrink: 0;">
+                    <i class="bi bi-clock-history fs-5"></i>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <strong class="text-dark" id="nearExpiryCountText">0 Critical Expiry Alerts (< 3 Months)</strong>
+                      <span class="badge bg-warning text-dark fw-bold">Critical Alert</span>
+                    </div>
+                    <small class="text-muted d-block" id="nearExpirySubtext">Medications expiring within 90 days. Rotate stock or notify supplier.</small>
+                  </div>
+                </div>
+                <div class="mt-2 pt-2 border-top border-warning-subtle small" id="nearExpiryList">
+                  <!-- Rendered dynamically by admin-products.js -->
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6" id="lowStockAlertCol">
+              <div class="card border-danger bg-danger-subtle shadow-sm rounded-3 p-3">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="rounded-circle bg-danger text-white p-2 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; flex-shrink: 0;">
+                    <i class="bi bi-exclamation-octagon fs-5"></i>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <strong class="text-danger" id="lowStockCountText">0 Low Stock Alerts</strong>
+                      <span class="badge bg-danger text-white fw-bold">Restock Urgently</span>
+                    </div>
+                    <small class="text-muted d-block" id="lowStockSubtext">Items at or below critical inventory replenishment thresholds.</small>
+                  </div>
+                </div>
+                <div class="mt-2 pt-2 border-top border-danger-subtle small" id="lowStockList">
+                  <!-- Rendered dynamically by admin-products.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Filter & Search Bar -->
         <div class="admin-card p-3 mb-4">
           <div class="row g-3 align-items-center">
@@ -78,10 +123,11 @@
             <table class="table admin-table">
               <thead>
                 <tr>
-                  <th style="width: 32%;">Product & Brand</th>
+                  <th style="width: 28%;">Product & Brand</th>
                   <th>Category</th>
                   <th>Unit Price</th>
                   <th>Stock Available</th>
+                  <th>Batch Expiry Date</th>
                   <th>Type</th>
                   <th>Status</th>
                   <th class="text-end">Actions</th>
@@ -136,6 +182,18 @@
                 <input type="number" class="form-control" id="mProdStock" placeholder="50" min="0" value="50" required>
               </div>
 
+              <!-- Expiry Date for Pharmaceuticals -->
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold text-danger"><i class="bi bi-calendar-event me-1"></i>Batch Expiry Date (Critical For Drugs) *</label>
+                <input type="date" class="form-control border-danger-subtle" id="mProdExpiry" required>
+                <small class="text-muted" style="font-size: 0.72rem;">Alerts trigger automatically 3 months before expiry date.</small>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label small fw-semibold">Dosage / Unit Packaging</label>
+                <input type="text" class="form-control" id="mProdForm" placeholder="e.g. 10x10 Blister Pack">
+              </div>
+
               <!-- Product Image Internet Link with Live Web Preview -->
               <div class="col-12">
                 <label class="form-label small fw-semibold">Picture Image Link (Internet URL) *</label>
@@ -154,7 +212,7 @@
                 </div>
               </div>
 
-              <div class="col-12 col-md-6">
+              <div class="col-12">
                 <label class="form-label small fw-semibold">Active Ingredient / Sensor Tech</label>
                 <input type="text" class="form-control" id="mProdIngredient" placeholder="e.g. Amoxicillin Trihydrate 500mg">
               </div>

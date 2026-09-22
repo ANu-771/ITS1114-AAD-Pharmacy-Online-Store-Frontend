@@ -958,5 +958,27 @@ Upgraded customer shopping journey from miniature popup modals to full-window de
   - Customers now experience the full dedicated catalog window featuring high-resolution product photography, detailed clinical dosage, storage requirements, stock counters, prescription upload indicators, and related product recommendations.
 
 ---
+
+## 26. PRODUCT EXPIRY MANAGEMENT & 3-MONTH EARLY WARNING ALERT SYSTEM
+
+Implemented critical pharmaceutical safety protocols for batch expiry tracking, early expiration warning banners (< 3 months / 90 days), and real-time inventory alerts:
+
+- **Admin Products Management & Expiry Dates (`admin/products.html` & `js/pages/admin-products.js`)**:
+  - Added **Batch Expiry Date** field (`#mProdExpiry`) to the Add/Edit Product modal with intelligent default configuration (2-year shelf life).
+  - Added dedicated **Batch Expiry Date** column in the Admin Products Catalog table with color-coded safety indicators:
+    - **Safe Shelf Life (> 90 days)**: Green badge (`YYYY-MM-DD`).
+    - **Expiring Soon (≤ 90 days / < 3 months)**: Amber warning badge with exact days remaining.
+    - **Expired (≤ 0 days)**: Red critical danger badge to immediately halt dispensing.
+  - Implemented **Real-Time Expiry & Low Stock Alerts Dashboard** (`#adminAlertsContainer`):
+    - **Critical Expiry Alert Card (< 3 Months)**: Dynamically scans and lists all pharmaceutical batches expiring within 90 days.
+    - **Low Stock Urgency Card**: Scans and highlights items with 10 or fewer units remaining or fully exhausted inventory.
+- **Storefront & Product Details Quality Verification (`pages/product-details.html`, `js/pages/product-details.js`, `js/components/product-card.js`)**:
+  - **Product Specifications Table**: Added **Batch Expiry / Freshness** verification row (`#specExpiry`) displaying verified pharmaceutical shelf-life to customers.
+  - **Product Cards**: Dynamic `Short Expiry` badge indicator for products expiring within the 3-month window.
+- **Backend Batch Expiry Tracking (`ProductServiceImpl.java`, `ProductDTO.java`, `ProductRequestDTO.java`)**:
+  - Persists and synchronizes `expiryDate` into `InventoryBatch` records.
+  - Automatically calculates `expiringSoon` boolean flag based on `LocalDate.now().plusMonths(3)`.
+
+---
 *Document maintained automatically with each build increment.*
 

@@ -15,10 +15,105 @@ const AdminProductsPage = {
     try {
       const data = await ProductService.getProducts('all');
       AdminProductsPage.productsList = data;
+      AdminProductsPage.renderAlerts(data);
       AdminProductsPage.renderTable(data);
     } catch (e) {
       console.error('[AdminProductsPage] Error loading products:', e);
     }
+  },
+
+  renderAlerts: (products) => {
+    const alertsContainer = document.getElementById('adminAlertsContainer');
+    const nearExpiryList = document.getElementById('nearExpiryList');
+    const lowStockList = document.getElementById('lowStockList');
+    const nearExpiryCountText = document.getElementById('nearExpiryCountText');
+    const lowStockCountText = document.getElementById('lowStockCountText');
+
+    if (!alertsContainer || !nearExpiryList || !lowStockList) return;
+
+    const now = new Date();
+    const nearExpiryItems = [];
+    const lowStockItems = [];
+
+    products.forEach(p => {
+      const stockVal = p.stock !== undefined ? p.stock : (p.initialStock !== undefined ? p.initialStock : (p.inStock ? 50 : 0));
+      
+      // Check stock
+      if (stockVal <= 10) {
+        lowStockItems.push({ ...p, currentStock: stockVal });
+      }
+
+      // Check expiry date
+      if (p.expiryDate) {
+        const expDate = new Date(p.expiryDate);
+        if (!isNaN(expDate.getTime())) {
+          const diffTime = expDate.getTime() - now.getTime();
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          // Expiring within 90 days (3 months) or already expired
+          if (diffDays <= 90) {
+            nearExpiryItems.push({
+              ...p,
+              diffDays,
+              isExpired: diffDays <= 0,
+              formattedExpiry: expDate.toISOString().split('T')[0]
+            });
+          }
+        }
+      } else if (p.expiringSoon) {
+        nearExpiryItems.push({
+          ...p,
+          diffDays: 45,
+          isExpired: false,
+          formattedExpiry: 'Expiring Soon'
+        });
+      }
+    });
+
+    // Render Near Expiry Alerts
+    if (nearExpiryCountText) {
+      nearExpiryCountText.textContent = `${nearExpiryItems.length} Critical Expiry Alerts (< 3 Months)`;
+    }
+    if (nearExpiryItems.length === 0) {
+      nearExpiryList.innerHTML = '<div class="text-success"><i class="bi bi-shield-check me-1"></i> All medicine batches are well within safe shelf-life (> 3 months).</div>';
+    } else {
+      nearExpiryList.innerHTML = nearExpiryItems.map(item => `
+        <div class="d-flex align-items-center justify-content-between py-1 border-bottom border-warning-subtle">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-clock-history ${item.isExpired ? 'text-danger' : 'text-warning'}"></i>
+            <span class="fw-semibold text-dark">${item.name}</span>
+          </div>
+          <div>
+            ${item.isExpired 
+              ? '<span class="badge bg-danger text-white">EXPIRED (' + item.formattedExpiry + ')</span>' 
+              : '<span class="badge bg-warning text-dark font-monospace">' + item.diffDays + ' days left (' + item.formattedExpiry + ')</span>'}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Low Stock Alerts
+    if (lowStockCountText) {
+      lowStockCountText.textContent = `${lowStockItems.length} Low Stock Alerts`;
+    }
+    if (lowStockItems.length === 0) {
+      lowStockList.innerHTML = '<div class="text-success"><i class="bi bi-check-circle me-1"></i> Inventory levels are healthy across all product lines.</div>';
+    } else {
+      lowStockList.innerHTML = lowStockItems.map(item => `
+        <div class="d-flex align-items-center justify-content-between py-1 border-bottom border-danger-subtle">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-box-seam text-danger"></i>
+            <span class="fw-semibold text-dark">${item.name}</span>
+          </div>
+          <div>
+            <span class="badge ${item.currentStock === 0 ? 'bg-danger text-white' : 'bg-warning text-dark'} font-monospace">
+              ${item.currentStock === 0 ? '0 Units (OUT OF STOCK)' : item.currentStock + ' Units Left'}
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    alertsContainer.classList.remove('d-none');
   },
 
   renderTable: (products) => {
@@ -28,11 +123,32 @@ const AdminProductsPage = {
 
     if (countEl) countEl.textContent = `Showing ${products.length} Products`;
 
+    const now = new Date();
     let html = '';
     products.forEach(p => {
       const imgSrc = resolveImagePath(p.image);
       const fallbackImg = resolveImagePath('assets/images/medicine_1.png');
       const stockVal = p.stock !== undefined ? p.stock : (p.initialStock !== undefined ? p.initialStock : (p.inStock ? 50 : 0));
+      
+      // Expiry status badge
+      let expiryBadge = '<span class="badge bg-light text-muted border font-monospace">Not Set</span>';
+      if (p.expiryDate) {
+        const exp = new Date(p.expiryDate);
+        if (!isNaN(exp.getTime())) {
+          const diffDays = Math.ceil((exp.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+          const dateStr = exp.toISOString().split('T')[0];
+          if (diffDays <= 0) {
+            expiryBadge = `<span class="badge bg-danger text-white border font-monospace" title="Expired"><i class="bi bi-exclamation-triangle-fill me-1"></i>Expired (${dateStr})</span>`;
+          } else if (diffDays <= 90) {
+            expiryBadge = `<span class="badge bg-warning-subtle text-warning-emphasis border border-warning font-monospace" title="Expiring within 3 months"><i class="bi bi-clock-history me-1"></i>${dateStr} (${diffDays}d)</span>`;
+          } else {
+            expiryBadge = `<span class="badge bg-success-subtle text-success border border-success-subtle font-monospace" title="Safe Batch"><i class="bi bi-shield-check me-1"></i>${dateStr}</span>`;
+          }
+        }
+      } else if (p.expiringSoon) {
+        expiryBadge = `<span class="badge bg-warning-subtle text-warning border border-warning font-monospace"><i class="bi bi-clock-history me-1"></i>Near Expiry</span>`;
+      }
+
       html += `
         <tr data-id="${p.id}">
           <td>
@@ -51,6 +167,7 @@ const AdminProductsPage = {
               <i class="bi ${stockVal > 0 ? 'bi-boxes' : 'bi-slash-circle'} me-1"></i> ${stockVal} units
             </span>
           </td>
+          <td>${expiryBadge}</td>
           <td>
             ${p.requiresPrescription ? '<span class="badge bg-warning-subtle text-warning border border-warning-subtle small">Rx Required</span>' : '<span class="badge bg-light text-muted border small">OTC / General</span>'}
           </td>
@@ -76,6 +193,14 @@ const AdminProductsPage = {
   },
 
   attachListeners: () => {
+    // Default expiry date in modal to 2 years from today
+    const expiryInput = document.getElementById('mProdExpiry');
+    if (expiryInput && !expiryInput.value) {
+      const defaultExp = new Date();
+      defaultExp.setFullYear(defaultExp.getFullYear() + 2);
+      expiryInput.value = defaultExp.toISOString().split('T')[0];
+    }
+
     // Search input
     const searchInput = document.getElementById('adminProductSearch');
     if (searchInput) {
@@ -169,6 +294,7 @@ const AdminProductsPage = {
 
         const customImg = imgInput ? imgInput.value.trim() : '';
         const resolvedImg = customImg || 'assets/images/medicine_1.png';
+        const rawExpiry = document.getElementById('mProdExpiry') ? document.getElementById('mProdExpiry').value : '';
 
         const newProductPayload = {
           name: document.getElementById('mProdName').value.trim(),
@@ -188,7 +314,8 @@ const AdminProductsPage = {
           initialStock: parsedStock,
           stock: parsedStock,
           inStock: parsedStock > 0,
-          reorderLevel: 10
+          reorderLevel: 10,
+          expiryDate: rawExpiry
         };
 
         const submitBtn = crudForm.querySelector('button[type="submit"]');
@@ -203,6 +330,11 @@ const AdminProductsPage = {
           const modal = bootstrap.Modal.getInstance(modalEl);
           if (modal) modal.hide();
           crudForm.reset();
+          if (expiryInput) {
+            const defaultExp = new Date();
+            defaultExp.setFullYear(defaultExp.getFullYear() + 2);
+            expiryInput.value = defaultExp.toISOString().split('T')[0];
+          }
           if (imgPreview) imgPreview.src = '../assets/images/medicine_1.png';
           Toast.show(`Product "${created.name || newProductPayload.name}" added with ${parsedStock} units in stock!`, 'success');
           await AdminProductsPage.loadProducts();
