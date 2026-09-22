@@ -926,5 +926,24 @@ Resolved visual collision between Tier 1 header profile dropdown and Tier 2 caps
   - Isolated glassmorphism dropdown menu with enhanced entry animation (`dropdownFadeSlideIn`), shadow depth, and user identity header.
 
 ---
+
+## 24. PRODUCT STOCK QUANTITY, INTERNET IMAGE LINK & STOREFRONT AVAILABILITY VISIBILITY
+
+Implemented professional pharmacy inventory management and stock transparency across the admin portal and storefront:
+
+- **Admin Products Management Modal (`admin/products.html` & `js/pages/admin-products.js`)**:
+  - Added **Stock Quantity (Units Available)** field (`#mProdStock`) supporting explicit initial stock configuration.
+  - Added **Picture Image Link (Internet URL)** field (`#mProdImage`) with a live interactive image preview card (`#mProdImagePreview`) and instant fallback handling for any external web link.
+  - Upgraded Admin Products Table with a dedicated **Stock Available** column rendering badge indicators (`XX units`) based on live stock quantity.
+- **Storefront Stock Availability Visibility (`js/components/product-card.js`, `js/pages/product-details.js`, `js/components/modal.js`)**:
+  - **Product Cards**: Display real-time stock indicators:
+    - Normal stock (> 8 units): `In Stock (XX available)` in green medical badge.
+    - Low stock (1–8 units): `Only X left in stock` with amber pulse indicator.
+    - Out of stock (0 units): `Out of Stock` with disabled Add to Cart button.
+  - **Product Details Page & Quick View Modal**: Dynamic stock badge displaying precise units available, auto-capping quantity selection at maximum stock and disabling cart submission when inventory is exhausted.
+- **Backend Stock & Image Synchronization (`ProductServiceImpl.java`)**:
+  - Enhanced `updateProduct` to synchronize inventory `currentStock` and `ProductImage` primary URL upon updates.
+
+---
 *Document maintained automatically with each build increment.*
 

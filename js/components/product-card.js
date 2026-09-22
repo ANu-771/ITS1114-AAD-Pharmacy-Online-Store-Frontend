@@ -11,6 +11,17 @@ function createProductCard(product) {
   const resolvedImg = resolveImagePath(product.image);
   const fallbackImg = resolveImagePath('assets/images/medicine_1.png');
 
+  // Stock availability calculation
+  const stockQty = typeof product.stock === 'number' ? product.stock : (product.initialStock !== undefined ? product.initialStock : (product.inStock ? 35 : 0));
+  let stockBadgeHtml = '';
+  if (stockQty <= 0) {
+    stockBadgeHtml = `<div class="product-stock-indicator stock-out"><i class="bi bi-x-circle-fill"></i> Out of Stock</div>`;
+  } else if (stockQty <= 8) {
+    stockBadgeHtml = `<div class="product-stock-indicator stock-low"><i class="bi bi-lightning-charge-fill"></i> Only ${stockQty} left in stock</div>`;
+  } else {
+    stockBadgeHtml = `<div class="product-stock-indicator stock-available"><i class="bi bi-check-circle-fill"></i> In Stock (${stockQty} available)</div>`;
+  }
+
   return `
     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
       <div class="product-card" data-id="${product.id}">
@@ -42,6 +53,9 @@ function createProductCard(product) {
             <span class="reviews-count">(${product.reviewsCount})</span>
           </div>
 
+          <!-- Stock Availability Indicator -->
+          ${stockBadgeHtml}
+
           <!-- Price & Old Price -->
           <div class="product-price-row">
             <span class="product-price">${formattedPrice}</span>
@@ -49,8 +63,8 @@ function createProductCard(product) {
           </div>
 
           <!-- Add to Cart CTA -->
-          <button class="btn-add-cart" data-action="add-cart" data-id="${product.id}">
-            <i class="bi bi-cart-plus"></i> Add to Cart
+          <button class="btn-add-cart ${stockQty <= 0 ? 'btn-out-of-stock disabled' : ''}" data-action="add-cart" data-id="${product.id}" ${stockQty <= 0 ? 'disabled' : ''}>
+            <i class="bi ${stockQty <= 0 ? 'bi-slash-circle' : 'bi-cart-plus'}"></i> ${stockQty <= 0 ? 'Out of Stock' : 'Add to Cart'}
           </button>
         </div>
       </div>

@@ -78,9 +78,10 @@
             <table class="table admin-table">
               <thead>
                 <tr>
-                  <th style="width: 35%;">Product & Brand</th>
+                  <th style="width: 32%;">Product & Brand</th>
                   <th>Category</th>
                   <th>Unit Price</th>
+                  <th>Stock Available</th>
                   <th>Type</th>
                   <th>Status</th>
                   <th class="text-end">Actions</th>
@@ -117,7 +118,7 @@
                 <label class="form-label small fw-semibold">Brand / Manufacturer *</label>
                 <input type="text" class="form-control" id="mProdBrand" placeholder="e.g. GSK, Omron" required>
               </div>
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-md-4">
                 <label class="form-label small fw-semibold">Category *</label>
                 <select class="form-select" id="mProdCategory" required>
                   <option value="medicines" selected>Medicines</option>
@@ -126,10 +127,33 @@
                   <option value="personal-care">Personal Care</option>
                 </select>
               </div>
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-md-4">
                 <label class="form-label small fw-semibold">Retail Price (LKR) *</label>
                 <input type="number" class="form-control" id="mProdPrice" placeholder="650.00" step="10" required>
               </div>
+              <div class="col-12 col-md-4">
+                <label class="form-label small fw-semibold">Stock Quantity (Units Available) *</label>
+                <input type="number" class="form-control" id="mProdStock" placeholder="50" min="0" value="50" required>
+              </div>
+
+              <!-- Product Image Internet Link with Live Web Preview -->
+              <div class="col-12">
+                <label class="form-label small fw-semibold">Picture Image Link (Internet URL) *</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-white"><i class="bi bi-link-45deg text-primary"></i></span>
+                  <input type="text" class="form-control" id="mProdImage" placeholder="https://example.com/medicine.png (or assets/images/medicine_1.png)" value="">
+                  <button class="btn btn-outline-secondary btn-sm" type="button" id="btnPreviewImage">Preview Image</button>
+                </div>
+                <!-- Live Thumbnail Preview Card -->
+                <div class="d-flex align-items-center gap-3 mt-2 p-2 rounded-3 bg-light border" id="imagePreviewBox">
+                  <img id="mProdImagePreview" src="../assets/images/medicine_1.png" alt="Product Image Preview" style="width: 48px; height: 48px; object-fit: contain; background: #FFF;" class="rounded border p-1" onerror="this.src='../assets/images/medicine_1.png';">
+                  <div class="small">
+                    <strong class="text-navy d-block">Live Picture Preview</strong>
+                    <span class="text-muted" id="imagePreviewStatus" style="font-size: 0.75rem;">Paste any internet image URL above and it will display across the web store.</span>
+                  </div>
+                </div>
+              </div>
+
               <div class="col-12 col-md-6">
                 <label class="form-label small fw-semibold">Active Ingredient / Sensor Tech</label>
                 <input type="text" class="form-control" id="mProdIngredient" placeholder="e.g. Amoxicillin Trihydrate 500mg">

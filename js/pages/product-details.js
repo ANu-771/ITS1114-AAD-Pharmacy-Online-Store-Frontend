@@ -68,6 +68,42 @@ const ProductDetailsPage = {
       oldPriceEl.textContent = '';
     }
 
+    // Stock Units & Availability Status
+    const stockQty = typeof product.stock === 'number' ? product.stock : (product.initialStock !== undefined ? product.initialStock : (product.inStock ? 50 : 0));
+    const stockBadge = document.getElementById('detailStockBadge');
+    const addToCartBtn = document.getElementById('detailAddToCartBtn');
+    const qtyInput = document.getElementById('detailQtyInput');
+
+    if (stockBadge) {
+      if (stockQty <= 0) {
+        stockBadge.className = 'badge bg-danger-subtle text-danger border border-danger-subtle ms-auto';
+        stockBadge.innerHTML = '<i class="bi bi-x-circle-fill me-1"></i> Out of Stock';
+      } else if (stockQty <= 5) {
+        stockBadge.className = 'badge bg-warning-subtle text-warning border border-warning-subtle ms-auto';
+        stockBadge.innerHTML = `<i class="bi bi-lightning-charge-fill me-1"></i> Only ${stockQty} left in stock - Order soon`;
+      } else {
+        stockBadge.className = 'badge bg-success-subtle text-success border border-success-subtle ms-auto';
+        stockBadge.innerHTML = `<i class="bi bi-check-circle-fill me-1"></i> In Stock (${stockQty} units available)`;
+      }
+    }
+
+    if (addToCartBtn) {
+      if (stockQty <= 0) {
+        addToCartBtn.disabled = true;
+        addToCartBtn.classList.add('disabled', 'opacity-50');
+        addToCartBtn.innerHTML = '<i class="bi bi-slash-circle me-1"></i> Out of Stock';
+      } else {
+        addToCartBtn.disabled = false;
+        addToCartBtn.classList.remove('disabled', 'opacity-50');
+        addToCartBtn.innerHTML = '<i class="bi bi-bag-plus me-1"></i> Add to Cart';
+      }
+    }
+
+    if (qtyInput) {
+      qtyInput.max = stockQty > 0 ? stockQty : 1;
+      qtyInput.disabled = stockQty <= 0;
+    }
+
     // Prescription warning alert
     const rxAlert = document.getElementById('rxWarningAlert');
     if (product.requiresPrescription) {

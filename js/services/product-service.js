@@ -329,6 +329,7 @@ const ProductService = {
       oldPrice: p.oldPrice ? parseFloat(p.oldPrice) : null,
       rating: p.rating !== undefined && p.rating !== null ? parseFloat(p.rating) : 4.8,
       reviewsCount: p.reviewsCount || 0,
+      stock: p.stock !== undefined ? parseInt(p.stock, 10) : (p.initialStock !== undefined ? parseInt(p.initialStock, 10) : 45),
       inStock: p.inStock !== undefined ? !!p.inStock : (p.stock !== undefined ? p.stock > 0 : true),
       requiresPrescription: p.requiresPrescription !== undefined ? !!p.requiresPrescription : !!p.rxRequired,
       rxRequired: p.rxRequired !== undefined ? !!p.rxRequired : !!p.requiresPrescription,

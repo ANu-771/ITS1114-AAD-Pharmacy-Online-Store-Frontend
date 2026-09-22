@@ -32,6 +32,7 @@ const AdminProductsPage = {
     products.forEach(p => {
       const imgSrc = resolveImagePath(p.image);
       const fallbackImg = resolveImagePath('assets/images/medicine_1.png');
+      const stockVal = p.stock !== undefined ? p.stock : (p.initialStock !== undefined ? p.initialStock : (p.inStock ? 50 : 0));
       html += `
         <tr data-id="${p.id}">
           <td>
@@ -46,11 +47,16 @@ const AdminProductsPage = {
           <td><span class="badge-category-yellow">${p.categoryName || p.category}</span></td>
           <td><span class="fw-bold text-primary small">Rs. ${p.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span></td>
           <td>
+            <span class="badge ${stockVal > 10 ? 'bg-success-subtle text-success border border-success-subtle' : (stockVal > 0 ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle')} fw-semibold small">
+              <i class="bi ${stockVal > 0 ? 'bi-boxes' : 'bi-slash-circle'} me-1"></i> ${stockVal} units
+            </span>
+          </td>
+          <td>
             ${p.requiresPrescription ? '<span class="badge bg-warning-subtle text-warning border border-warning-subtle small">Rx Required</span>' : '<span class="badge bg-light text-muted border small">OTC / General</span>'}
           </td>
           <td>
-            <span class="badge-status ${p.inStock ? 'badge-instock' : 'badge-outofstock'}">
-              <i class="bi bi-circle-fill" style="font-size: 0.45rem;"></i> ${p.inStock ? 'In Stock' : 'Out of Stock'}
+            <span class="badge-status ${stockVal > 0 ? 'badge-instock' : 'badge-outofstock'}">
+              <i class="bi bi-circle-fill" style="font-size: 0.45rem;"></i> ${stockVal > 0 ? 'In Stock' : 'Out of Stock'}
             </span>
           </td>
           <td class="text-end">
@@ -96,6 +102,31 @@ const AdminProductsPage = {
       });
     }
 
+    // Live Image Preview in Add/Edit Product Modal
+    const imgInput = document.getElementById('mProdImage');
+    const imgPreview = document.getElementById('mProdImagePreview');
+    const btnPreview = document.getElementById('btnPreviewImage');
+    const updateImagePreview = () => {
+      if (!imgInput || !imgPreview) return;
+      const url = imgInput.value.trim();
+      if (url) {
+        imgPreview.src = resolveImagePath(url);
+        imgPreview.onerror = () => {
+          imgPreview.src = '../assets/images/medicine_1.png';
+        };
+      } else {
+        imgPreview.src = '../assets/images/medicine_1.png';
+      }
+    };
+
+    if (imgInput) {
+      imgInput.addEventListener('input', updateImagePreview);
+      imgInput.addEventListener('paste', () => setTimeout(updateImagePreview, 50));
+    }
+    if (btnPreview) {
+      btnPreview.addEventListener('click', updateImagePreview);
+    }
+
     // Delete Product
     const tbody = document.getElementById('adminProductsTableBody');
     if (tbody) {
@@ -132,6 +163,13 @@ const AdminProductsPage = {
         else if (catValue === 'vitamins') catId = 3;
         else if (catValue === 'personal-care') catId = 4;
 
+        const stockInput = document.getElementById('mProdStock');
+        const rawStock = stockInput ? parseInt(stockInput.value, 10) : 50;
+        const parsedStock = isNaN(rawStock) ? 50 : Math.max(0, rawStock);
+
+        const customImg = imgInput ? imgInput.value.trim() : '';
+        const resolvedImg = customImg || 'assets/images/medicine_1.png';
+
         const newProductPayload = {
           name: document.getElementById('mProdName').value.trim(),
           brand: document.getElementById('mProdBrand').value.trim(),
@@ -145,8 +183,11 @@ const AdminProductsPage = {
           description: document.getElementById('mProdDesc')?.value.trim() || 'Newly added certified healthcare product.',
           requiresPrescription: document.getElementById('mProdRx')?.checked || false,
           rxRequired: document.getElementById('mProdRx')?.checked || false,
-          image: 'assets/images/medicine_1.png',
-          initialStock: 50,
+          image: resolvedImg,
+          images: [resolvedImg],
+          initialStock: parsedStock,
+          stock: parsedStock,
+          inStock: parsedStock > 0,
           reorderLevel: 10
         };
 
@@ -162,7 +203,8 @@ const AdminProductsPage = {
           const modal = bootstrap.Modal.getInstance(modalEl);
           if (modal) modal.hide();
           crudForm.reset();
-          Toast.show(`Product "${created.name || newProductPayload.name}" added successfully!`, 'success');
+          if (imgPreview) imgPreview.src = '../assets/images/medicine_1.png';
+          Toast.show(`Product "${created.name || newProductPayload.name}" added with ${parsedStock} units in stock!`, 'success');
           await AdminProductsPage.loadProducts();
         } catch (err) {
           Toast.show(err.message || 'Failed to add product.', 'error');

@@ -15,6 +15,7 @@ const Modal = {
 
     const resolvedImg = resolveImagePath(product.image);
     const fallbackImg = resolveImagePath('assets/images/medicine_1.png');
+    const stockQty = typeof product.stock === 'number' ? product.stock : (product.initialStock !== undefined ? product.initialStock : (product.inStock ? 50 : 0));
 
     modalEl.innerHTML = `
       <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -40,9 +41,20 @@ const Modal = {
                   <span class="text-muted small">(${product.reviewsCount} customer reviews)</span>
                 </div>
 
-                <div class="d-flex align-items-baseline gap-2 mb-3">
+                <div class="d-flex align-items-baseline gap-2 mb-2">
                   <span class="fs-3 fw-bold" style="color: #0066B3;">Rs. ${product.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                   ${product.oldPrice ? `<span class="text-muted text-decoration-line-through">Rs. ${product.oldPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>` : ''}
+                </div>
+
+                <!-- Stock Quantity Availability Indicator -->
+                <div class="mb-3">
+                  ${stockQty <= 0 
+                    ? `<span class="badge bg-danger-subtle text-danger border border-danger-subtle"><i class="bi bi-x-circle-fill me-1"></i> Out of Stock</span>`
+                    : (stockQty <= 5 
+                        ? `<span class="badge bg-warning-subtle text-warning border border-warning-subtle"><i class="bi bi-lightning-charge-fill me-1"></i> Low Stock (Only ${stockQty} units left)</span>`
+                        : `<span class="badge bg-success-subtle text-success border border-success-subtle"><i class="bi bi-check-circle-fill me-1"></i> In Stock (${stockQty} units available)</span>`
+                      )
+                  }
                 </div>
 
                 <p class="text-muted small mb-4">
@@ -57,8 +69,8 @@ const Modal = {
                 ` : ''}
 
                 <div class="d-flex gap-2">
-                  <button class="btn btn-primary-pharmacy flex-grow-1 btn-modal-cart" data-id="${product.id}">
-                    <i class="bi bi-cart-plus"></i> Add to Shopping Cart
+                  <button class="btn btn-primary-pharmacy flex-grow-1 btn-modal-cart ${stockQty <= 0 ? 'disabled opacity-50' : ''}" data-id="${product.id}" ${stockQty <= 0 ? 'disabled' : ''}>
+                    <i class="bi ${stockQty <= 0 ? 'bi-slash-circle' : 'bi-cart-plus'}"></i> ${stockQty <= 0 ? 'Out of Stock' : 'Add to Shopping Cart'}
                   </button>
                   <button class="btn btn-outline-pharmacy btn-modal-wishlist" data-id="${product.id}">
                     <i class="bi bi-heart"></i>

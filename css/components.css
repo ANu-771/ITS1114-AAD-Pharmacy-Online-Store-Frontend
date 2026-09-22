@@ -2079,6 +2079,43 @@
   font-size: 0.75rem;
 }
 
+/* Stock Availability Indicator on Product Cards */
+.product-stock-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  margin-bottom: 0.65rem;
+  width: fit-content;
+}
+
+.product-stock-indicator.stock-available {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.product-stock-indicator.stock-low {
+  background: rgba(245, 158, 11, 0.12);
+  color: #D97706;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  animation: pulseLowStock 2s infinite ease-in-out;
+}
+
+.product-stock-indicator.stock-out {
+  background: rgba(239, 68, 68, 0.1);
+  color: #DC2626;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+@keyframes pulseLowStock {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+
 .product-price-row {
   margin-top: auto;
   display: flex;
@@ -2115,8 +2152,16 @@
   transition: var(--transition-fast);
 }
 
-.btn-add-cart:hover {
+.btn-add-cart:hover:not(:disabled) {
   background-color: var(--primary-hover);
+}
+
+.btn-add-cart.btn-out-of-stock,
+.btn-add-cart:disabled {
+  background-color: #CBD5E1 !important;
+  color: #64748B !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
 }
 
 /* --- 6. Medical Equipment Banner --- */
