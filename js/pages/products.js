@@ -134,8 +134,8 @@ const ProductsPage = {
         } else if (action === 'wishlist') {
           target.classList.toggle('active');
           Toast.show(`Added ${product.name} to Wishlist!`, 'success');
-        } else if (action === 'quickview') {
-          Modal.showQuickView(product);
+        } else if (action === 'quickview' || action === 'view-details') {
+          window.location.href = `product-details.html?id=${productId}`;
         }
       });
     }

@@ -945,5 +945,18 @@ Implemented professional pharmacy inventory management and stock transparency ac
   - Enhanced `updateProduct` to synchronize inventory `currentStock` and `ProductImage` primary URL upon updates.
 
 ---
+
+## 25. FULL-WINDOW DEDICATED PRODUCT SPECIFICATIONS NAVIGATION
+
+Upgraded customer shopping journey from miniature popup modals to full-window dedicated product specification views:
+
+- **Direct Full Page Navigation on Product Cards (`js/components/product-card.js`)**:
+  - Transformed product card images and product titles into direct semantic anchor links (`<a href="product-details.html?id=...">`).
+  - Automatically calculates relative URLs across root and subdirectories (`pages/` vs root `/`).
+- **Storefront Click Routing Alignment (`js/pages/home.js`, `js/pages/products.js`, `js/pages/wishlist.js`)**:
+  - Replaced intercepting quickview modal triggers with seamless navigation to the comprehensive `pages/product-details.html?id=X` page.
+  - Customers now experience the full dedicated catalog window featuring high-resolution product photography, detailed clinical dosage, storage requirements, stock counters, prescription upload indicators, and related product recommendations.
+
+---
 *Document maintained automatically with each build increment.*
 

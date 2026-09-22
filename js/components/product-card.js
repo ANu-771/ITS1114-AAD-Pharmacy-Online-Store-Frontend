@@ -22,6 +22,11 @@ function createProductCard(product) {
     stockBadgeHtml = `<div class="product-stock-indicator stock-available"><i class="bi bi-check-circle-fill"></i> In Stock (${stockQty} available)</div>`;
   }
 
+  // Calculate relative details page link based on current directory
+  const path = window.location.pathname.replace(/\\/g, '/');
+  const isSubdir = path.includes('/pages/') || path.includes('/admin/');
+  const detailsUrl = isSubdir ? `product-details.html?id=${product.id}` : `pages/product-details.html?id=${product.id}`;
+
   return `
     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
       <div class="product-card" data-id="${product.id}">
@@ -36,15 +41,17 @@ function createProductCard(product) {
           <i class="bi bi-heart"></i>
         </button>
 
-        <!-- Product Image -->
-        <div class="product-img-wrapper" data-action="quickview" data-id="${product.id}" style="cursor: pointer;">
+        <!-- Product Image (Direct Full Window Page Navigation) -->
+        <a href="${detailsUrl}" class="product-img-wrapper" title="View Full Specifications: ${product.name}">
           <img src="${resolvedImg}" alt="${product.name}" loading="lazy" onerror="this.onerror=null; this.src='${fallbackImg}';">
-        </div>
+        </a>
 
         <!-- Product Details -->
         <div class="product-body">
           <div class="product-brand">${product.brand}</div>
-          <h6 class="product-title" data-action="quickview" data-id="${product.id}" style="cursor: pointer;">${product.name}</h6>
+          <h6 class="product-title">
+            <a href="${detailsUrl}" class="text-navy text-decoration-none" title="View Full Clinical & Product Details">${product.name}</a>
+          </h6>
           
           <!-- Rating -->
           <div class="product-rating">

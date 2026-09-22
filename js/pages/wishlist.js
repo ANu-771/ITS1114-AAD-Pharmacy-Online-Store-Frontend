@@ -43,8 +43,8 @@ const WishlistPage = {
 
           if (action === 'add-cart') {
             CartService.addToCart(item, 1);
-          } else if (action === 'quickview') {
-            Modal.showQuickView(item);
+          } else if (action === 'quickview' || action === 'view-details') {
+            window.location.href = `product-details.html?id=${productId}`;
           }
         });
       }

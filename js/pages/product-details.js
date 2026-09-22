@@ -154,8 +154,8 @@ const ProductDetailsPage = {
 
           if (action === 'add-cart') {
             CartService.addToCart(prod, 1);
-          } else if (action === 'quickview') {
-            Modal.showQuickView(prod);
+          } else if (action === 'quickview' || action === 'view-details') {
+            window.location.href = `product-details.html?id=${productId}`;
           } else if (action === 'wishlist') {
             target.classList.toggle('active');
             Toast.show(`Added ${prod.name} to Wishlist!`, 'success');
