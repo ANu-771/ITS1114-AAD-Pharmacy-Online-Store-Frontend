@@ -14,7 +14,7 @@ function createCategoryCard(category) {
 
   return `
     <div class="category-marquee-item">
-      <div class="category-card category-card-${catSlug}" data-category="${category.id}">
+      <div class="category-card category-card-${catSlug}" data-category="${category.id}" data-slug="${catSlug}" style="cursor: pointer;">
         <div class="category-bg-watermark"><i class="bi ${watermarkIcon}"></i></div>
         <div class="category-icon-wrapper">
           <i class="bi ${displayIcon}"></i>

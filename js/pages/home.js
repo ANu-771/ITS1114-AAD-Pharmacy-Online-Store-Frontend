@@ -154,8 +154,8 @@ const HomePage = {
       container.querySelectorAll('.category-card').forEach(card => {
         card.addEventListener('click', (e) => {
           e.preventDefault();
-          const categoryId = card.closest('[data-category]')?.getAttribute('data-category') || card.getAttribute('data-category');
-          HomePage.filterProducts(categoryId);
+          const categorySlug = card.getAttribute('data-slug') || card.getAttribute('data-category') || 'medicines';
+          HomePage.filterProducts(categorySlug);
           document.getElementById('featured-section')?.scrollIntoView({ behavior: 'smooth' });
         });
       });
