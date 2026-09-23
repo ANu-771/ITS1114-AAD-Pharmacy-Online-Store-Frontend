@@ -87,8 +87,8 @@
             <div class="admin-stat-card">
               <div>
                 <span class="admin-stat-label">Gross Sales Revenue</span>
-                <div class="admin-stat-value text-primary">Rs. 284,500</div>
-                <span class="admin-stat-change text-success">Net of discounts</span>
+                <div class="admin-stat-value text-primary" id="rptGrossSales">Rs. 0.00</div>
+                <span class="admin-stat-change text-success" id="rptGrossSalesSubtext"><i class="bi bi-arrow-up-right"></i> Live Database</span>
               </div>
               <div class="admin-stat-icon stat-icon-green"><i class="bi bi-graph-up"></i></div>
             </div>
@@ -97,8 +97,8 @@
             <div class="admin-stat-card">
               <div>
                 <span class="admin-stat-label">Total Orders Processed</span>
-                <div class="admin-stat-value">64 Orders</div>
-                <span class="admin-stat-change text-muted">98.4% On-time dispatch</span>
+                <div class="admin-stat-value" id="rptTotalOrders">0 Orders</div>
+                <span class="admin-stat-change text-muted" id="rptTotalOrdersSubtext">Fulfillment queue</span>
               </div>
               <div class="admin-stat-icon stat-icon-blue"><i class="bi bi-box-seam"></i></div>
             </div>
@@ -107,8 +107,8 @@
             <div class="admin-stat-card">
               <div>
                 <span class="admin-stat-label">Average Basket Value</span>
-                <div class="admin-stat-value">Rs. 4,445</div>
-                <span class="admin-stat-change text-success">+6.2% vs previous period</span>
+                <div class="admin-stat-value" id="rptAvgBasket">Rs. 0.00</div>
+                <span class="admin-stat-change text-success" id="rptAvgBasketSubtext">Calculated Average</span>
               </div>
               <div class="admin-stat-icon stat-icon-purple"><i class="bi bi-cart4"></i></div>
             </div>
@@ -117,7 +117,7 @@
             <div class="admin-stat-card">
               <div>
                 <span class="admin-stat-label">Rx Clinical Verification</span>
-                <div class="admin-stat-value text-success">100%</div>
+                <div class="admin-stat-value text-success" id="rptRxVerification">100%</div>
                 <span class="admin-stat-change text-success">Zero dispensing errors</span>
               </div>
               <div class="admin-stat-icon stat-icon-amber"><i class="bi bi-shield-check"></i></div>

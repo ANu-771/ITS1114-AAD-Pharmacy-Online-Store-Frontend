@@ -60,7 +60,10 @@
             <h1 class="h4 fw-bold text-navy mb-1">Pharmaceutical Control Dashboard</h1>
             <p class="text-muted small mb-0">Live revenue metrics, fulfillment queues, and automated inventory alerts.</p>
           </div>
-          <div class="d-flex gap-2 mt-3 mt-sm-0">
+          <div class="d-flex align-items-center gap-2 mt-3 mt-sm-0">
+            <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" id="btnRefreshDashboard" title="Sync live database metrics">
+              <i class="bi bi-arrow-clockwise" id="refreshIcon"></i> <span id="syncStatusText">Sync Live</span>
+            </button>
             <a href="reports.html" class="btn btn-outline-primary btn-sm">
               <i class="bi bi-file-earmark-pdf me-1"></i> Sales Report
             </a>
@@ -76,8 +79,8 @@
             <div class="admin-stat-card">
               <div>
                 <span class="admin-stat-label">Total Pharmacy Revenue</span>
-                <div class="admin-stat-value" id="kpiRevenue">Rs. 284,500</div>
-                <span class="admin-stat-change text-success"><i class="bi bi-arrow-up-right"></i> +14.8% this month</span>
+                <div class="admin-stat-value" id="kpiRevenue">Rs. 0.00</div>
+                <span class="admin-stat-change text-success" id="kpiRevenueChange"><i class="bi bi-arrow-up-right"></i> Real-Time Database</span>
               </div>
               <div class="admin-stat-icon stat-icon-green">
                 <i class="bi bi-currency-dollar"></i>
@@ -88,9 +91,9 @@
           <div class="col-12 col-sm-6 col-xl-3">
             <div class="admin-stat-card">
               <div>
-                <span class="admin-stat-label">Total Prescription Orders</span>
-                <div class="admin-stat-value" id="kpiOrders">64</div>
-                <span class="admin-stat-change text-success"><i class="bi bi-arrow-up-right"></i> +8.2% from last week</span>
+                <span class="admin-stat-label">Total Store Orders</span>
+                <div class="admin-stat-value" id="kpiOrders">0</div>
+                <span class="admin-stat-change text-success" id="kpiOrdersChange"><i class="bi bi-arrow-up-right"></i> Live Orders</span>
               </div>
               <div class="admin-stat-icon stat-icon-blue">
                 <i class="bi bi-bag-check"></i>
@@ -102,8 +105,8 @@
             <div class="admin-stat-card">
               <div>
                 <span class="admin-stat-label">Active Medical Products</span>
-                <div class="admin-stat-value" id="kpiProducts">48</div>
-                <span class="admin-stat-change text-muted">6 Categories active</span>
+                <div class="admin-stat-value" id="kpiProducts">0</div>
+                <span class="admin-stat-change text-muted" id="kpiProductsSubtext">Loading catalog...</span>
               </div>
               <div class="admin-stat-icon stat-icon-purple">
                 <i class="bi bi-capsule"></i>
@@ -115,8 +118,8 @@
             <div class="admin-stat-card">
               <div>
                 <span class="admin-stat-label">Low Stock Warnings</span>
-                <div class="admin-stat-value text-danger" id="kpiLowStock">3</div>
-                <span class="admin-stat-change text-danger"><i class="bi bi-exclamation-circle"></i> Requires immediate reorder</span>
+                <div class="admin-stat-value text-danger" id="kpiLowStock">0</div>
+                <span class="admin-stat-change text-danger" id="kpiLowStockSubtext"><i class="bi bi-exclamation-circle"></i> Requires immediate reorder</span>
               </div>
               <div class="admin-stat-icon stat-icon-red">
                 <i class="bi bi-exclamation-triangle"></i>
@@ -132,7 +135,7 @@
             <div class="admin-card h-100">
               <div class="admin-card-header">
                 <h5 class="admin-card-title"><i class="bi bi-graph-up-arrow me-2 text-primary"></i>Revenue & Order Trend (2026)</h5>
-                <span class="badge bg-light text-navy border small">Monthly Aggregation</span>
+                <span class="badge bg-light text-navy border small">Real-Time Aggregation</span>
               </div>
               <div class="p-4 text-center">
                 <!-- HTML5 Canvas Visual Chart -->
@@ -147,46 +150,8 @@
               <div class="admin-card-header">
                 <h5 class="admin-card-title"><i class="bi bi-pie-chart me-2 text-primary"></i>Sales by Department</h5>
               </div>
-              <div class="p-4">
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-navy fw-semibold">Prescription Medicines (Rx)</span>
-                    <span class="text-primary fw-bold">42%</span>
-                  </div>
-                  <div class="progress" style="height: 6px;">
-                    <div class="progress-bar bg-primary" style="width: 42%;"></div>
-                  </div>
-                </div>
-
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-navy fw-semibold">Medical Equipment & Devices</span>
-                    <span class="text-primary fw-bold">34%</span>
-                  </div>
-                  <div class="progress" style="height: 6px;">
-                    <div class="progress-bar bg-info" style="width: 34%;"></div>
-                  </div>
-                </div>
-
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-navy fw-semibold">Vitamins & Supplements</span>
-                    <span class="text-primary fw-bold">16%</span>
-                  </div>
-                  <div class="progress" style="height: 6px;">
-                    <div class="progress-bar bg-success" style="width: 16%;"></div>
-                  </div>
-                </div>
-
-                <div class="mb-0">
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-navy fw-semibold">Personal & Baby Care</span>
-                    <span class="text-primary fw-bold">8%</span>
-                  </div>
-                  <div class="progress" style="height: 6px;">
-                    <div class="progress-bar bg-warning" style="width: 8%;"></div>
-                  </div>
-                </div>
+              <div class="p-4" id="categoryDistributionContainer">
+                <!-- Rendered dynamically from live database by admin-dashboard.js -->
               </div>
             </div>
           </div>
