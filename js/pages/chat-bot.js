@@ -41,6 +41,9 @@ const MediMateChatBot = {
     // Prevent duplicate widget injection
     if (document.getElementById('medimate-container')) return;
 
+    const isSubdir = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+    const pathPrefix = isSubdir ? '' : 'pages/';
+
     const container = document.createElement('div');
     container.id = 'medimate-container';
     container.innerHTML = `
@@ -59,7 +62,7 @@ const MediMateChatBot = {
               <i class="bi bi-robot fs-5"></i>
             </div>
             <div>
-              <div class="fw-bold text-white small" id="medimateTitle">MediMate</div>
+              <div class="fw-bold text-white small" id="medimateTitle">MediMate AI</div>
               <small class="text-white-50 d-flex align-items-center" style="font-size: 0.7rem;">
                 <span class="pulse-dot me-1"></span> Clinical & Store AI Advisor
               </small>
@@ -75,6 +78,25 @@ const MediMateChatBot = {
           </div>
         </div>
 
+        <!-- Store Quick Navigator Bar -->
+        <div class="medimate-store-nav" id="medimateStoreNav">
+          <a href="${pathPrefix}products.html" class="medimate-nav-chip" title="Browse all medicines & medical devices">
+            <i class="bi bi-shop text-primary"></i> Catalog
+          </a>
+          <a href="${pathPrefix}categories.html" class="medimate-nav-chip" title="Explore health departments">
+            <i class="bi bi-grid text-info"></i> Categories
+          </a>
+          <a href="${pathPrefix}cart.html" class="medimate-nav-chip" title="View your shopping cart">
+            <i class="bi bi-cart3 text-warning"></i> Cart
+          </a>
+          <a href="${pathPrefix}orders.html" class="medimate-nav-chip" title="Track your medicine orders">
+            <i class="bi bi-box-seam text-success"></i> My Orders
+          </a>
+          <a href="${pathPrefix}contact.html" class="medimate-nav-chip" title="Contact clinical pharmacy hotline">
+            <i class="bi bi-headset text-danger"></i> Helpline
+          </a>
+        </div>
+
         <!-- Chat Body / Messages Container -->
         <div class="ai-chat-body" id="medimateMessages" tabindex="0">
           <!-- Initial Bot Greeting -->
@@ -82,36 +104,45 @@ const MediMateChatBot = {
             <div class="fw-bold text-primary mb-1 d-flex align-items-center gap-1">
               <i class="bi bi-patch-check-fill text-primary"></i> KK PHARMACY Clinical AI Assistant
             </div>
-            👋 Hello! I'm <strong>MediMate</strong>, your personal KK PHARMACY Healthcare & Clinical Assistant.
-            <div class="my-2">
-              How can I help you today? You can ask me about:
-              <ul class="mb-1 ps-3 mt-1 small">
-                <li><strong>Medicines & OTC Guidance</strong> (Dosage, active ingredients, usage)</li>
-                <li><strong>Prescriptions</strong> (How to upload & verify Rx orders)</li>
-                <li><strong>Medical Equipment</strong> (BP monitors, glucometers, nebulizers)</li>
-                <li><strong>Orders & Free Delivery</strong> across Sri Lanka</li>
-              </ul>
+            👋 Hello! I'm <strong>MediMate</strong>, your personal KK PHARMACY Healthcare & Clinical Advisor.
+            <div class="my-2 small">
+              Ask me about authentic medicines, active ingredients, dosage guidelines, equipment, or orders across Sri Lanka!
             </div>
-            <div class="small text-muted border-top pt-1 mt-2">
-              <em>⚠️ Disclaimer: Advice is for informational guidance. Always consult a qualified physician for emergencies.</em>
+
+            <!-- Real Database Products Question Carousel -->
+            <div class="mt-2 pt-2 border-top">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-navy" style="font-size: 0.74rem;">
+                  <i class="bi bi-stars text-warning me-1"></i> Featured Pharmacy Items:
+                </span>
+                <span class="text-muted" style="font-size: 0.68rem;">Click to ask details</span>
+              </div>
+              <div class="product-prompt-carousel" id="medimateProductCarousel">
+                <!-- Dynamically populated from Database Products -->
+                <div class="text-muted small py-2 px-1">Loading store catalog...</div>
+              </div>
+            </div>
+
+            <div class="small text-muted border-top pt-1 mt-2" style="font-size: 0.7rem;">
+              <em>⚠️ Disclaimer: Information is for educational guidance. Always consult a certified physician for emergencies.</em>
             </div>
           </div>
 
           <!-- Suggested Quick Prompts Row -->
-          <div class="quick-prompts-container mt-2 mb-1" id="medimateQuickPrompts">
-            <div class="small fw-bold text-muted mb-1" style="font-size: 0.72rem;">Suggested Questions:</div>
+          <div class="quick-prompts-container mt-1 mb-1" id="medimateQuickPrompts">
+            <div class="small fw-bold text-muted mb-1" style="font-size: 0.72rem;">Suggested Quick Questions:</div>
             <div class="d-flex flex-wrap gap-1">
-              <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What is the adult dosage for Paracetamol?">
-                Paracetamol Dosage
+              <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What is the recommended adult dosage and safety precautions for Paracetamol 500mg?">
+                💊 Paracetamol Dosage
               </button>
-              <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How do I upload a doctor prescription?">
-                Prescription Upload
+              <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How do I upload and verify a prescription order?">
+                📄 Prescription Upload
               </button>
-              <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What medical devices do you have in stock?">
-                Medical Equipment
+              <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What medical devices and monitors do you have in stock?">
+                🩺 Medical Devices
               </button>
-              <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How does free islandwide delivery work?">
-                Free Delivery Info
+              <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How does free islandwide delivery over Rs. 5,000 work across Sri Lanka?">
+                🚚 Free Islandwide Delivery
               </button>
             </div>
           </div>
@@ -130,6 +161,71 @@ const MediMateChatBot = {
     `;
 
     document.body.appendChild(container);
+    MediMateChatBot.loadProductPrompts();
+  },
+
+  /**
+   * Load real products from database/ProductService and render as question cards with images
+   */
+  loadProductPrompts: async () => {
+    const carousel = document.getElementById('medimateProductCarousel');
+    if (!carousel) return;
+
+    try {
+      let products = [];
+      if (typeof ProductService !== 'undefined') {
+        products = await ProductService.getProducts('all');
+      }
+
+      if (!products || products.length === 0) {
+        carousel.innerHTML = '<div class="text-muted small">No items currently loaded.</div>';
+        return;
+      }
+
+      const isSubdir = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+      const imgPrefix = isSubdir ? '../' : '';
+
+      // Select diverse sample items (e.g. Paracetamol, BP Monitor, Glucose Kit, Vitamin C, First Aid)
+      const sampleProducts = products.slice(0, 6);
+
+      let html = '';
+      sampleProducts.forEach(p => {
+        let imgSrc = p.image || 'assets/images/medicine_1.png';
+        if (!imgSrc.startsWith('http://') && !imgSrc.startsWith('https://') && !imgSrc.startsWith('../')) {
+          imgSrc = imgPrefix + imgSrc;
+        }
+
+        const priceFormatted = parseFloat(p.price || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        const questionPrompt = `Tell me about ${p.name}. What are its main uses, price (Rs. ${priceFormatted}), dosage, and precautions?`;
+
+        html += `
+          <div class="product-prompt-card" data-prompt="${questionPrompt.replace(/"/g, '&quot;')}" title="Ask MediMate about ${p.name}">
+            <img src="${imgSrc}" alt="${p.name}" class="product-prompt-img" onerror="this.src='${imgPrefix}assets/images/medicine_1.png'">
+            <div class="product-prompt-title">${p.name}</div>
+            <div class="product-prompt-price">Rs. ${priceFormatted}</div>
+            <button type="button" class="btn-ask-product">
+              <i class="bi bi-chat-dots me-1"></i> Ask AI
+            </button>
+          </div>
+        `;
+      });
+
+      carousel.innerHTML = html;
+
+      // Add click listeners to cards
+      carousel.querySelectorAll('.product-prompt-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const prompt = card.getAttribute('data-prompt');
+          if (prompt && !MediMateChatBot.isGenerating) {
+            MediMateChatBot.handleUserMessage(prompt);
+          }
+        });
+      });
+
+    } catch (e) {
+      console.warn('[MediMate] Could not load product question cards:', e);
+      if (carousel) carousel.innerHTML = '';
+    }
   },
 
   /**
@@ -236,7 +332,39 @@ const MediMateChatBot = {
               <div class="fw-bold text-primary mb-1 d-flex align-items-center gap-1">
                 <i class="bi bi-patch-check-fill text-primary"></i> KK PHARMACY Clinical AI Assistant
               </div>
-              Chat history cleared. How can I assist you with your health or medicines today?
+              👋 Chat history cleared. How can I assist you with your health or medicines today?
+              
+              <!-- Real Database Products Question Carousel -->
+              <div class="mt-2 pt-2 border-top">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-bold text-navy" style="font-size: 0.74rem;">
+                    <i class="bi bi-stars text-warning me-1"></i> Featured Pharmacy Items:
+                  </span>
+                  <span class="text-muted" style="font-size: 0.68rem;">Click to ask details</span>
+                </div>
+                <div class="product-prompt-carousel" id="medimateProductCarousel">
+                  <div class="text-muted small py-2 px-1">Loading store catalog...</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Suggested Quick Prompts Row -->
+            <div class="quick-prompts-container mt-1 mb-1" id="medimateQuickPrompts">
+              <div class="small fw-bold text-muted mb-1" style="font-size: 0.72rem;">Suggested Quick Questions:</div>
+              <div class="d-flex flex-wrap gap-1">
+                <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What is the recommended adult dosage and safety precautions for Paracetamol 500mg?">
+                  💊 Paracetamol Dosage
+                </button>
+                <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How do I upload and verify a prescription order?">
+                  📄 Prescription Upload
+                </button>
+                <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What medical devices and monitors do you have in stock?">
+                  🩺 Medical Devices
+                </button>
+                <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How does free islandwide delivery over Rs. 5,000 work across Sri Lanka?">
+                  🚚 Free Islandwide Delivery
+                </button>
+              </div>
             </div>
           `;
           if (input) {
@@ -245,6 +373,9 @@ const MediMateChatBot = {
           }
           const sendBtn = document.getElementById('medimateSendBtn');
           if (sendBtn) sendBtn.disabled = false;
+
+          MediMateChatBot.loadProductPrompts();
+          MediMateChatBot._attachQuickPromptListeners();
         }
       });
     }
@@ -294,13 +425,15 @@ const MediMateChatBot = {
 
     // 2. Render Typing Indicator
     const typingIndicator = document.createElement('div');
-    typingIndicator.className = 'chat-bubble chat-bubble-ai text-muted fst-italic shadow-sm';
+    typingIndicator.className = 'chat-bubble chat-bubble-ai shadow-sm d-flex align-items-center gap-2';
     typingIndicator.id = 'medimateTyping';
     typingIndicator.innerHTML = `
-      <div class="d-flex align-items-center gap-2">
-        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
-        <span style="font-size: 0.8rem;">MediMate is consulting clinical database...</span>
+      <div class="medimate-typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
+      <span class="medimate-typing-text">MediMate is typing...</span>
     `;
     messages.appendChild(typingIndicator);
     messages.scrollTop = messages.scrollHeight;
