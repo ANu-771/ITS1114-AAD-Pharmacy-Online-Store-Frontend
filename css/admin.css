@@ -369,6 +369,39 @@
   border-color: #FCA5A5;
 }
 
+.btn-view-order {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-view-order:hover {
+  background-color: #0066B3 !important;
+  color: #FFFFFF !important;
+  transform: scale(1.08);
+  box-shadow: 0 4px 10px rgba(0, 102, 179, 0.25);
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #adminOrderDetailsModal,
+  #adminOrderDetailsModal * {
+    visibility: visible;
+  }
+  #adminOrderDetailsModal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .modal-footer,
+  .btn-close {
+    display: none !important;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 991.98px) {
   #admin-sidebar-container {
