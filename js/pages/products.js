@@ -143,25 +143,25 @@ const ProductsPage = {
         const pIdStr = String(p.categoryId || '');
 
         if (selectedCat === 'prescription') {
-          return p.requiresPrescription === true || p.rxRequired === true || pCat.includes('prescription') || pIdStr === '2';
+          return p.requiresPrescription === true || p.rxRequired === true || pCat === 'prescription' || pIdStr === '2';
         }
         if (selectedCat === 'medicines') {
-          return pCat === 'medicines' || pCatName.includes('medicine') || pIdStr === '1';
+          return (pCat === 'medicines' || pCatName === 'medicines' || pIdStr === '1') && pCat !== 'first-aid' && pCat !== 'vitamins' && pCat !== 'equipment';
         }
         if (selectedCat === 'equipment') {
-          return pCat === 'equipment' || pCatName.includes('equipment') || pIdStr === '3';
+          return (pCat === 'equipment' || pCatName === 'medical-equipment' || pIdStr === '3') && !pCat.includes('vitamin');
         }
         if (selectedCat === 'vitamins') {
-          return pCat === 'vitamins' || pCatName.includes('vitamin') || pIdStr === '4';
+          return pCat === 'vitamins' || pCatName === 'vitamins-&-supplements' || pCatName.includes('vitamin') || pIdStr === '4';
         }
         if (selectedCat === 'personal-care') {
-          return pCat === 'personal-care' || pCatName.includes('personal') || pIdStr === '5';
+          return pCat === 'personal-care' || pCatName === 'personal-care' || pIdStr === '5';
         }
         if (selectedCat === 'baby-care') {
-          return pCat === 'baby-care' || pCatName.includes('baby') || pIdStr === '6';
+          return pCat === 'baby-care' || pCatName === 'baby-&-mother-care' || pCatName === 'baby-care' || pIdStr === '6';
         }
         if (selectedCat === 'first-aid') {
-          return pCat === 'first-aid' || pCatName.includes('first') || pIdStr === '7';
+          return pCat === 'first-aid' || pCatName === 'first-aid' || pIdStr === '7';
         }
 
         return pCat === selectedCat || pCatName === selectedCat || pIdStr === selectedCat;

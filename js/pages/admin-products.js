@@ -423,10 +423,16 @@ const AdminProductsPage = {
         const catValue = catSelect.value;
         const catText = catSelect.options[catSelect.selectedIndex]?.text || 'Medicines';
 
-        let catId = 1;
-        if (catValue === 'equipment') catId = 2;
-        else if (catValue === 'vitamins') catId = 3;
-        else if (catValue === 'personal-care') catId = 4;
+        const categoryMap = {
+          'medicines': 1,
+          'prescription': 2,
+          'equipment': 3,
+          'vitamins': 4,
+          'personal-care': 5,
+          'baby-care': 6,
+          'first-aid': 7
+        };
+        const catId = categoryMap[catValue] || 1;
 
         const stockInput = document.getElementById('mProdStock');
         const rawStock = stockInput ? parseInt(stockInput.value, 10) : 50;
