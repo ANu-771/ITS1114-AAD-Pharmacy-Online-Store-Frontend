@@ -1,9 +1,27 @@
 /**
  * KK PHARMACY ONLINE PHARMACY - CART SERVICE (js/services/cart-service.js)
- * Manages shopping cart state, guest LocalStorage persistence, and authenticated Spring Boot Cart API synchronization.
+ * Manages user-isolated shopping cart state, guest LocalStorage persistence, and authenticated Spring Boot Cart API synchronization.
  */
 const CartService = {
   _cartItems: [],
+
+  /**
+   * Derive user-scoped storage key so each account and guest maintains an independent cart
+   */
+  _getStorageKey: () => {
+    try {
+      if (typeof AuthService !== 'undefined' && AuthService.isAuthenticated()) {
+        const user = AuthService.getCurrentUser();
+        if (user && (user.email || user.id)) {
+          const userIdentifier = (user.email || user.id).toString().toLowerCase().replace(/[^a-z0-9_@.-]/g, '_');
+          return `${CONFIG.STORAGE_KEYS.CART_ITEMS}_${userIdentifier}`;
+        }
+      }
+    } catch (e) {
+      console.warn('[CartService] Error getting user cart key:', e);
+    }
+    return `${CONFIG.STORAGE_KEYS.CART_ITEMS}_guest`;
+  },
 
   /**
    * Normalize backend CartItemDTO into frontend item structure
@@ -26,11 +44,12 @@ const CartService = {
   },
 
   /**
-   * Get current cart items directly from persistent storage or backend
+   * Get current cart items directly from persistent storage or backend for active user
    */
   getCartItems: () => {
     try {
-      const stored = StorageService.getItem(CONFIG.STORAGE_KEYS.CART_ITEMS, []);
+      const key = CartService._getStorageKey();
+      const stored = StorageService.getItem(key, []);
       CartService._cartItems = Array.isArray(stored) ? stored : [];
     } catch (e) {
       CartService._cartItems = [];
@@ -42,12 +61,13 @@ const CartService = {
    * Fetch latest cart from backend for authenticated users, or local storage for guests
    */
   fetchCart: async () => {
-    if (!CONFIG.USE_MOCK_DATA && AuthService.isAuthenticated()) {
+    if (!CONFIG.USE_MOCK_DATA && typeof AuthService !== 'undefined' && AuthService.isAuthenticated()) {
       try {
         const cartDto = await CartAPI.getCart();
         if (cartDto && Array.isArray(cartDto.items)) {
           CartService._cartItems = cartDto.items.map(CartService._normalizeItem);
-          StorageService.setItem(CONFIG.STORAGE_KEYS.CART_ITEMS, CartService._cartItems);
+          const key = CartService._getStorageKey();
+          StorageService.setItem(key, CartService._cartItems);
           window.dispatchEvent(new CustomEvent('cart:updated', {
             detail: {
               count: CartService.getCartCount(),
@@ -90,12 +110,13 @@ const CartService = {
     const qtyToAdd = parseInt(quantity, 10) || 1;
 
     // Authenticated Live REST API Integration
-    if (!CONFIG.USE_MOCK_DATA && AuthService.isAuthenticated()) {
+    if (!CONFIG.USE_MOCK_DATA && typeof AuthService !== 'undefined' && AuthService.isAuthenticated()) {
       try {
         const cartDto = await CartAPI.addToCart(prodId, qtyToAdd);
         if (cartDto && Array.isArray(cartDto.items)) {
           CartService._cartItems = cartDto.items.map(CartService._normalizeItem);
-          StorageService.setItem(CONFIG.STORAGE_KEYS.CART_ITEMS, CartService._cartItems);
+          const key = CartService._getStorageKey();
+          StorageService.setItem(key, CartService._cartItems);
           window.dispatchEvent(new CustomEvent('cart:updated', {
             detail: {
               count: CartService.getCartCount(),
@@ -154,13 +175,14 @@ const CartService = {
     const items = CartService.getCartItems();
     const item = items.find(i => (i.productId || i.id) === productId || i.cartItemId === productId);
 
-    if (!CONFIG.USE_MOCK_DATA && AuthService.isAuthenticated()) {
+    if (!CONFIG.USE_MOCK_DATA && typeof AuthService !== 'undefined' && AuthService.isAuthenticated()) {
       try {
         const targetId = (item && item.cartItemId) ? item.cartItemId : productId;
         const cartDto = await CartAPI.updateQuantity(targetId, newQty);
         if (cartDto && Array.isArray(cartDto.items)) {
           CartService._cartItems = cartDto.items.map(CartService._normalizeItem);
-          StorageService.setItem(CONFIG.STORAGE_KEYS.CART_ITEMS, CartService._cartItems);
+          const key = CartService._getStorageKey();
+          StorageService.setItem(key, CartService._cartItems);
           window.dispatchEvent(new CustomEvent('cart:updated', {
             detail: {
               count: CartService.getCartCount(),
@@ -189,13 +211,14 @@ const CartService = {
     const items = CartService.getCartItems();
     const item = items.find(i => (i.productId || i.id) === productId || i.cartItemId === productId);
 
-    if (!CONFIG.USE_MOCK_DATA && AuthService.isAuthenticated()) {
+    if (!CONFIG.USE_MOCK_DATA && typeof AuthService !== 'undefined' && AuthService.isAuthenticated()) {
       try {
         const targetId = (item && item.cartItemId) ? item.cartItemId : productId;
         const cartDto = await CartAPI.removeFromCart(targetId);
         if (cartDto && Array.isArray(cartDto.items)) {
           CartService._cartItems = cartDto.items.map(CartService._normalizeItem);
-          StorageService.setItem(CONFIG.STORAGE_KEYS.CART_ITEMS, CartService._cartItems);
+          const key = CartService._getStorageKey();
+          StorageService.setItem(key, CartService._cartItems);
           window.dispatchEvent(new CustomEvent('cart:updated', {
             detail: {
               count: CartService.getCartCount(),
@@ -215,10 +238,10 @@ const CartService = {
   },
 
   /**
-   * Clear the entire shopping cart
+   * Clear the entire shopping cart for active user
    */
   clearCart: async () => {
-    if (!CONFIG.USE_MOCK_DATA && AuthService.isAuthenticated()) {
+    if (!CONFIG.USE_MOCK_DATA && typeof AuthService !== 'undefined' && AuthService.isAuthenticated()) {
       try {
         await CartAPI.clearCart().catch(() => {});
       } catch (err) {
@@ -226,7 +249,8 @@ const CartService = {
       }
     }
     CartService._cartItems = [];
-    StorageService.setItem(CONFIG.STORAGE_KEYS.CART_ITEMS, []);
+    const key = CartService._getStorageKey();
+    StorageService.setItem(key, []);
     window.dispatchEvent(new CustomEvent('cart:updated', { 
       detail: { count: 0, subtotal: 0, items: [] } 
     }));
@@ -236,20 +260,22 @@ const CartService = {
    * Synchronize local guest cart to backend upon login
    */
   syncLocalCartToBackend: async () => {
-    if (CONFIG.USE_MOCK_DATA || !AuthService.isAuthenticated()) return;
-    const localItems = CartService.getCartItems();
-    if (!localItems || localItems.length === 0) {
+    if (CONFIG.USE_MOCK_DATA || typeof AuthService === 'undefined' || !AuthService.isAuthenticated()) return;
+    const guestItems = StorageService.getItem(`${CONFIG.STORAGE_KEYS.CART_ITEMS}_guest`, []);
+    if (!guestItems || guestItems.length === 0) {
       await CartService.fetchCart();
       return;
     }
 
     try {
-      for (const item of localItems) {
+      for (const item of guestItems) {
         const prodId = item.productId || item.id;
         const qty = item.quantity || 1;
         await CartAPI.addToCart(prodId, qty).catch(() => {});
       }
-      // Re-fetch merged cart
+      // Clear guest cart once synced to user account
+      StorageService.setItem(`${CONFIG.STORAGE_KEYS.CART_ITEMS}_guest`, []);
+      // Re-fetch merged backend cart
       await CartService.fetchCart();
     } catch (err) {
       console.warn('[CartService] Cart synchronization error:', err);
@@ -257,10 +283,11 @@ const CartService = {
   },
 
   /**
-   * Internal persistence helper for guest state
+   * Internal persistence helper for active user state
    */
   _save: () => {
-    StorageService.setItem(CONFIG.STORAGE_KEYS.CART_ITEMS, CartService._cartItems);
+    const key = CartService._getStorageKey();
+    StorageService.setItem(key, CartService._cartItems);
     window.dispatchEvent(new CustomEvent('cart:updated', { 
       detail: { 
         count: CartService.getCartCount(),
@@ -270,3 +297,15 @@ const CartService = {
     }));
   }
 };
+
+// Automatically switch cart when user logs in or logs out
+window.addEventListener('auth:state-changed', async () => {
+  if (typeof AuthService !== 'undefined' && AuthService.isAuthenticated()) {
+    await CartService.fetchCart();
+  } else {
+    const items = CartService.getCartItems();
+    window.dispatchEvent(new CustomEvent('cart:updated', {
+      detail: { count: CartService.getCartCount(), subtotal: CartService.getCartSubtotal(), items: items }
+    }));
+  }
+});
