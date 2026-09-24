@@ -66,6 +66,24 @@
         </div>
       </div>
 
+      <!-- Guest Cart Sign-in Prompt Banner -->
+      <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 d-none" id="guestCartBanner" style="background: linear-gradient(135deg, #EFF6FF 0%, #F0FDFA 100%); border-left: 4px solid var(--primary-color) !important;">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle p-2 bg-white shadow-xs text-primary fs-4 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; min-width: 44px;">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <div>
+              <div class="fw-bold text-navy fs-6">Already have an account?</div>
+              <small class="text-muted">Sign in to sync your cart across devices and access saved prescription orders.</small>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary-pharmacy btn-sm px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#authModal">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In / Login
+          </button>
+        </div>
+      </div>
+
       <div class="row g-4" id="cartContentWrapper">
         
         <!-- Cart Items Table -->

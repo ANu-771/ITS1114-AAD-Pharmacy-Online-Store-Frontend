@@ -1,8 +1,11 @@
 /**
  * KK PHARMACY ONLINE PHARMACY - CHECKOUT CONTROLLER (js/pages/checkout.js)
- * Manages customer information validation, prescription upload dropzone, payment method selection, and order placement.
+ * Manages customer information validation, guest authentication prompt banner & modal,
+ * prescription upload dropzone, payment method selection, and order placement.
  */
 const CheckoutPage = {
+  guestConfirmed: false,
+
   init: () => {
     const items = CartService.getCartItems();
     if (!items || items.length === 0) {
@@ -11,15 +14,40 @@ const CheckoutPage = {
       return;
     }
 
-    // Prefill customer profile if authenticated
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      if (document.getElementById('custFullName')) document.getElementById('custFullName').value = user.fullName || '';
-      if (document.getElementById('custEmail')) document.getElementById('custEmail').value = user.email || '';
-    }
-
+    CheckoutPage.updateAuthUI();
     CheckoutPage.renderMiniSummary(items);
     CheckoutPage.attachListeners();
+
+    // Listen to global auth state changes (e.g. user logs in from banner or modal)
+    window.addEventListener('auth:state-changed', () => {
+      CheckoutPage.updateAuthUI();
+      const updatedItems = CartService.getCartItems();
+      CheckoutPage.renderMiniSummary(updatedItems);
+    });
+  },
+
+  /**
+   * Update banner and customer fields based on current authentication state
+   */
+  updateAuthUI: () => {
+    const banner = document.getElementById('guestCheckoutBanner');
+    const user = AuthService.getCurrentUser();
+    const isAuth = AuthService.isAuthenticated();
+
+    if (isAuth && user) {
+      if (banner) banner.classList.add('d-none');
+      if (document.getElementById('custFullName')) {
+        document.getElementById('custFullName').value = user.fullName || '';
+      }
+      if (document.getElementById('custEmail')) {
+        document.getElementById('custEmail').value = user.email || '';
+      }
+      if (document.getElementById('custPhone') && user.phone) {
+        document.getElementById('custPhone').value = user.phone;
+      }
+    } else {
+      if (banner) banner.classList.remove('d-none');
+    }
   },
 
   renderMiniSummary: (items) => {
@@ -78,7 +106,7 @@ const CheckoutPage = {
   },
 
   attachListeners: () => {
-    // Prescription dropzone file select
+    // 1. Prescription dropzone file select
     const dropzone = document.getElementById('prescriptionDropzone');
     const fileInput = document.getElementById('prescriptionFileInput');
     const previewBox = document.getElementById('rxPreviewBox');
@@ -109,7 +137,25 @@ const CheckoutPage = {
       });
     }
 
-    // Form Submission
+    // 2. Guest Auth Prompt Modal Button Listeners
+    const promptSignInBtn = document.getElementById('promptSignInBtn');
+    const guestPromptModalEl = document.getElementById('guestAuthPromptModal');
+    const authModalEl = document.getElementById('authModal');
+
+    if (promptSignInBtn) {
+      promptSignInBtn.addEventListener('click', () => {
+        if (guestPromptModalEl) {
+          const bsPrompt = bootstrap.Modal.getInstance(guestPromptModalEl);
+          if (bsPrompt) bsPrompt.hide();
+        }
+        if (authModalEl) {
+          const bsAuth = new bootstrap.Modal(authModalEl);
+          bsAuth.show();
+        }
+      });
+    }
+
+    // 3. Form Submission
     const form = document.getElementById('checkoutForm');
     if (form && !form._hasSubmitHandler) {
       form._hasSubmitHandler = true;
@@ -123,53 +169,69 @@ const CheckoutPage = {
           return;
         }
 
-        const items = CartService.getCartItems();
-        if (!items || items.length === 0) {
-          Toast.show('Your cart is empty. Please add items to proceed.', 'warning');
-          return;
-        }
-
-        const subtotal = items.reduce((sum, i) => sum + ((parseFloat(i.price) || 0) * (parseInt(i.quantity, 10) || 1)), 0);
-        const deliveryFee = subtotal >= CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : 350.00;
-        const total = subtotal + deliveryFee;
-
-        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'Credit Card';
-
-        const orderPayload = {
-          customerName: document.getElementById('custFullName')?.value.trim() || 'Valued Patient',
-          customerEmail: document.getElementById('custEmail')?.value.trim() || 'user@example.com',
-          customerPhone: document.getElementById('custPhone')?.value.trim() || '+94 77 123 4567',
-          city: document.getElementById('custCity')?.value || 'Colombo',
-          address: document.getElementById('custAddress')?.value.trim() || 'Colombo, Sri Lanka',
-          postalCode: document.getElementById('custZip')?.value.trim() || '',
-          paymentMethod: paymentMethod,
-          items: items,
-          subtotal: subtotal,
-          deliveryFee: deliveryFee,
-          total: total
-        };
-
-        const submitBtn = document.getElementById('placeOrderBtn');
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing Healthcare Order...';
-        }
-
-        try {
-          const createdOrder = await OrderService.placeOrder(orderPayload);
-          Toast.show('Order placed successfully! Transferring to invoice...', 'success');
-          
-          setTimeout(() => {
-            window.location.href = `order-details.html?id=${createdOrder.id || createdOrder.orderNumber}`;
-          }, 800);
-        } catch (err) {
-          Toast.show(err.message || 'Failed to place order. Please try again.', 'error');
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="bi bi-bag-check me-2"></i> Place & Confirm Order';
+        // If user is not authenticated, prompt them to sign in
+        if (!AuthService.isAuthenticated()) {
+          if (guestPromptModalEl) {
+            const bsPrompt = new bootstrap.Modal(guestPromptModalEl);
+            bsPrompt.show();
+            return;
           }
         }
+
+        await CheckoutPage.executeOrderPlacement();
       });
+    }
+  },
+
+  /**
+   * Execute actual order submission
+   */
+  executeOrderPlacement: async () => {
+    const items = CartService.getCartItems();
+    if (!items || items.length === 0) {
+      Toast.show('Your cart is empty. Please add items to proceed.', 'warning');
+      return;
+    }
+
+    const subtotal = items.reduce((sum, i) => sum + ((parseFloat(i.price) || 0) * (parseInt(i.quantity, 10) || 1)), 0);
+    const deliveryFee = subtotal >= CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : 350.00;
+    const total = subtotal + deliveryFee;
+
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'Credit Card';
+
+    const orderPayload = {
+      customerName: document.getElementById('custFullName')?.value.trim() || 'Valued Patient',
+      customerEmail: document.getElementById('custEmail')?.value.trim() || 'user@example.com',
+      customerPhone: document.getElementById('custPhone')?.value.trim() || '+94 77 123 4567',
+      city: document.getElementById('custCity')?.value || 'Colombo',
+      address: document.getElementById('custAddress')?.value.trim() || 'Colombo, Sri Lanka',
+      postalCode: document.getElementById('custZip')?.value.trim() || '',
+      paymentMethod: paymentMethod,
+      items: items,
+      subtotal: subtotal,
+      deliveryFee: deliveryFee,
+      total: total
+    };
+
+    const submitBtn = document.getElementById('placeOrderBtn');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing Healthcare Order...';
+    }
+
+    try {
+      const createdOrder = await OrderService.placeOrder(orderPayload);
+      Toast.show('Order placed successfully! Transferring to invoice...', 'success');
+      
+      setTimeout(() => {
+        window.location.href = `order-details.html?id=${createdOrder.id || createdOrder.orderNumber}`;
+      }, 800);
+    } catch (err) {
+      Toast.show(err.message || 'Failed to place order. Please try again.', 'error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="bi bi-bag-check me-2"></i> Place & Confirm Order';
+      }
     }
   }
 };
