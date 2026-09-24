@@ -21,7 +21,23 @@ const LoginPage = {
     const form = document.getElementById('standaloneLoginForm');
     const emailInput = document.getElementById('loginEmailInput');
     const passInput = document.getElementById('loginPasswordInput');
+    const errorAlert = document.getElementById('loginErrorAlert');
+    const errorText = document.getElementById('loginErrorText');
     const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+
+    // Auto-clear error alerts and invalid styles on typing
+    [emailInput, passInput].forEach(input => {
+      if (input) {
+        input.addEventListener('input', () => {
+          if (errorAlert) {
+            errorAlert.classList.add('d-none');
+            errorAlert.classList.remove('d-flex');
+          }
+          if (emailInput) emailInput.classList.remove('is-invalid');
+          if (passInput) passInput.classList.remove('is-invalid');
+        });
+      }
+    });
 
     if (form) {
       form.addEventListener('submit', async (e) => {
@@ -29,8 +45,19 @@ const LoginPage = {
         const email = emailInput ? emailInput.value.trim() : '';
         const password = passInput ? passInput.value.trim() : '';
 
+        if (errorAlert) {
+          errorAlert.classList.add('d-none');
+          errorAlert.classList.remove('d-flex');
+        }
+
         if (!email || !password) {
-          Toast.show('Please enter both email and password.', 'warning');
+          if (errorAlert && errorText) {
+            errorText.textContent = 'Please enter both email and password.';
+            errorAlert.classList.remove('d-none');
+            errorAlert.classList.add('d-flex');
+          }
+          if (!email && emailInput) emailInput.classList.add('is-invalid');
+          if (!password && passInput) passInput.classList.add('is-invalid');
           return;
         }
 
@@ -52,10 +79,20 @@ const LoginPage = {
             }
           }, 800);
         } catch (err) {
-          Toast.show(err.message || 'Login failed. Please check credentials.', 'error');
+          const errMsg = (err && err.message) ? err.message : 'Your email or password is incorrect. Please check your credentials.';
+          if (errorAlert && errorText) {
+            errorText.textContent = errMsg;
+            errorAlert.classList.remove('d-none');
+            errorAlert.classList.add('d-flex');
+          } else {
+            Toast.show(errMsg, 'error');
+          }
+          if (emailInput) emailInput.classList.add('is-invalid');
+          if (passInput) passInput.classList.add('is-invalid');
+        } finally {
           if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = 'Sign In to Account';
+            submitBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i> Sign In to Account';
           }
         }
       });

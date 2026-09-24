@@ -87,6 +87,12 @@ const App = {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body p-4">
+                <!-- Professional Inline Error Alert -->
+                <div class="alert alert-danger py-2 px-3 small rounded-3 d-none align-items-center gap-2 mb-3" id="modalLoginErrorAlert" role="alert">
+                  <i class="bi bi-exclamation-octagon-fill text-danger fs-5 flex-shrink-0"></i>
+                  <div class="flex-grow-1" id="modalLoginErrorText">Invalid email or password. Please try again.</div>
+                </div>
+
                 <form id="modalLoginForm">
                   <div class="mb-3">
                     <label class="form-label small fw-semibold">Email or Username</label>
@@ -109,7 +115,7 @@ const App = {
                     </div>
                     <a href="#" class="small text-primary text-decoration-none">Forgot Password?</a>
                   </div>
-                  <button type="submit" class="btn btn-primary-pharmacy w-100 py-2 mb-3">
+                  <button type="submit" class="btn btn-primary-pharmacy w-100 py-2 mb-3" id="modalLoginSubmitBtn">
                     <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Account
                   </button>
                   
@@ -127,11 +133,41 @@ const App = {
     }
 
     const form = document.getElementById('modalLoginForm');
+    const emailInput = document.getElementById('modalLoginEmail');
+    const passInput = document.getElementById('modalLoginPassword');
+    const errorAlert = document.getElementById('modalLoginErrorAlert');
+    const errorText = document.getElementById('modalLoginErrorText');
+    const submitBtn = document.getElementById('modalLoginSubmitBtn');
+
+    // Auto-clear error when user types
+    [emailInput, passInput].forEach(input => {
+      if (input) {
+        input.addEventListener('input', () => {
+          if (errorAlert) {
+            errorAlert.classList.add('d-none');
+            errorAlert.classList.remove('d-flex');
+          }
+          if (passInput) passInput.classList.remove('is-invalid');
+          if (emailInput) emailInput.classList.remove('is-invalid');
+        });
+      }
+    });
+
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('modalLoginEmail').value;
-        const password = document.getElementById('modalLoginPassword').value;
+        const email = emailInput ? emailInput.value.trim() : '';
+        const password = passInput ? passInput.value.trim() : '';
+
+        if (errorAlert) {
+          errorAlert.classList.add('d-none');
+          errorAlert.classList.remove('d-flex');
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Authenticating...';
+        }
 
         try {
           await AuthService.login(email, password);
@@ -143,7 +179,19 @@ const App = {
             window.location.reload();
           }
         } catch (err) {
-          Toast.show(err.message || 'Login failed', 'error');
+          const errMsg = (err && err.message) ? err.message : 'Your email or password is incorrect. Please check your credentials.';
+          if (errorAlert && errorText) {
+            errorText.textContent = errMsg;
+            errorAlert.classList.remove('d-none');
+            errorAlert.classList.add('d-flex');
+          }
+          if (passInput) passInput.classList.add('is-invalid');
+          if (emailInput) emailInput.classList.add('is-invalid');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Account';
+          }
         }
       });
     }
