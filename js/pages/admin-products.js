@@ -461,10 +461,11 @@ const AdminProductsPage = {
         const editIdVal = document.getElementById('mProdId')?.value;
         const isEditing = Boolean(editIdVal);
 
+        const brandName = document.getElementById('mProdBrand') ? document.getElementById('mProdBrand').value.trim() : 'KK PHARMACY';
+
         const productPayload = {
           name: document.getElementById('mProdName').value.trim(),
-          brand: document.getElementById('mProdBrand').value.trim(),
-          brandId: 1,
+          brand: brandName || 'KK PHARMACY',
           category: catValue,
           categoryName: catText,
           categoryId: catId,
