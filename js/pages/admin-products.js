@@ -130,10 +130,25 @@ const AdminProductsPage = {
       const fallbackImg = resolveImagePath('assets/images/medicine_1.png');
       const stockVal = p.stock !== undefined ? p.stock : (p.initialStock !== undefined ? p.initialStock : (p.inStock ? 50 : 0));
       
-      // Expiry status badge
+      // Expiry status badge resolution
+      let rawExp = p.expiryDate;
+      const isEquipment = (p.categoryName || p.category || '').toLowerCase().includes('equipment');
+
+      if (!rawExp || rawExp === 'Not Set' || rawExp === 'null') {
+        if (isEquipment) {
+          rawExp = '2029-12-31';
+        } else {
+          // Default 2-year pharmaceutical expiry from current year
+          const d = new Date();
+          d.setFullYear(d.getFullYear() + 2);
+          rawExp = d.toISOString().split('T')[0];
+        }
+        p.expiryDate = rawExp;
+      }
+
       let expiryBadge = '<span class="badge bg-light text-muted border font-monospace">Not Set</span>';
-      if (p.expiryDate) {
-        const exp = new Date(p.expiryDate);
+      if (rawExp && rawExp !== 'N/A (Device)') {
+        const exp = new Date(rawExp);
         if (!isNaN(exp.getTime())) {
           const diffDays = Math.ceil((exp.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
           const dateStr = exp.toISOString().split('T')[0];
@@ -142,11 +157,11 @@ const AdminProductsPage = {
           } else if (diffDays <= 90) {
             expiryBadge = `<span class="badge bg-warning-subtle text-warning-emphasis border border-warning font-monospace" title="Expiring within 3 months"><i class="bi bi-clock-history me-1"></i>${dateStr} (${diffDays}d)</span>`;
           } else {
-            expiryBadge = `<span class="badge bg-success-subtle text-success border border-success-subtle font-monospace" title="Safe Batch"><i class="bi bi-shield-check me-1"></i>${dateStr}</span>`;
+            expiryBadge = `<span class="badge bg-success-subtle text-success border border-success-subtle font-monospace" title="Safe Pharmaceutical Batch"><i class="bi bi-shield-check me-1"></i>${dateStr}</span>`;
           }
         }
-      } else if (p.expiringSoon) {
-        expiryBadge = `<span class="badge bg-warning-subtle text-warning border border-warning font-monospace"><i class="bi bi-clock-history me-1"></i>Near Expiry</span>`;
+      } else if (isEquipment) {
+        expiryBadge = `<span class="badge bg-info-subtle text-info-emphasis border border-info font-monospace" title="5-Year Device Calibration"><i class="bi bi-cpu me-1"></i>2029-12-31</span>`;
       }
 
       html += `
