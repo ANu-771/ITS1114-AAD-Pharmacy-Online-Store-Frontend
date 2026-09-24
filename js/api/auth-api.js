@@ -39,5 +39,26 @@ const AuthAPI = {
    */
   logout: async () => {
     return await apiClient.post('/auth/logout', {});
+  },
+
+  /**
+   * Request password reset OTP (POST /api/v1/auth/forgot-password)
+   */
+  forgotPassword: async (email) => {
+    return await apiClient.post('/auth/forgot-password', { email });
+  },
+
+  /**
+   * Verify 6-digit OTP code (POST /api/v1/auth/verify-otp)
+   */
+  verifyOtp: async (email, otpCode) => {
+    return await apiClient.post('/auth/verify-otp', { email, otpCode });
+  },
+
+  /**
+   * Reset password with OTP (POST /api/v1/auth/reset-password)
+   */
+  resetPassword: async (email, otpCode, newPassword) => {
+    return await apiClient.post('/auth/reset-password', { email, otpCode, newPassword });
   }
 };

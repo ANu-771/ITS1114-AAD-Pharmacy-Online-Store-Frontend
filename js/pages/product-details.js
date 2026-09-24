@@ -143,6 +143,19 @@ const ProductDetailsPage = {
         specExpiryEl.innerHTML = '<span class="text-success fw-semibold"><i class="bi bi-patch-check-fill me-1"></i>Standard 2-Year Manufacturer Quality Guarantee</span>';
       }
     }
+
+    // Wishlist Button State
+    const wishlistBtn = document.getElementById('detailWishlistBtn');
+    if (wishlistBtn) {
+      const isWishlisted = typeof WishlistService !== 'undefined' && WishlistService.isInWishlist(product.id);
+      if (isWishlisted) {
+        wishlistBtn.className = 'btn btn-danger btn-lg px-4 d-flex align-items-center justify-content-center';
+        wishlistBtn.innerHTML = '<i class="bi bi-heart-fill me-2"></i> Wishlisted';
+      } else {
+        wishlistBtn.className = 'btn btn-outline-danger btn-lg px-4 d-flex align-items-center justify-content-center';
+        wishlistBtn.innerHTML = '<i class="bi bi-heart me-2"></i> Add to Wishlist';
+      }
+    }
   },
 
   loadRelatedProducts: async (category, currentId) => {
@@ -179,8 +192,21 @@ const ProductDetailsPage = {
           } else if (action === 'quickview' || action === 'view-details') {
             window.location.href = `product-details.html?id=${productId}`;
           } else if (action === 'wishlist') {
-            target.classList.toggle('active');
-            Toast.show(`Added ${prod.name} to Wishlist!`, 'success');
+            const added = WishlistService.toggleWishlist(prod);
+            const heartIcon = target.querySelector('i');
+            if (added) {
+              target.classList.add('active', 'text-danger');
+              if (heartIcon) {
+                heartIcon.classList.remove('bi-heart');
+                heartIcon.classList.add('bi-heart-fill');
+              }
+            } else {
+              target.classList.remove('active', 'text-danger');
+              if (heartIcon) {
+                heartIcon.classList.remove('bi-heart-fill');
+                heartIcon.classList.add('bi-heart');
+              }
+            }
           }
         });
       }
@@ -222,9 +248,14 @@ const ProductDetailsPage = {
     if (wishlistBtn) {
       wishlistBtn.addEventListener('click', () => {
         if (ProductDetailsPage.currentProduct) {
-          wishlistBtn.classList.toggle('btn-outline-danger');
-          wishlistBtn.classList.toggle('btn-danger');
-          Toast.show(`Added ${ProductDetailsPage.currentProduct.name} to Wishlist!`, 'success');
+          const added = WishlistService.toggleWishlist(ProductDetailsPage.currentProduct);
+          if (added) {
+            wishlistBtn.className = 'btn btn-danger btn-lg px-4 d-flex align-items-center justify-content-center';
+            wishlistBtn.innerHTML = '<i class="bi bi-heart-fill me-2"></i> Wishlisted';
+          } else {
+            wishlistBtn.className = 'btn btn-outline-danger btn-lg px-4 d-flex align-items-center justify-content-center';
+            wishlistBtn.innerHTML = '<i class="bi bi-heart me-2"></i> Add to Wishlist';
+          }
         }
       });
     }

@@ -154,8 +154,8 @@ const HomePage = {
       container.querySelectorAll('.category-card').forEach(card => {
         card.addEventListener('click', (e) => {
           e.preventDefault();
-          const categoryId = card.closest('[data-category]')?.getAttribute('data-category') || card.getAttribute('data-category');
-          HomePage.filterProducts(categoryId);
+          const categorySlug = card.getAttribute('data-slug') || card.getAttribute('data-category') || 'medicines';
+          HomePage.filterProducts(categorySlug);
           document.getElementById('featured-section')?.scrollIntoView({ behavior: 'smooth' });
         });
       });
@@ -233,8 +233,21 @@ const HomePage = {
         if (action === 'add-cart') {
           CartService.addToCart(product, 1);
         } else if (action === 'wishlist') {
-          target.classList.toggle('active');
-          Toast.show(`Added ${product.name} to Wishlist!`, 'success');
+          const added = WishlistService.toggleWishlist(product);
+          const heartIcon = target.querySelector('i');
+          if (added) {
+            target.classList.add('active', 'text-danger');
+            if (heartIcon) {
+              heartIcon.classList.remove('bi-heart');
+              heartIcon.classList.add('bi-heart-fill');
+            }
+          } else {
+            target.classList.remove('active', 'text-danger');
+            if (heartIcon) {
+              heartIcon.classList.remove('bi-heart-fill');
+              heartIcon.classList.add('bi-heart');
+            }
+          }
         } else if (action === 'quickview' || action === 'view-details') {
           window.location.href = `pages/product-details.html?id=${productId}`;
         }

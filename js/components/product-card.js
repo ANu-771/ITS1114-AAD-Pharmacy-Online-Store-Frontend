@@ -38,8 +38,8 @@ function createProductCard(product) {
         </div>
 
         <!-- Wishlist Button -->
-        <button class="product-wishlist-btn" title="Add to Wishlist" data-action="wishlist" data-id="${product.id}">
-          <i class="bi bi-heart"></i>
+        <button class="product-wishlist-btn ${typeof WishlistService !== 'undefined' && WishlistService.isInWishlist(product.id) ? 'active text-danger' : ''}" title="${typeof WishlistService !== 'undefined' && WishlistService.isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}" data-action="wishlist" data-id="${product.id}">
+          <i class="bi ${typeof WishlistService !== 'undefined' && WishlistService.isInWishlist(product.id) ? 'bi-heart-fill' : 'bi-heart'}"></i>
         </button>
 
         <!-- Product Image (Direct Full Window Page Navigation) -->

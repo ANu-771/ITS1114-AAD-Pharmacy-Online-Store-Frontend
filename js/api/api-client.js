@@ -100,9 +100,22 @@ class APIClient {
       return null;
     }
 
-    // 401 Unauthorized - Attempt Token Refresh Once
+    // 401 Unauthorized
     if (response.status === 401) {
-      if (!isRetry && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/refresh')) {
+      if (endpoint.includes('/auth/login')) {
+        let loginErrMsg = 'Your email or password is incorrect. Please check your credentials and try again.';
+        try {
+          const errJson = await response.json();
+          if (errJson && errJson.message) {
+            loginErrMsg = errJson.message.includes('Bad credentials') || errJson.message.includes('credential')
+              ? 'Your email or password is incorrect. Please check your credentials and try again.'
+              : errJson.message;
+          }
+        } catch (_) {}
+        throw new Error(loginErrMsg);
+      }
+
+      if (!isRetry && !endpoint.includes('/auth/refresh')) {
         const refreshed = await this._attemptTokenRefresh();
         if (refreshed) {
           return this._request(endpoint, options, true);

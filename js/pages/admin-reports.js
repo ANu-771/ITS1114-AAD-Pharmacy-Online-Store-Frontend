@@ -3,28 +3,62 @@
  * Manages sales analytics retrieval via Spring Boot REST API, Jasper report triggers, and CSV generation.
  */
 const AdminReportsPage = {
-  init: () => {
+  init: async () => {
     AdminSidebarComponent.render('reports');
+    await AdminReportsPage.loadLiveReport();
     AdminReportsPage.attachListeners();
+  },
+
+  /**
+   * Load real-time sales report from Spring Boot backend (/api/v1/admin/reports/sales)
+   */
+  loadLiveReport: async () => {
+    try {
+      const report = await AdminAPI.getSalesReport();
+      if (!report) return;
+
+      const grossSalesEl = document.getElementById('rptGrossSales');
+      if (grossSalesEl) {
+        const total = parseFloat(report.totalSales) || 0;
+        grossSalesEl.textContent = `Rs. ${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      }
+
+      const totalOrdersEl = document.getElementById('rptTotalOrders');
+      if (totalOrdersEl) {
+        const ordersCount = Array.isArray(report.orders) ? report.orders.length : (report.totalOrders || 0);
+        totalOrdersEl.textContent = `${ordersCount} Orders`;
+      }
+
+      const avgBasketEl = document.getElementById('rptAvgBasket');
+      if (avgBasketEl) {
+        const avg = parseFloat(report.averageOrderValue) || 0;
+        avgBasketEl.textContent = `Rs. ${avg.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      }
+
+    } catch (e) {
+      console.warn('[AdminReportsPage] Error loading live sales report:', e.message);
+    }
   },
 
   attachListeners: () => {
     // Regenerate report
     document.getElementById('btnRunReport')?.addEventListener('click', async () => {
-      const period = document.getElementById('reportPeriodSelect')?.value || 'monthly';
-      const dept = document.getElementById('reportDeptSelect')?.value || 'all';
+      const btn = document.getElementById('btnRunReport');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Fetching Live Data...';
+      }
 
       try {
-        if (!CONFIG.USE_MOCK_DATA) {
-          const report = await AdminAPI.getSalesReport();
-          if (report) {
-            Toast.show(`Analytics regenerated! Total Sales: Rs. ${(parseFloat(report.totalSales) || 0).toLocaleString('en-US')}`, 'success');
-            return;
-          }
-        }
-        Toast.show(`Analytics regenerated for [${period.toUpperCase()}] department: [${dept.toUpperCase()}]`, 'success');
+        await AdminReportsPage.loadLiveReport();
+        Toast.show('Live sales analytics updated from database!', 'success');
       } catch (e) {
-        Toast.show(`Analytics regenerated for [${period.toUpperCase()}] department: [${dept.toUpperCase()}]`, 'success');
+        Toast.show('Failed to refresh report from server.', 'error');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i> Regenerate Analytics';
+        }
       }
     });
 
@@ -34,7 +68,7 @@ const AdminReportsPage = {
       setTimeout(() => {
         Toast.show('KK_PHARMACY_Executive_Report_2026.pdf prepared! Printing dialog opened.', 'success');
         window.print();
-      }, 1000);
+      }, 800);
     });
 
     // Export CSV

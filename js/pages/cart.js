@@ -14,6 +14,11 @@ const CartPage = {
     window.addEventListener('cart:updated', () => {
       CartPage.renderCart();
     });
+
+    // Listen to auth state changes to toggle guest banner
+    window.addEventListener('auth:state-changed', () => {
+      CartPage.renderCart();
+    });
   },
 
   renderCart: () => {
@@ -32,6 +37,15 @@ const CartPage = {
       if (summaryCol) summaryCol.classList.add('d-none');
       CartPage.updateShippingProgress(0);
       return;
+    }
+
+    const guestBanner = document.getElementById('guestCartBanner');
+    if (guestBanner) {
+      if (typeof AuthService !== 'undefined' && AuthService.isAuthenticated()) {
+        guestBanner.classList.add('d-none');
+      } else {
+        guestBanner.classList.remove('d-none');
+      }
     }
 
     if (emptyView) emptyView.classList.add('d-none');

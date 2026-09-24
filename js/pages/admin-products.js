@@ -130,10 +130,25 @@ const AdminProductsPage = {
       const fallbackImg = resolveImagePath('assets/images/medicine_1.png');
       const stockVal = p.stock !== undefined ? p.stock : (p.initialStock !== undefined ? p.initialStock : (p.inStock ? 50 : 0));
       
-      // Expiry status badge
+      // Expiry status badge resolution
+      let rawExp = p.expiryDate;
+      const isEquipment = (p.categoryName || p.category || '').toLowerCase().includes('equipment');
+
+      if (!rawExp || rawExp === 'Not Set' || rawExp === 'null') {
+        if (isEquipment) {
+          rawExp = '2029-12-31';
+        } else {
+          // Default 2-year pharmaceutical expiry from current year
+          const d = new Date();
+          d.setFullYear(d.getFullYear() + 2);
+          rawExp = d.toISOString().split('T')[0];
+        }
+        p.expiryDate = rawExp;
+      }
+
       let expiryBadge = '<span class="badge bg-light text-muted border font-monospace">Not Set</span>';
-      if (p.expiryDate) {
-        const exp = new Date(p.expiryDate);
+      if (rawExp && rawExp !== 'N/A (Device)') {
+        const exp = new Date(rawExp);
         if (!isNaN(exp.getTime())) {
           const diffDays = Math.ceil((exp.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
           const dateStr = exp.toISOString().split('T')[0];
@@ -142,11 +157,11 @@ const AdminProductsPage = {
           } else if (diffDays <= 90) {
             expiryBadge = `<span class="badge bg-warning-subtle text-warning-emphasis border border-warning font-monospace" title="Expiring within 3 months"><i class="bi bi-clock-history me-1"></i>${dateStr} (${diffDays}d)</span>`;
           } else {
-            expiryBadge = `<span class="badge bg-success-subtle text-success border border-success-subtle font-monospace" title="Safe Batch"><i class="bi bi-shield-check me-1"></i>${dateStr}</span>`;
+            expiryBadge = `<span class="badge bg-success-subtle text-success border border-success-subtle font-monospace" title="Safe Pharmaceutical Batch"><i class="bi bi-shield-check me-1"></i>${dateStr}</span>`;
           }
         }
-      } else if (p.expiringSoon) {
-        expiryBadge = `<span class="badge bg-warning-subtle text-warning border border-warning font-monospace"><i class="bi bi-clock-history me-1"></i>Near Expiry</span>`;
+      } else if (isEquipment) {
+        expiryBadge = `<span class="badge bg-info-subtle text-info-emphasis border border-info font-monospace" title="5-Year Device Calibration"><i class="bi bi-cpu me-1"></i>2029-12-31</span>`;
       }
 
       html += `
@@ -178,9 +193,12 @@ const AdminProductsPage = {
           </td>
           <td class="text-end">
             <div class="d-flex justify-content-end gap-1">
-              <a href="../pages/product-details.html?id=${p.id}" class="btn-action-icon" title="View Storefront Page" target="_blank">
+              <a href="../pages/product-details.html?id=${p.id}" class="btn-action-icon text-muted" title="View Storefront Page" target="_blank">
                 <i class="bi bi-box-arrow-up-right"></i>
               </a>
+              <button class="btn-action-icon text-primary btn-edit-product" data-id="${p.id}" title="Edit Product Details">
+                <i class="bi bi-pencil-square"></i>
+              </button>
               <button class="btn-action-icon text-danger btn-delete-product" data-id="${p.id}" title="Delete Product">
                 <i class="bi bi-trash"></i>
               </button>
@@ -192,6 +210,96 @@ const AdminProductsPage = {
     tbody.innerHTML = html;
   },
 
+  /**
+   * Reset modal form to Add Product mode
+   */
+  resetModalToAddMode: () => {
+    const crudForm = document.getElementById('productCrudForm');
+    if (crudForm) crudForm.reset();
+
+    const mProdId = document.getElementById('mProdId');
+    if (mProdId) mProdId.value = '';
+
+    const titleEl = document.getElementById('productModalTitle');
+    if (titleEl) {
+      titleEl.innerHTML = '<i class="bi bi-capsule me-2 text-primary"></i>Add New Healthcare Product';
+    }
+
+    const submitBtn = document.getElementById('btnProductSubmit');
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Save to Catalog';
+    }
+
+    const expiryInput = document.getElementById('mProdExpiry');
+    if (expiryInput) {
+      const defaultExp = new Date();
+      defaultExp.setFullYear(defaultExp.getFullYear() + 2);
+      expiryInput.value = defaultExp.toISOString().split('T')[0];
+    }
+
+    const imgPreview = document.getElementById('mProdImagePreview');
+    if (imgPreview) imgPreview.src = '../assets/images/medicine_1.png';
+  },
+
+  /**
+   * Populate modal form with selected product and switch to Edit mode
+   */
+  openEditModal: (p) => {
+    const mProdId = document.getElementById('mProdId');
+    if (mProdId) mProdId.value = p.id;
+
+    const titleEl = document.getElementById('productModalTitle');
+    if (titleEl) {
+      titleEl.innerHTML = '<i class="bi bi-pencil-square me-2 text-primary"></i>Edit Healthcare Product';
+    }
+
+    const submitBtn = document.getElementById('btnProductSubmit');
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Update Product';
+    }
+
+    if (document.getElementById('mProdName')) document.getElementById('mProdName').value = p.name || '';
+    if (document.getElementById('mProdBrand')) document.getElementById('mProdBrand').value = p.brand || '';
+    if (document.getElementById('mProdCategory')) {
+      document.getElementById('mProdCategory').value = p.category || 'medicines';
+    }
+    if (document.getElementById('mProdPrice')) document.getElementById('mProdPrice').value = p.price || '';
+    
+    const stockVal = p.stock !== undefined ? p.stock : (p.initialStock !== undefined ? p.initialStock : 50);
+    if (document.getElementById('mProdStock')) document.getElementById('mProdStock').value = stockVal;
+
+    if (document.getElementById('mProdExpiry')) {
+      if (p.expiryDate && p.expiryDate !== 'N/A (Device)') {
+        document.getElementById('mProdExpiry').value = p.expiryDate.split('T')[0];
+      } else {
+        const defaultExp = new Date();
+        defaultExp.setFullYear(defaultExp.getFullYear() + 2);
+        document.getElementById('mProdExpiry').value = defaultExp.toISOString().split('T')[0];
+      }
+    }
+
+    if (document.getElementById('mProdForm')) document.getElementById('mProdForm').value = p.dosageForm || '';
+    if (document.getElementById('mProdImage')) document.getElementById('mProdImage').value = p.image || '';
+    if (document.getElementById('mProdIngredient')) document.getElementById('mProdIngredient').value = p.activeIngredient || '';
+    if (document.getElementById('mProdDesc')) document.getElementById('mProdDesc').value = p.description || '';
+    if (document.getElementById('mProdRx')) document.getElementById('mProdRx').checked = !!(p.requiresPrescription || p.rxRequired);
+    if (document.getElementById('mProdInStock')) document.getElementById('mProdInStock').checked = p.inStock !== false && stockVal > 0;
+
+    // Update preview image
+    const imgPreview = document.getElementById('mProdImagePreview');
+    if (imgPreview) {
+      imgPreview.src = p.image ? resolveImagePath(p.image) : '../assets/images/medicine_1.png';
+      imgPreview.onerror = () => { imgPreview.src = '../assets/images/medicine_1.png'; };
+    }
+
+    // Open Bootstrap Modal
+    const modalEl = document.getElementById('addProductModal');
+    if (modalEl) {
+      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+      modal.show();
+    }
+  },
+
   attachListeners: () => {
     // Default expiry date in modal to 2 years from today
     const expiryInput = document.getElementById('mProdExpiry');
@@ -201,13 +309,21 @@ const AdminProductsPage = {
       expiryInput.value = defaultExp.toISOString().split('T')[0];
     }
 
+    // Topbar Add New Product Button click
+    const openAddBtn = document.getElementById('btnOpenAddProductModal');
+    if (openAddBtn) {
+      openAddBtn.addEventListener('click', () => {
+        AdminProductsPage.resetModalToAddMode();
+      });
+    }
+
     // Search input
     const searchInput = document.getElementById('adminProductSearch');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
         const q = e.target.value.toLowerCase().trim();
         const filtered = AdminProductsPage.productsList.filter(p => 
-          p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q)
+          p.name.toLowerCase().includes(q) || (p.brand && p.brand.toLowerCase().includes(q))
         );
         AdminProductsPage.renderTable(filtered);
       });
@@ -252,27 +368,67 @@ const AdminProductsPage = {
       btnPreview.addEventListener('click', updateImagePreview);
     }
 
-    // Delete Product
+    // Product Table Actions: Edit & Delete with SweetAlert2
     const tbody = document.getElementById('adminProductsTableBody');
     if (tbody) {
       tbody.addEventListener('click', async (e) => {
+        // Edit Product Button
+        const editBtn = e.target.closest('.btn-edit-product');
+        if (editBtn) {
+          const id = parseInt(editBtn.getAttribute('data-id'), 10);
+          const product = AdminProductsPage.productsList.find(p => p.id === id);
+          if (product) {
+            AdminProductsPage.openEditModal(product);
+          }
+          return;
+        }
+
+        // Delete Product Button with SweetAlert2 Confirmation
         const deleteBtn = e.target.closest('.btn-delete-product');
         if (deleteBtn) {
           const id = parseInt(deleteBtn.getAttribute('data-id'), 10);
-          if (confirm('Are you sure you want to remove this product from the catalog?')) {
+          const product = AdminProductsPage.productsList.find(p => p.id === id);
+          const prodName = product ? product.name : 'this product';
+
+          const result = await Swal.fire({
+            title: 'Delete Product?',
+            html: `Are you sure you want to delete <strong>${prodName}</strong>?<br><span class="text-danger small"><i class="bi bi-exclamation-triangle-fill me-1"></i> This will permanently remove the item from inventory and the online store.</span>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: '<i class="bi bi-trash-fill me-1"></i> Yes, Delete',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+            focusCancel: true
+          });
+
+          if (result.isConfirmed) {
             try {
               await ProductService.deleteProduct(id);
-              Toast.show('Product removed from database catalog.', 'info');
+              await Swal.fire({
+                icon: 'success',
+                title: 'Product Deleted',
+                text: `"${prodName}" has been removed from the catalog.`,
+                confirmButtonColor: '#003B66',
+                timer: 2000,
+                showConfirmButton: false
+              });
               await AdminProductsPage.loadProducts();
             } catch (err) {
-              Toast.show(err.message || 'Failed to delete product.', 'error');
+              Swal.fire({
+                icon: 'error',
+                title: 'Delete Failed',
+                text: err.message || 'Unable to delete product.',
+                confirmButtonColor: '#003B66'
+              });
             }
           }
         }
       });
     }
 
-    // Add Product Form
+    // Save / Update Product Form with SweetAlert2
     const crudForm = document.getElementById('productCrudForm');
     if (crudForm) {
       crudForm.addEventListener('submit', async (e) => {
@@ -282,11 +438,16 @@ const AdminProductsPage = {
         const catValue = catSelect.value;
         const catText = catSelect.options[catSelect.selectedIndex]?.text || 'Medicines';
 
-        // Map category ID fallback
-        let catId = 1;
-        if (catValue === 'equipment') catId = 2;
-        else if (catValue === 'vitamins') catId = 3;
-        else if (catValue === 'personal-care') catId = 4;
+        const categoryMap = {
+          'medicines': 1,
+          'prescription': 2,
+          'equipment': 3,
+          'vitamins': 4,
+          'personal-care': 5,
+          'baby-care': 6,
+          'first-aid': 7
+        };
+        const catId = categoryMap[catValue] || 1;
 
         const stockInput = document.getElementById('mProdStock');
         const rawStock = stockInput ? parseInt(stockInput.value, 10) : 50;
@@ -295,55 +456,101 @@ const AdminProductsPage = {
         const customImg = imgInput ? imgInput.value.trim() : '';
         const resolvedImg = customImg || 'assets/images/medicine_1.png';
         const rawExpiry = document.getElementById('mProdExpiry') ? document.getElementById('mProdExpiry').value : '';
+        const inStockChecked = document.getElementById('mProdInStock')?.checked ?? (parsedStock > 0);
 
-        const newProductPayload = {
+        const editIdVal = document.getElementById('mProdId')?.value;
+        const isEditing = Boolean(editIdVal);
+
+        const brandName = document.getElementById('mProdBrand') ? document.getElementById('mProdBrand').value.trim() : 'KK PHARMACY';
+
+        const productPayload = {
           name: document.getElementById('mProdName').value.trim(),
-          brand: document.getElementById('mProdBrand').value.trim(),
-          brandId: 1, // Default verified brand ID
+          brand: brandName || 'KK PHARMACY',
           category: catValue,
           categoryName: catText,
           categoryId: catId,
           price: parseFloat(document.getElementById('mProdPrice').value),
           activeIngredient: document.getElementById('mProdIngredient')?.value.trim() || 'Clinical Grade Compound',
           dosageForm: document.getElementById('mProdForm')?.value.trim() || 'Unit Pack',
-          description: document.getElementById('mProdDesc')?.value.trim() || 'Newly added certified healthcare product.',
+          description: document.getElementById('mProdDesc')?.value.trim() || 'Certified healthcare product.',
           requiresPrescription: document.getElementById('mProdRx')?.checked || false,
           rxRequired: document.getElementById('mProdRx')?.checked || false,
           image: resolvedImg,
           images: [resolvedImg],
           initialStock: parsedStock,
           stock: parsedStock,
-          inStock: parsedStock > 0,
+          inStock: inStockChecked,
           reorderLevel: 10,
           expiryDate: rawExpiry
         };
 
-        const submitBtn = crudForm.querySelector('button[type="submit"]');
+        const submitBtn = document.getElementById('btnProductSubmit') || crudForm.querySelector('button[type="submit"]');
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Saving...';
+          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Processing...';
         }
 
-        try {
-          const created = await ProductService.createProduct(newProductPayload);
-          const modalEl = document.getElementById('addProductModal');
-          const modal = bootstrap.Modal.getInstance(modalEl);
-          if (modal) modal.hide();
-          crudForm.reset();
-          if (expiryInput) {
-            const defaultExp = new Date();
-            defaultExp.setFullYear(defaultExp.getFullYear() + 2);
-            expiryInput.value = defaultExp.toISOString().split('T')[0];
+        if (isEditing) {
+          // --- UPDATE PRODUCT ---
+          try {
+            const updated = await ProductService.updateProduct(parseInt(editIdVal, 10), productPayload);
+            const modalEl = document.getElementById('addProductModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+
+            await Swal.fire({
+              icon: 'success',
+              title: 'Product Updated!',
+              html: `<strong>${updated.name || productPayload.name}</strong> details have been saved successfully.`,
+              confirmButtonColor: '#003B66',
+              confirmButtonText: 'Done',
+              timer: 2500
+            });
+
+            await AdminProductsPage.loadProducts();
+          } catch (err) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Update Failed',
+              text: err.message || 'Failed to update product details.',
+              confirmButtonColor: '#003B66'
+            });
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Update Product';
+            }
           }
-          if (imgPreview) imgPreview.src = '../assets/images/medicine_1.png';
-          Toast.show(`Product "${created.name || newProductPayload.name}" added with ${parsedStock} units in stock!`, 'success');
-          await AdminProductsPage.loadProducts();
-        } catch (err) {
-          Toast.show(err.message || 'Failed to add product.', 'error');
-        } finally {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Save to Catalog';
+        } else {
+          // --- CREATE PRODUCT ---
+          try {
+            const created = await ProductService.createProduct(productPayload);
+            const modalEl = document.getElementById('addProductModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+
+            await Swal.fire({
+              icon: 'success',
+              title: 'Product Added!',
+              html: `<strong>${created.name || productPayload.name}</strong> has been added with <strong>${parsedStock} units</strong> in stock.`,
+              confirmButtonColor: '#003B66',
+              confirmButtonText: 'Great!',
+              timer: 2500
+            });
+
+            await AdminProductsPage.loadProducts();
+          } catch (err) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Failed to Add Product',
+              text: err.message || 'Unable to save new product to catalog.',
+              confirmButtonColor: '#003B66'
+            });
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Save to Catalog';
+            }
           }
         }
       });

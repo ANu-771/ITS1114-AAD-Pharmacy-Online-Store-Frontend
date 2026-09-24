@@ -16,7 +16,8 @@ const NavbarComponent = {
     const user = AuthService.getCurrentUser();
     const isAuthenticated = AuthService.isAuthenticated();
     const isAdmin = AuthService.hasRole('ROLE_ADMIN');
-    const cartCount = CartService.getCartCount();
+    const cartCount = typeof CartService !== 'undefined' ? CartService.getCartCount() : 0;
+    const wishlistCount = typeof WishlistService !== 'undefined' ? WishlistService.getWishlistCount() : 0;
 
     // Compute initials for professional profile circle avatar
     let initials = 'U';
@@ -87,7 +88,7 @@ const NavbarComponent = {
               <!-- Wishlist Bubble -->
               <a href="${p}pages/wishlist.html" class="header-action-bubble position-relative" title="My Wishlist" aria-label="Saved Products Wishlist">
                 <i class="bi bi-heart"></i>
-                <span class="bubble-badge wishlist-badge-count">4</span>
+                <span class="bubble-badge wishlist-badge-count">${wishlistCount}</span>
               </a>
 
               <!-- Shopping Cart Bubble -->
@@ -286,11 +287,19 @@ const NavbarComponent = {
     window.addEventListener('cart:updated', (e) => {
       const badgeElements = document.querySelectorAll('.cart-badge-count');
       badgeElements.forEach(badge => {
-        badge.textContent = e.detail.count;
+        badge.textContent = e.detail.count !== undefined ? e.detail.count : 0;
       });
     });
 
-    // 5. Subscribe to Auth state updates
+    // 5. Subscribe to Wishlist updates
+    window.addEventListener('wishlist:updated', (e) => {
+      const badgeElements = document.querySelectorAll('.wishlist-badge-count');
+      badgeElements.forEach(badge => {
+        badge.textContent = e.detail.count !== undefined ? e.detail.count : 0;
+      });
+    });
+
+    // 6. Subscribe to Auth state updates
     window.addEventListener('auth:state-changed', () => {
       NavbarComponent.render();
     });

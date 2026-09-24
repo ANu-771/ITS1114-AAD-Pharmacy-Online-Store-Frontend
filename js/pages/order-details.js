@@ -31,15 +31,16 @@ const OrderDetailsPage = {
     // Status Badge
     const statusBadge = document.getElementById('orderStatusBadge');
     if (statusBadge) {
-      statusBadge.textContent = order.status;
-      if (order.status === 'DELIVERED') {
-        statusBadge.className = 'badge bg-success text-white border-0';
-      } else if (order.status === 'PROCESSING') {
-        statusBadge.className = 'badge bg-primary text-white border-0';
-      } else if (order.status === 'DISPATCHED') {
-        statusBadge.className = 'badge bg-info text-dark border-0';
+      const st = (order.status || 'PENDING').toUpperCase();
+      statusBadge.textContent = st;
+      if (st === 'DELIVERED' || st === 'COMPLETED') {
+        statusBadge.className = 'badge bg-success text-white border-0 px-3 py-1';
+      } else if (st === 'PROCESSING' || st === 'CONFIRMED' || st === 'PACKED') {
+        statusBadge.className = 'badge bg-primary text-white border-0 px-3 py-1';
+      } else if (st === 'DISPATCHED' || st === 'SHIPPED') {
+        statusBadge.className = 'badge bg-info text-dark border-0 px-3 py-1';
       } else {
-        statusBadge.className = 'badge bg-warning text-dark border-0';
+        statusBadge.className = 'badge bg-warning text-dark border-0 px-3 py-1';
       }
     }
 
@@ -99,23 +100,27 @@ const OrderDetailsPage = {
     const s3 = document.getElementById('step3');
     const s4 = document.getElementById('step4');
 
-    // Reset
+    // Reset all steps
     [s1, s2, s3, s4].forEach(s => { if (s) s.className = 'timeline-step'; });
 
-    if (status === 'PENDING') {
+    const normalizedStatus = (status || '').toUpperCase();
+
+    if (normalizedStatus === 'PENDING' || normalizedStatus === 'PRESCRIPTION_REVIEW') {
       if (s1) s1.className = 'timeline-step active';
-    } else if (status === 'PROCESSING') {
+    } else if (normalizedStatus === 'CONFIRMED' || normalizedStatus === 'PROCESSING' || normalizedStatus === 'PACKED') {
       if (s1) s1.className = 'timeline-step completed';
       if (s2) s2.className = 'timeline-step active';
-    } else if (status === 'DISPATCHED') {
+    } else if (normalizedStatus === 'DISPATCHED' || normalizedStatus === 'SHIPPED') {
       if (s1) s1.className = 'timeline-step completed';
       if (s2) s2.className = 'timeline-step completed';
       if (s3) s3.className = 'timeline-step active';
-    } else if (status === 'DELIVERED') {
+    } else if (normalizedStatus === 'DELIVERED' || normalizedStatus === 'COMPLETED') {
       if (s1) s1.className = 'timeline-step completed';
       if (s2) s2.className = 'timeline-step completed';
       if (s3) s3.className = 'timeline-step completed';
       if (s4) s4.className = 'timeline-step completed';
+    } else {
+      if (s1) s1.className = 'timeline-step active';
     }
   }
 };

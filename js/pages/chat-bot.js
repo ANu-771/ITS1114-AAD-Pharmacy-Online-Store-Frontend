@@ -2,41 +2,36 @@
  * KK PHARMACY ONLINE PHARMACY — MEDIMATE AI CHATBOT CONTROLLER
  * File: js/pages/chat-bot.js
  * 
- * Implementation of the MediMate customer AI assistant powered by Google
- * Generative AI (Gemini).
- * 
- * Features:
- * - Dynamic live database context extraction (Products, Categories, Cart, Auth)
- * - Safe token usage and customizable 5-message conversation memory window
- * - Robust Google Generative AI REST API caller with fallback knowledgebase
- * - Modern, accessible, responsive healthcare chat interface
+ * Secure Enterprise AI Assistant Architecture:
+ * - Communicates with backend proxy endpoint (/api/v1/chat)
+ * - Google Gemini API Key is kept 100% confidential on the Spring Boot server
+ * - Zero client-side key exposure
+ * - Removed mock fallbacks: If the AI API is unconfigured or offline, transparently informs the user
+ * - Interactive site-entry welcome bubble (Intercom/Zendesk style) with dismissal session memory
  */
-
 const MediMateChatBot = {
-  initialized: false,
   isOpen: false,
   isGenerating: false,
-  
-  // Conversation History Memory: Capped at MEDIMATE_CONFIG.maxHistoryMessages
-  history: [],
+  history: [], // Conversation memory for contextual multi-turn chat
+  initialized: false,
 
   /**
-   * Initialize MediMate on customer integrated pages
+   * Initialize chatbot widget and attach to DOM
    */
   init: () => {
     // Only initialize once and avoid loading inside admin dashboard
     if (MediMateChatBot.initialized || document.querySelector('.admin-layout')) return;
 
-    // Ensure training data & config is loaded
-    if (typeof MEDIMATE_CONFIG === 'undefined') {
-      console.warn('[MediMate] MEDIMATE_CONFIG not found. Please ensure js/chat/MediMate_training_data.js is loaded.');
-      return;
-    }
-
     MediMateChatBot.renderUI();
     MediMateChatBot.attachEventListeners();
     MediMateChatBot.initialized = true;
-    console.log(`🤖 [MediMate] AI Assistant initialized with model: ${MEDIMATE_CONFIG.model}, memory cap: ${MEDIMATE_CONFIG.maxHistoryMessages} msgs.`);
+
+    // Trigger site-entry welcome notification after 2.5 seconds
+    setTimeout(() => {
+      MediMateChatBot.showWelcomeBubble();
+    }, 2500);
+
+    console.log('🤖 [MediMate] AI Assistant initialized with secure Backend Proxy architecture.');
   },
 
   /**
@@ -45,6 +40,9 @@ const MediMateChatBot = {
   renderUI: () => {
     // Prevent duplicate widget injection
     if (document.getElementById('medimate-container')) return;
+
+    const isSubdir = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+    const pathPrefix = isSubdir ? '' : 'pages/';
 
     const container = document.createElement('div');
     container.id = 'medimate-container';
@@ -56,7 +54,7 @@ const MediMateChatBot = {
       </button>
 
       <!-- MediMate Chat Window -->
-      <div class="ai-chat-window" id="medimateWindow" role="dialog" aria-labelledby="medimateTitle" aria-hidden="true">
+      <div class="ai-chat-window" id="medimateWindow" role="dialog" aria-labelledby="medimateTitle" aria-hidden="true" inert>
         <!-- Header -->
         <div class="ai-chat-header d-flex align-items-center justify-content-between">
           <div class="d-flex align-items-center gap-2">
@@ -64,9 +62,9 @@ const MediMateChatBot = {
               <i class="bi bi-robot fs-5"></i>
             </div>
             <div>
-              <div class="fw-bold text-white small" id="medimateTitle">${MEDIMATE_CONFIG.botName}</div>
+              <div class="fw-bold text-white small" id="medimateTitle">MediMate AI</div>
               <small class="text-white-50 d-flex align-items-center" style="font-size: 0.7rem;">
-                <span class="pulse-dot me-1"></span> ${MEDIMATE_CONFIG.botStatusText}
+                <span class="pulse-dot me-1"></span> Clinical & Store AI Advisor
               </small>
             </div>
           </div>
@@ -80,25 +78,72 @@ const MediMateChatBot = {
           </div>
         </div>
 
+        <!-- Store Quick Navigator Bar -->
+        <div class="medimate-store-nav" id="medimateStoreNav">
+          <a href="${pathPrefix}products.html" class="medimate-nav-chip" title="Browse all medicines & medical devices">
+            <i class="bi bi-shop text-primary"></i> Catalog
+          </a>
+          <a href="${pathPrefix}categories.html" class="medimate-nav-chip" title="Explore health departments">
+            <i class="bi bi-grid text-info"></i> Categories
+          </a>
+          <a href="${pathPrefix}cart.html" class="medimate-nav-chip" title="View your shopping cart">
+            <i class="bi bi-cart3 text-warning"></i> Cart
+          </a>
+          <a href="${pathPrefix}orders.html" class="medimate-nav-chip" title="Track your medicine orders">
+            <i class="bi bi-box-seam text-success"></i> My Orders
+          </a>
+          <a href="${pathPrefix}contact.html" class="medimate-nav-chip" title="Contact clinical pharmacy hotline">
+            <i class="bi bi-headset text-danger"></i> Helpline
+          </a>
+        </div>
+
         <!-- Chat Body / Messages Container -->
         <div class="ai-chat-body" id="medimateMessages" tabindex="0">
           <!-- Initial Bot Greeting -->
           <div class="chat-bubble chat-bubble-ai shadow-sm">
             <div class="fw-bold text-primary mb-1 d-flex align-items-center gap-1">
-              <i class="bi bi-patch-check-fill text-primary"></i> ${MEDIMATE_CONFIG.botTagline}
+              <i class="bi bi-patch-check-fill text-primary"></i> KK PHARMACY Clinical AI Assistant
             </div>
-            ${MediMateChatBot.formatMarkdown(MEDIMATE_CONFIG.welcomeMessage)}
+            👋 Hello! I'm <strong>MediMate</strong>, your personal KK PHARMACY Healthcare & Clinical Advisor.
+            <div class="my-2 small">
+              Ask me about authentic medicines, active ingredients, dosage guidelines, equipment, or orders across Sri Lanka!
+            </div>
+
+            <!-- Real Database Products Question Carousel -->
+            <div class="mt-2 pt-2 border-top">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="fw-bold text-navy" style="font-size: 0.74rem;">
+                  <i class="bi bi-stars text-warning me-1"></i> Featured Pharmacy Items:
+                </span>
+                <span class="text-muted" style="font-size: 0.68rem;">Click to ask details</span>
+              </div>
+              <div class="product-prompt-carousel" id="medimateProductCarousel">
+                <!-- Dynamically populated from Database Products -->
+                <div class="text-muted small py-2 px-1">Loading store catalog...</div>
+              </div>
+            </div>
+
+            <div class="small text-muted border-top pt-1 mt-2" style="font-size: 0.7rem;">
+              <em>⚠️ Disclaimer: Information is for educational guidance. Always consult a certified physician for emergencies.</em>
+            </div>
           </div>
 
-          <!-- Quick Prompts Row -->
-          <div class="quick-prompts-container mt-2 mb-1" id="medimateQuickPrompts">
-            <div class="small fw-bold text-muted mb-1" style="font-size: 0.72rem;">Suggested Questions:</div>
+          <!-- Suggested Quick Prompts Row -->
+          <div class="quick-prompts-container mt-1 mb-1" id="medimateQuickPrompts">
+            <div class="small fw-bold text-muted mb-1" style="font-size: 0.72rem;">Suggested Quick Questions:</div>
             <div class="d-flex flex-wrap gap-1">
-              ${(MEDIMATE_CONFIG.trainingData.quickPrompts || []).map(p => `
-                <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="${p}">
-                  ${p}
-                </button>
-              `).join('')}
+              <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What is the recommended adult dosage and safety precautions for Paracetamol 500mg?">
+                💊 Paracetamol Dosage
+              </button>
+              <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How do I upload and verify a prescription order?">
+                📄 Prescription Upload
+              </button>
+              <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What medical devices and monitors do you have in stock?">
+                🩺 Medical Devices
+              </button>
+              <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How does free islandwide delivery over Rs. 5,000 work across Sri Lanka?">
+                🚚 Free Islandwide Delivery
+              </button>
             </div>
           </div>
         </div>
@@ -111,82 +156,238 @@ const MediMateChatBot = {
               <i class="bi bi-send-fill"></i>
             </button>
           </div>
-          <div class="d-flex justify-content-between align-items-center mt-1 px-1">
-            <small class="text-muted" style="font-size: 0.65rem;">
-              <i class="bi bi-shield-check text-success me-1"></i>Google Generative AI &middot; Memory: 5 msgs
-            </small>
-            <small class="text-muted" style="font-size: 0.65rem;">Token-Safe</small>
-          </div>
         </form>
       </div>
     `;
 
     document.body.appendChild(container);
+    MediMateChatBot.loadProductPrompts();
   },
 
   /**
-   * Attach UI event listeners
+   * Load real products from database/ProductService and render as question cards with images
+   */
+  loadProductPrompts: async () => {
+    const carousel = document.getElementById('medimateProductCarousel');
+    if (!carousel) return;
+
+    try {
+      let products = [];
+      if (typeof ProductService !== 'undefined') {
+        products = await ProductService.getProducts('all');
+      }
+
+      if (!products || products.length === 0) {
+        carousel.innerHTML = '<div class="text-muted small">No items currently loaded.</div>';
+        return;
+      }
+
+      const isSubdir = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
+      const imgPrefix = isSubdir ? '../' : '';
+
+      // Select diverse sample items (e.g. Paracetamol, BP Monitor, Glucose Kit, Vitamin C, First Aid)
+      const sampleProducts = products.slice(0, 6);
+
+      let html = '';
+      sampleProducts.forEach(p => {
+        let imgSrc = p.image || 'assets/images/medicine_1.png';
+        if (!imgSrc.startsWith('http://') && !imgSrc.startsWith('https://') && !imgSrc.startsWith('../')) {
+          imgSrc = imgPrefix + imgSrc;
+        }
+
+        const priceFormatted = parseFloat(p.price || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
+        const questionPrompt = `Tell me about ${p.name}. What are its main uses, price (Rs. ${priceFormatted}), dosage, and precautions?`;
+
+        html += `
+          <div class="product-prompt-card" data-prompt="${questionPrompt.replace(/"/g, '&quot;')}" title="Ask MediMate about ${p.name}">
+            <img src="${imgSrc}" alt="${p.name}" class="product-prompt-img" onerror="this.src='${imgPrefix}assets/images/medicine_1.png'">
+            <div class="product-prompt-title">${p.name}</div>
+            <div class="product-prompt-price">Rs. ${priceFormatted}</div>
+            <button type="button" class="btn-ask-product">
+              <i class="bi bi-chat-dots me-1"></i> Ask AI
+            </button>
+          </div>
+        `;
+      });
+
+      carousel.innerHTML = html;
+
+      // Add click listeners to cards
+      carousel.querySelectorAll('.product-prompt-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const prompt = card.getAttribute('data-prompt');
+          if (prompt && !MediMateChatBot.isGenerating) {
+            MediMateChatBot.handleUserMessage(prompt);
+          }
+        });
+      });
+
+    } catch (e) {
+      console.warn('[MediMate] Could not load product question cards:', e);
+      if (carousel) carousel.innerHTML = '';
+    }
+  },
+
+  /**
+   * Interactive site-entry welcome speech bubble (Intercom/Zendesk style)
+   */
+  showWelcomeBubble: () => {
+    if (MediMateChatBot.isOpen) return;
+    if (sessionStorage.getItem('medimate_welcome_dismissed') === 'true') return;
+    if (document.getElementById('medimateWelcomeBubble')) return;
+
+    const bubble = document.createElement('div');
+    bubble.id = 'medimateWelcomeBubble';
+    bubble.className = 'ai-welcome-bubble';
+    bubble.innerHTML = `
+      <div class="d-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle p-1" style="width: 30px; height: 30px; flex-shrink: 0;">
+        <i class="bi bi-robot fs-6"></i>
+      </div>
+      <p class="bubble-text">
+        <strong>Need help?</strong> Ask MediMate for medicine advice, dosages, or orders!
+      </p>
+      <button class="bubble-close" id="btnDismissWelcomeBubble" title="Dismiss message" aria-label="Dismiss message">&times;</button>
+    `;
+
+    bubble.addEventListener('click', (e) => {
+      if (e.target.closest('#btnDismissWelcomeBubble')) {
+        e.stopPropagation();
+        MediMateChatBot.dismissWelcomeBubble();
+        return;
+      }
+      MediMateChatBot.dismissWelcomeBubble();
+      if (!MediMateChatBot.isOpen) {
+        MediMateChatBot.toggleChat();
+      }
+    });
+
+    document.body.appendChild(bubble);
+  },
+
+  dismissWelcomeBubble: () => {
+    sessionStorage.setItem('medimate_welcome_dismissed', 'true');
+    const bubble = document.getElementById('medimateWelcomeBubble');
+    if (bubble) {
+      bubble.style.opacity = '0';
+      bubble.style.transform = 'translateY(12px) scale(0.92)';
+      setTimeout(() => bubble.remove(), 250);
+    }
+  },
+
+  /**
+   * Attach all DOM and interaction listeners
    */
   attachEventListeners: () => {
     const fab = document.getElementById('medimateFab');
     const closeBtn = document.getElementById('medimateCloseBtn');
     const clearBtn = document.getElementById('medimateClearBtn');
-    const windowEl = document.getElementById('medimateWindow');
     const form = document.getElementById('medimateForm');
     const input = document.getElementById('medimateInput');
-    const quickPrompts = document.getElementById('medimateQuickPrompts');
 
     // Toggle Chat Window
     const toggleChat = () => {
       MediMateChatBot.isOpen = !MediMateChatBot.isOpen;
-      if (MediMateChatBot.isOpen) {
-        windowEl.classList.add('show');
-        windowEl.setAttribute('aria-hidden', 'false');
-        input.focus();
-      } else {
-        windowEl.classList.remove('show');
-        windowEl.setAttribute('aria-hidden', 'true');
+      const windowEl = document.getElementById('medimateWindow');
+      if (windowEl) {
+        if (MediMateChatBot.isOpen) {
+          // Open dialog: make interactive and accessible
+          windowEl.removeAttribute('inert');
+          windowEl.classList.add('active', 'show');
+          windowEl.setAttribute('aria-hidden', 'false');
+          MediMateChatBot.dismissWelcomeBubble();
+          if (input) setTimeout(() => input.focus(), 150);
+        } else {
+          // Close dialog: safely blur descendant before hiding to comply with WAI-ARIA
+          if (document.activeElement && windowEl.contains(document.activeElement)) {
+            document.activeElement.blur();
+          }
+          windowEl.classList.remove('active', 'show');
+          windowEl.setAttribute('aria-hidden', 'true');
+          windowEl.setAttribute('inert', '');
+          // Return focus to opening button per accessibility standards
+          if (fab) fab.focus();
+        }
       }
     };
+    MediMateChatBot.toggleChat = toggleChat;
 
     if (fab) fab.addEventListener('click', toggleChat);
     if (closeBtn) closeBtn.addEventListener('click', toggleChat);
+
+    // Close on Escape key press (W3C Dialog pattern)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && MediMateChatBot.isOpen) {
+        toggleChat();
+      }
+    });
 
     // Clear Chat History
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
         MediMateChatBot.history = [];
         const messages = document.getElementById('medimateMessages');
-        messages.innerHTML = `
-          <div class="chat-bubble chat-bubble-ai shadow-sm">
-            <div class="fw-bold text-primary mb-1 d-flex align-items-center gap-1">
-              <i class="bi bi-arrow-clockwise text-primary"></i> Memory Cleared
+        if (messages) {
+          messages.innerHTML = `
+            <div class="chat-bubble chat-bubble-ai shadow-sm">
+              <div class="fw-bold text-primary mb-1 d-flex align-items-center gap-1">
+                <i class="bi bi-patch-check-fill text-primary"></i> KK PHARMACY Clinical AI Assistant
+              </div>
+              👋 Chat history cleared. How can I assist you with your health or medicines today?
+              
+              <!-- Real Database Products Question Carousel -->
+              <div class="mt-2 pt-2 border-top">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="fw-bold text-navy" style="font-size: 0.74rem;">
+                    <i class="bi bi-stars text-warning me-1"></i> Featured Pharmacy Items:
+                  </span>
+                  <span class="text-muted" style="font-size: 0.68rem;">Click to ask details</span>
+                </div>
+                <div class="product-prompt-carousel" id="medimateProductCarousel">
+                  <div class="text-muted small py-2 px-1">Loading store catalog...</div>
+                </div>
+              </div>
             </div>
-            ${MediMateChatBot.formatMarkdown(MEDIMATE_CONFIG.welcomeMessage)}
-          </div>
-          <div class="quick-prompts-container mt-2 mb-1" id="medimateQuickPrompts">
-            <div class="small fw-bold text-muted mb-1" style="font-size: 0.72rem;">Suggested Questions:</div>
-            <div class="d-flex flex-wrap gap-1">
-              ${(MEDIMATE_CONFIG.trainingData.quickPrompts || []).map(p => `
-                <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="${p}">
-                  ${p}
+
+            <!-- Suggested Quick Prompts Row -->
+            <div class="quick-prompts-container mt-1 mb-1" id="medimateQuickPrompts">
+              <div class="small fw-bold text-muted mb-1" style="font-size: 0.72rem;">Suggested Quick Questions:</div>
+              <div class="d-flex flex-wrap gap-1">
+                <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What is the recommended adult dosage and safety precautions for Paracetamol 500mg?">
+                  💊 Paracetamol Dosage
                 </button>
-              `).join('')}
+                <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How do I upload and verify a prescription order?">
+                  📄 Prescription Upload
+                </button>
+                <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="What medical devices and monitors do you have in stock?">
+                  🩺 Medical Devices
+                </button>
+                <button type="button" class="btn btn-sm py-1 px-2 rounded-pill quick-prompt-btn" style="font-size: 0.72rem;" data-prompt="How does free islandwide delivery over Rs. 5,000 work across Sri Lanka?">
+                  🚚 Free Islandwide Delivery
+                </button>
+              </div>
             </div>
-          </div>
-        `;
-        MediMateChatBot._attachQuickPromptListeners();
+          `;
+          if (input) {
+            input.disabled = false;
+            input.placeholder = 'Ask about medicines, dosage, orders...';
+          }
+          const sendBtn = document.getElementById('medimateSendBtn');
+          if (sendBtn) sendBtn.disabled = false;
+
+          MediMateChatBot.loadProductPrompts();
+          MediMateChatBot._attachQuickPromptListeners();
+        }
       });
     }
 
-    // Quick Prompt Clicks
+    // Attach suggested quick prompt buttons
     MediMateChatBot._attachQuickPromptListeners();
 
-    // Form Submission / Message Dispatch
+    // Submit user message
     if (form) {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const query = input.value.trim();
+        const query = input ? input.value.trim() : '';
         if (!query || MediMateChatBot.isGenerating) return;
 
         input.value = '';
@@ -195,80 +396,27 @@ const MediMateChatBot = {
     }
   },
 
-  /**
-   * Helper to attach click handlers to suggestion prompt pills
-   */
   _attachQuickPromptListeners: () => {
-    const promptButtons = document.querySelectorAll('.quick-prompt-btn');
-    promptButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const text = btn.getAttribute('data-prompt');
-        // Strip emoji for clean query if needed
-        const cleanQuery = text.replace(/^[^\w\s]+\s*/, '');
-        MediMateChatBot.handleUserMessage(cleanQuery);
+    const quickButtons = document.querySelectorAll('.quick-prompt-btn');
+    quickButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const promptText = e.currentTarget.getAttribute('data-prompt');
+        if (promptText && !MediMateChatBot.isGenerating) {
+          MediMateChatBot.handleUserMessage(promptText);
+        }
       });
     });
   },
 
   /**
-   * Extract live database and store state to inject into AI prompt context
-   */
-  getDatabaseContext: async () => {
-    try {
-      // 1. Fetch live products and categories
-      const products = typeof ProductService !== 'undefined' ? await ProductService.getProducts('all') : [];
-      const categories = typeof ProductService !== 'undefined' ? await ProductService.getCategories() : [];
-      
-      // 2. Fetch current customer cart status
-      const cartItems = typeof CartService !== 'undefined' ? CartService.getCartItems() : [];
-      const cartCount = typeof CartService !== 'undefined' ? CartService.getCartCount() : 0;
-      const cartSubtotal = typeof CartService !== 'undefined' ? CartService.getCartSubtotal() : 0;
-
-      // 3. Fetch active customer session info
-      const currentUser = typeof AuthService !== 'undefined' ? AuthService.getCurrentUser() : null;
-
-      // Format compact product catalog summary (Token-safe)
-      const catalogSummary = (products || []).map(p => (
-        `ID: ${p.id} | ${p.name} | Category: ${p.categoryName || p.category} | Price: Rs. ${p.price} | Stock: ${p.inStock ? 'IN STOCK' : 'OUT OF STOCK'} | Rx Required: ${p.requiresPrescription ? 'YES (Doctor Rx Mandatory)' : 'NO (OTC)'} | Ingredient: ${p.activeIngredient || 'N/A'}`
-      )).join('\n');
-
-      const cartSummary = cartItems.length > 0 
-        ? cartItems.map(i => `${i.name} (Qty: ${i.quantity}, Price: Rs. ${i.price})`).join(', ')
-        : 'Cart is currently empty';
-
-      const userInfo = currentUser && currentUser.fullName && currentUser.fullName !== 'Guest User'
-        ? `Authenticated Customer: ${currentUser.fullName} (${currentUser.email})`
-        : 'Guest Customer (Not Logged In)';
-
-      return `
-[LIVE DATABASE & STORE CONTEXT - REAL TIME DATA]
-1. Active Store Catalog (${products.length} Products):
-${catalogSummary}
-
-2. Available Departments:
-${(categories || []).map(c => `- ${c.name} (${c.desc})`).join('\n')}
-
-3. Current Customer Session:
-- User: ${userInfo}
-- Active Cart: ${cartSummary} | Subtotal: Rs. ${cartSubtotal} (Items Count: ${cartCount})
-- Free Delivery Threshold: Rs. ${CONFIG.FREE_SHIPPING_THRESHOLD || 5000} (${cartSubtotal >= (CONFIG.FREE_SHIPPING_THRESHOLD || 5000) ? 'ELIGIBLE FOR FREE SHIPPING' : `Rs. ${(CONFIG.FREE_SHIPPING_THRESHOLD || 5000) - cartSubtotal} needed for free shipping`})
-[END OF DATABASE CONTEXT]
-`;
-    } catch (err) {
-      console.warn('[MediMate] Error reading live database context:', err);
-      return '';
-    }
-  },
-
-  /**
-   * Process and send user query to Google Generative AI / Gemini API
+   * Process and send user query to secure backend proxy endpoint (/api/v1/chat)
    */
   handleUserMessage: async (userQuery) => {
     const messages = document.getElementById('medimateMessages');
     const input = document.getElementById('medimateInput');
     const sendBtn = document.getElementById('medimateSendBtn');
 
-    // 1. Render User Message in UI
+    // 1. Render User Bubble in UI
     const userBubble = document.createElement('div');
     userBubble.className = 'chat-bubble chat-bubble-user shadow-sm';
     userBubble.textContent = userQuery;
@@ -277,13 +425,15 @@ ${(categories || []).map(c => `- ${c.name} (${c.desc})`).join('\n')}
 
     // 2. Render Typing Indicator
     const typingIndicator = document.createElement('div');
-    typingIndicator.className = 'chat-bubble chat-bubble-ai text-muted fst-italic shadow-sm';
+    typingIndicator.className = 'chat-bubble chat-bubble-ai shadow-sm d-flex align-items-center gap-2';
     typingIndicator.id = 'medimateTyping';
     typingIndicator.innerHTML = `
-      <div class="d-flex align-items-center gap-2">
-        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
-        <span style="font-size: 0.8rem;">${MEDIMATE_CONFIG.botName} is consulting clinical database...</span>
+      <div class="medimate-typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
+      <span class="medimate-typing-text">MediMate is typing...</span>
     `;
     messages.appendChild(typingIndicator);
     messages.scrollTop = messages.scrollHeight;
@@ -293,48 +443,121 @@ ${(categories || []).map(c => `- ${c.name} (${c.desc})`).join('\n')}
     if (sendBtn) sendBtn.disabled = true;
 
     try {
-      // 3. Get real-time database context
-      const liveDbContext = await MediMateChatBot.getDatabaseContext();
+      // 3. Send query to Spring Boot Backend Proxy
+      const apiBase = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) 
+        ? CONFIG.API_BASE_URL 
+        : 'http://localhost:8080/api/v1';
 
-      // 4. Call Google Generative AI API or Local Fallback Engine
-      const aiResponse = await MediMateChatBot.callGeminiAPI(userQuery, liveDbContext);
+      // Format conversation memory
+      const historyPayload = MediMateChatBot.history.slice(-6).map(h => ({
+        role: h.role === 'user' ? 'user' : 'model',
+        text: (h.parts && h.parts[0]) ? h.parts[0].text : ''
+      }));
 
-      // 5. Update Conversation Memory (Strictly last N messages)
-      MediMateChatBot.updateHistory('user', userQuery);
-      MediMateChatBot.updateHistory('model', aiResponse);
+      const response = await fetch(`${apiBase}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          message: userQuery,
+          history: historyPayload
+        })
+      });
 
-      // 6. Remove typing indicator and render formatted AI response
       typingIndicator.remove();
 
+      if (!response.ok) {
+        throw new Error(`Server returned HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // 4. Handle Service Unavailable state (No API key or service down)
+      if (data.status === 'UNAVAILABLE' || !data.available) {
+        const unavailBubble = document.createElement('div');
+        unavailBubble.className = 'chat-bubble chat-bubble-ai border border-warning-subtle shadow-sm';
+        unavailBubble.innerHTML = `
+          <div class="text-warning-emphasis fw-bold mb-1">
+            <i class="bi bi-exclamation-triangle-fill me-1"></i> AI Assistant Currently Unavailable
+          </div>
+          <p class="mb-2 small">${data.reply || 'MediMate AI Assistant is currently offline or undergoing scheduled maintenance.'}</p>
+          <div class="small text-muted border-top pt-2">
+            <i class="bi bi-telephone-fill text-primary me-1"></i> Pharmacist Hotline: <strong>+94 11 234 5678</strong><br>
+            <i class="bi bi-envelope-fill text-primary me-1"></i> support@kkpharmacy.com
+          </div>
+        `;
+        messages.appendChild(unavailBubble);
+        messages.scrollTop = messages.scrollHeight;
+
+        if (input) {
+          input.disabled = true;
+          input.placeholder = 'AI Assistant is currently offline';
+        }
+        if (sendBtn) sendBtn.disabled = true;
+        return;
+      }
+
+      // 5. Successful AI Response
       const aiBubble = document.createElement('div');
       aiBubble.className = 'chat-bubble chat-bubble-ai shadow-sm';
-      aiBubble.innerHTML = MediMateChatBot.formatMarkdown(aiResponse);
+      aiBubble.innerHTML = MediMateChatBot.formatMarkdown(data.reply);
       messages.appendChild(aiBubble);
       messages.scrollTop = messages.scrollHeight;
 
-    } catch (error) {
-      console.error('[MediMate] Generation error:', error);
-      typingIndicator.remove();
+      // 6. Update Conversation Memory
+      MediMateChatBot.updateHistory('user', userQuery);
+      MediMateChatBot.updateHistory('model', data.reply);
 
-      // Fallback response with training knowledge
-      const fallbackResponse = MediMateChatBot.generateLocalFallback(userQuery);
-      const fallbackBubble = document.createElement('div');
-      fallbackBubble.className = 'chat-bubble chat-bubble-ai shadow-sm';
-      fallbackBubble.innerHTML = MediMateChatBot.formatMarkdown(fallbackResponse);
-      messages.appendChild(fallbackBubble);
-      messages.scrollTop = messages.scrollHeight;
-    } finally {
-      MediMateChatBot.isGenerating = false;
+      // 7. Re-enable input and send button for continuous chatting
       if (input) {
         input.disabled = false;
-        input.focus();
+        input.placeholder = 'Ask about medicines, dosage, orders...';
+      }
+      if (sendBtn) {
+        sendBtn.disabled = false;
+      }
+
+    } catch (error) {
+      console.warn('[MediMate] Backend chat error:', error.message);
+      if (typingIndicator.parentNode) typingIndicator.remove();
+
+      // Transparent Unavailable Notice (NO FAKE MOCK FALLBACK)
+      const errorBubble = document.createElement('div');
+      errorBubble.className = 'chat-bubble chat-bubble-ai border border-danger-subtle shadow-sm';
+      errorBubble.innerHTML = `
+        <div class="text-danger fw-bold mb-1">
+          <i class="bi bi-shield-x me-1"></i> MediMate AI Currently Unavailable
+        </div>
+        <p class="mb-2 small">
+          Unable to connect to the KK Pharmacy AI services right now. 
+          For immediate prescription verification, medicine availability, or urgent consultation, please contact our registered pharmacists directly.
+        </p>
+        <div class="small text-muted border-top pt-2">
+          <i class="bi bi-telephone-fill text-primary me-1"></i> Hotline: <strong>+94 11 234 5678</strong> (8:00 AM – 10:00 PM)
+        </div>
+      `;
+      messages.appendChild(errorBubble);
+      messages.scrollTop = messages.scrollHeight;
+
+      // Allow user to try again
+      if (input) {
+        input.disabled = false;
+        input.placeholder = 'Type your question to try again...';
       }
       if (sendBtn) sendBtn.disabled = false;
+
+    } finally {
+      MediMateChatBot.isGenerating = false;
+      if (input && !input.disabled) {
+        setTimeout(() => input.focus(), 80);
+      }
     }
   },
 
   /**
-   * Maintain strict 5-message memory cap (or custom configured value)
+   * Maintain conversation memory cap
    */
   updateHistory: (role, text) => {
     MediMateChatBot.history.push({
@@ -342,164 +565,9 @@ ${(categories || []).map(c => `- ${c.name} (${c.desc})`).join('\n')}
       parts: [{ text: text }]
     });
 
-    const maxMemory = MEDIMATE_CONFIG.maxHistoryMessages || 5;
-    if (MediMateChatBot.history.length > maxMemory) {
-      MediMateChatBot.history = MediMateChatBot.history.slice(-maxMemory);
+    if (MediMateChatBot.history.length > 6) {
+      MediMateChatBot.history = MediMateChatBot.history.slice(-6);
     }
-  },
-
-  /**
-   * Call Google Generative AI REST API with token limit safety
-   */
-  callGeminiAPI: async (userQuery, liveDbContext) => {
-    const config = MEDIMATE_CONFIG;
-
-    // If API Key is unconfigured or default placeholder, use local knowledgebase directly
-    if (!config.apiKey || config.apiKey.includes('YOUR_GEMINI_API_KEY')) {
-      console.info('[MediMate] Notice: Gemini API Key is in placeholder state. Operating in High-Accuracy Local Knowledgebase mode.');
-      return MediMateChatBot.generateLocalFallback(userQuery);
-    }
-
-    const endpoint = `${config.apiBaseUrl}/${config.model}:generateContent?key=${config.apiKey}`;
-
-    // Prepare system instructions + dynamic store database context
-    const fullSystemInstruction = `${config.systemInstruction}\n\n${liveDbContext}`;
-
-    // Build payload according to Gemini REST API specification
-    const payload = {
-      systemInstruction: {
-        parts: [{ text: fullSystemInstruction }]
-      },
-      contents: [
-        ...MediMateChatBot.history,
-        {
-          role: 'user',
-          parts: [{ text: userQuery }]
-        }
-      ],
-      generationConfig: {
-        maxOutputTokens: config.generationConfig.maxOutputTokens || 400,
-        temperature: config.generationConfig.temperature || 0.6,
-        topP: config.generationConfig.topP || 0.9,
-        topK: config.generationConfig.topK || 40
-      },
-      safetySettings: config.safetySettings || []
-    };
-
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      console.warn(`[MediMate] Gemini API returned status ${response.status}: ${errText}`);
-      // Fallback to local intelligence if quota/rate limit/error occurs
-      return MediMateChatBot.generateLocalFallback(userQuery);
-    }
-
-    const data = await response.json();
-    if (data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
-      return data.candidates[0].content.parts.map(p => p.text).join('\n');
-    }
-
-    return MediMateChatBot.generateLocalFallback(userQuery);
-  },
-
-  /**
-   * Local Knowledge Base & Real-Time Product Database Matcher
-   * Provides immediate, 100% accurate fallback responses matching KK PHARMACY's catalog
-   */
-  generateLocalFallback: (query) => {
-    const q = query.toLowerCase();
-    const training = MEDIMATE_CONFIG.trainingData;
-    const isSubdir = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
-    const basePath = isSubdir ? '' : 'pages/';
-
-    // 1. Direct Q&A Dataset Exact/Partial Matches
-    for (const qa of (training.qaDataset || [])) {
-      const qKeywords = qa.question.toLowerCase().split(' ').filter(w => w.length > 3);
-      const matchCount = qKeywords.filter(k => q.includes(k)).length;
-      if (matchCount >= 2 || q.includes(qa.question.toLowerCase())) {
-        return qa.answer;
-      }
-    }
-
-    // 2. Paracetamol / Fever / Pain
-    if (q.includes('paracetamol') || q.includes('panadol') || q.includes('fever') || q.includes('headache') || q.includes('pain')) {
-      return `**Paracetamol 500mg Guidance:**
-* **Standard Adult Dose**: 1–2 tablets (500mg–1000mg) every 4–6 hours as needed.
-* **Maximum Daily Dose**: 4,000mg (8 tablets) within 24 hours.
-* **In Stock**: Panadol / Haleon Paracetamol 500mg (100s) — **Rs. 480.00**
-* [View Paracetamol in Store](${basePath}products.html?search=paracetamol)
-* ⚠️ *Do not combine with other paracetamol-containing products.*`;
-    }
-
-    // 3. Amoxicillin / Antibiotics / Prescription
-    if (q.includes('amoxicillin') || q.includes('antibiotic') || q.includes('infection') || q.includes('prescription') || q.includes('rx')) {
-      return `**Amoxicillin 500mg & Prescription (Rx) Policy:**
-* ⚠️ **Doctor Prescription Required**: Amoxicillin is a regulated antibiotic and cannot be dispensed without a valid doctor's prescription.
-* **Price**: Rs. 650.00 (GSK Capsules 30s pack) — In Stock.
-* **How to Order**:
-  1. Add medication to your cart.
-  2. Proceed to [Checkout](${basePath}checkout.html).
-  3. Upload your doctor's prescription photo/PDF.
-  4. Our registered pharmacist will verify before shipping.`;
-    }
-
-    // 4. Medical Equipment & BP Monitors / Glucometers / Nebulizers
-    if (q.includes('blood pressure') || q.includes('bp') || q.includes('omron') || q.includes('hypertension') || q.includes('equipment') || q.includes('monitor') || q.includes('glucometer') || q.includes('nebulizer') || q.includes('oximeter')) {
-      return `**Certified Medical Diagnostic Equipment:**
-* **Omron Upper Arm BP Monitor**: Rs. 14,850.00 (IntelliWrap 360° sensor, 60 memory slots)
-* **Accu-Chek Instant Glucometer Kit**: Rs. 8,900.00 (4-second result, 50 strips included)
-* **Beurer Fingertip Pulse Oximeter**: Rs. 4,950.00 (SpO2 & Heart Rate OLED)
-* **Microlife Forehead Thermometer**: Rs. 6,200.00 (1-sec infrared fever alert)
-* **Philips Ultrasonic Nebulizer**: Rs. 12,500.00 (Piston compressor respiratory therapy)
-
-[Browse All Medical Equipment](${basePath}products.html?category=equipment)`;
-    }
-
-    // 5. Vitamins, Supplements & Immunity
-    if (q.includes('vitamin') || q.includes('immunity') || q.includes('supplement') || q.includes('omega') || q.includes('calcium') || q.includes('zinc')) {
-      return `**Daily Wellness, Vitamins & Immune Boosters:**
-* **Redoxon / Vita-Immune Vitamin C 1000mg + Zinc (20s)**: Rs. 1,950.00 (Effervescent Orange)
-* **Seven Seas Daily Multivitamin 60s**: Rs. 3,200.00 (A, B-Complex, C, D3, Zinc, Iron)
-* **Omega-3 Triple Strength Fish Oil (90s)**: Rs. 4,600.00 (EPA 360mg / DHA 240mg)
-* **Calcium + Vitamin D3 60s**: Rs. 2,800.00 (Bone mineralization & joint health)
-
-[Shop Vitamins & Supplements](${basePath}products.html?category=vitamins)`;
-    }
-
-    // 6. Baby Care & Infant Colic / Diaper Rash
-    if (q.includes('baby') || q.includes('infant') || q.includes('colic') || q.includes('gripe') || q.includes('rash') || q.includes('diaper')) {
-      return `**Pediatrician-Approved Baby Care Essentials:**
-* **Tummy Calm Gripe Water (60ml)**: Rs. 780.00 (Natural gas & colic relief with oral dropper)
-* **Sudocrem Baby Healing Diaper Rash Cream (226g)**: Rs. 1,850.00 (Zinc Oxide barrier)
-* **Sebamed Tear-Free Baby Wash & Shampoo (250ml)**: Rs. 2,450.00 (pH 5.5 skin balanced)
-
-[Explore Baby Care Collection](${basePath}products.html?category=baby-care)`;
-    }
-
-    // 7. Delivery, Shipping Fees & Islandwide Coverage
-    if (q.includes('delivery') || q.includes('shipping') || q.includes('free') || q.includes('cost') || q.includes('islandwide')) {
-      return `**KK PHARMACY Islandwide Delivery Details:**
-* **Free Delivery**: On all orders over **Rs. 5,000**.
-* **Standard Delivery**: Rs. 350 for orders below Rs. 5,000.
-* **Delivery Time**: 1–2 business days across all districts in Sri Lanka.
-* **Secure Packaging**: Temperature-monitored vehicles for delicate medicines.`;
-    }
-
-    // 8. General Healthcare / Pharmacy Inquiry
-    return `**KK PHARMACY Pharmacist Guidance:**
-Thank you for your question regarding "*${query}*".
-
-As your **MediMate** assistant, I can check our live pharmaceutical catalog, confirm dosage and Rx status, or help with orders.
-* [Search Our Products Catalog](${basePath}products.html)
-* [View Your Shopping Cart](${basePath}cart.html)
-* Need direct pharmacist assistance? Call our Colombo branch hotline: **+94 11 234 5678** (8:00 AM – 10:00 PM).`;
   },
 
   /**
@@ -508,7 +576,6 @@ As your **MediMate** assistant, I can check our live pharmaceutical catalog, con
   formatMarkdown: (text) => {
     if (!text) return '';
     
-    // Normalize relative links based on current page location
     const isSubdir = window.location.pathname.replace(/\\/g, '/').includes('/pages/');
     const fixLink = (url) => {
       if (url.startsWith('http://') || url.startsWith('https://')) return url;
@@ -537,7 +604,7 @@ As your **MediMate** assistant, I can check our live pharmaceutical catalog, con
     // Remove duplicate nested <ul> tags
     html = html.replace(/<\/ul>\s*<ul class="mb-1 ps-3 mt-1 small">/g, '');
 
-    // Convert newlines to <br> where appropriate
+    // Convert newlines to <br>
     html = html.replace(/\n\n/g, '<div class="my-1"></div>').replace(/\n/g, '<br>');
 
     return html;

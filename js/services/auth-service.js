@@ -211,5 +211,41 @@ const AuthService = {
       StorageService.removeItem(CONFIG.STORAGE_KEYS.ROLE);
       window.dispatchEvent(new CustomEvent('auth:state-changed', { detail: { user: null } }));
     }
+  },
+
+  /**
+   * Request password reset OTP
+   */
+  forgotPassword: async (email) => {
+    const cleanEmail = (email || '').trim();
+    if (CONFIG.USE_MOCK_DATA) {
+      return { success: true, message: 'Verification code sent to ' + cleanEmail };
+    }
+    return await AuthAPI.forgotPassword(cleanEmail);
+  },
+
+  /**
+   * Verify 6-digit OTP code
+   */
+  verifyOtp: async (email, otpCode) => {
+    const cleanEmail = (email || '').trim();
+    const cleanCode = (otpCode || '').trim();
+    if (CONFIG.USE_MOCK_DATA) {
+      return { success: true, message: 'Code verified' };
+    }
+    return await AuthAPI.verifyOtp(cleanEmail, cleanCode);
+  },
+
+  /**
+   * Reset password with OTP
+   */
+  resetPassword: async (email, otpCode, newPassword) => {
+    const cleanEmail = (email || '').trim();
+    const cleanCode = (otpCode || '').trim();
+    const cleanPass = (newPassword || '').trim();
+    if (CONFIG.USE_MOCK_DATA) {
+      return { success: true, message: 'Password updated' };
+    }
+    return await AuthAPI.resetPassword(cleanEmail, cleanCode, cleanPass);
   }
 };
