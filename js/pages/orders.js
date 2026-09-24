@@ -39,12 +39,13 @@ const OrdersPage = {
 
         // Mini preview of items
         let itemsSummaryHtml = '';
-        order.items.forEach(item => {
-          const imgSrc = item.image.startsWith('../') ? item.image : `../${item.image}`;
+        const fallbackImg = resolveImagePath('assets/images/medicine_1.png');
+        (order.items || []).forEach(item => {
+          const imgSrc = resolveImagePath(item.image);
           itemsSummaryHtml += `
             <div class="d-flex align-items-center gap-2 mb-2">
-              <img src="${imgSrc}" alt="${item.name}" class="rounded border p-1" style="width: 36px; height: 36px; object-fit: contain; background:#FFF;">
-              <span class="small text-navy text-truncate" style="max-width: 320px;">${item.name} <strong class="text-muted">(×${item.quantity})</strong></span>
+              <img src="${imgSrc}" alt="${item.name || 'Healthcare Item'}" class="rounded border p-1" style="width: 36px; height: 36px; object-fit: contain; background:#FFF;" onerror="this.onerror=null; this.src='${fallbackImg}';">
+              <span class="small text-navy text-truncate" style="max-width: 320px;">${item.name || 'Item'} <strong class="text-muted">(×${item.quantity})</strong></span>
             </div>
           `;
         });

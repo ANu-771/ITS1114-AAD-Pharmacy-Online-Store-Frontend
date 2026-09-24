@@ -111,16 +111,24 @@ const OrderService = {
       const orders = await OrderService.getMyOrders();
       return orders.find(o => String(o.id) === String(orderId) || o.orderNumber === String(orderId)) || orders[0] || null;
     }
+    
+    // Extract numeric ID if orderId has prefix (e.g. KKP-2026-5 or ORD-5)
+    let searchId = orderId;
+    if (typeof orderId === 'string' && isNaN(orderId)) {
+      const match = orderId.match(/\d+$/);
+      if (match) searchId = match[0];
+    }
+
     try {
-      const order = await OrderAPI.getOrderById(orderId);
+      const order = await OrderAPI.getOrderById(searchId);
       if (order && order.id) {
         return OrderService._normalizeOrder(order);
       }
     } catch (e) {
-      console.warn('[OrderService] Live getOrderById failed, checking cache:', e.message);
+      console.warn('[OrderService] Live getOrderById failed, checking my-orders:', e.message);
     }
     const orders = await OrderService.getMyOrders();
-    return orders.find(o => String(o.id) === String(orderId) || o.orderNumber === String(orderId)) || null;
+    return orders.find(o => String(o.id) === String(orderId) || o.orderNumber === String(orderId) || String(o.id) === String(searchId)) || null;
   },
 
   /**
